@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Welcome!</title>
-    </head>
-    <body>
-        <h3>Test!</h3>
-    </body>
-</html>
+<?php
+    $page_title = "Welcome";
+    include_once "./global_components/header.php";
+    include_once "./global_components/navbar.php";
+?>
+<h4>Testing</h4>
+<?php
+    include_once "./global_components/footer.php";
+?>
