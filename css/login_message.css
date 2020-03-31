@@ -1,0 +1,39 @@
+.message_container {
+    width: 30%;
+    margin: auto;
+    margin-top: 30px;
+    padding: 10px;
+
+    border-radius: 20px;
+    border-width: 2px;
+    border-style: solid;
+}
+.message_container h4 {
+    margin: 0;
+    text-align: center;
+}
+.message_container form {
+    padding: 5px;
+    align-items: center;
+}
+.message_container input {
+    width: 100%;
+    margin: 2px;
+
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    text-indent: 5px;
+
+    outline: none;
+}
+::placeholder {
+    color: #7e8860;
+}
+.message_container input[type="text"] {
+    padding: 3px;
+}
+.message_container input[type="submit"]:hover {
+    transform: translate(0.5px, 0.5px);
+}

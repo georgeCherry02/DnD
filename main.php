@@ -7,10 +7,6 @@
     include_once "./global_components/header.php";
     include_once "./global_components/navbar.php";
 ?>
-
-<?php
-    if ($_SESSION["Logged_in"]) {
-?>
 <div class='main_content_container'>
     <img style="width: 100%;" src='./resources/images/landing_page_background.jpg'/>
     <div style='padding: 30px; padding-top: 10px; font-size: 14px;'>
@@ -19,10 +15,6 @@
         <p class='dark_red_text'>Nam consequat malesuada eros, vel facilisis lorem rutrum a. Quisque semper, lectus vel scelerisque sollicitudin, nibh augue sollicitudin diam, et dapibus velit ipsum vitae tellus. Pellentesque quam quam, fermentum sit amet dignissim id, luctus non mauris. Nam hendrerit arcu elementum tellus finibus, in hendrerit elit dictum. Pellentesque fringilla massa non lectus fermentum consequat. Nunc dapibus, ipsum a commodo scelerisque, augue turpis gravida justo, ac posuere neque nisl at neque. Fusce finibus rhoncus arcu, sed ullamcorper mauris dictum non. Pellentesque nec egestas nulla. Cras in volutpat diam. Nullam et dolor vehicula, lobortis elit eu, posuere elit. Donec pretium sollicitudin metus vitae placerat.</p>
     </div>
 </div>
-<?php
-    }   
-?>
-
 <?php
     include_once "./global_components/footer.php";
 ?>

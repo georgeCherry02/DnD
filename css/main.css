@@ -1,33 +1,61 @@
 /* General Styling */
 * {
     font-family: 'Gotu';
+    box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+    cursor: default;
 }
 html, body {
     margin: 0;
-    box-sizing: border-box;
     position: relative;
+}
+html {
+    min-height: 100%;
+    display: flex;
+}
+body {
+    width: 100%;
 }
 
 /* Colour scheme */
 .light_brown {
     background-color: #d1ba9b;
 }
+.light_green {
+    background-color: #b7c199;
+}
+.temp_green {
+    background-color: #7e8860;
+}
 .dark_red {
     background-color: #461a11;
+}
+.light_red {
+    background-color: #926358;
 }
 .medium_red {
     background-color: #662924;
 }
 
+.dark_red_border {
+    border-color: #461a11;
+}
+.dark_green_border {
+    border-color: #343c24;
+}
 
 .light_brown_text {
     color: #d1ba9b;
+}
+.dark_green_text {
+    color: #343c24;
 }
 .dark_red_text {
     color: #461a11;
 }
 .light_red_text {
-    color: #794134;
+    color: #926358;
 }
 
 
@@ -62,16 +90,17 @@ html, body {
     z-index: 5;
 }
 .navbar_container .menu_button {
-    height: 35px;
+    height: 40px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     left: 20px;
 }
 .navbar_container .menu_button i {
-    width: 35px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     font-size: 35px;
+    cursor: pointer;
 }
 .navbar_container h3 {
     margin: 0;
@@ -80,16 +109,86 @@ html, body {
     height: 80px;
     line-height: 80px;
 }
+#navbar_dropdown {
+    position: fixed;
+    top: 80px;
+
+    height: auto;
+    width: 100%;
+
+    box-shadow: 0 2px 4px black;
+    z-index: 5;
+
+    overflow: hidden;
+    transition: max-height 0.5s;
+}
+#navbar_dropdown a {
+    margin: 0;
+    height: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+}
+#navbar_dropdown a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* Footer Styling */
 .footer {
     position: absolute;
     bottom: 0;
-    height: 30px;
+    height: 20px;
     width: 100%;
 }
+
 /* Component Styling */
 .main_content_container {
     position: relative;
     margin-top: 80px;
+    width: 100%;
+    padding: 30px;
+}
+
+/* Functionality Styling */
+[class^='col-'] {
+    display: inline-block;
+}
+.col-1 {
+    width: 8.33%;
+}
+.col-2 {
+    width: 16.66%;
+}
+.col-3 {
+    width: 25%;
+}
+.col-4 {
+    width: 33.33%
+}
+.col-5 {
+    width: 41.66%;
+}
+.col-6 {
+    width: 50%;
+}
+.col-7 {
+    width: 58.33%;
+}
+.col-8 {
+    width: 66.66%;
+}
+.col-9 {
+    width: 75%;
+}
+.col-10 {
+    width: 83.33%;
+}
+.col-11 {
+    width: 91.66%;
+}
+.col-12 {
     width: 100%;
 }
