@@ -1,0 +1,95 @@
+/* General Styling */
+* {
+    font-family: 'Gotu';
+}
+html, body {
+    margin: 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Colour scheme */
+.light_brown {
+    background-color: #d1ba9b;
+}
+.dark_red {
+    background-color: #461a11;
+}
+.medium_red {
+    background-color: #662924;
+}
+
+
+.light_brown_text {
+    color: #d1ba9b;
+}
+.dark_red_text {
+    color: #461a11;
+}
+.light_red_text {
+    color: #794134;
+}
+
+
+
+
+
+.light {
+    background-color: #49add1;
+}
+.text_dark {
+    color: #012f42;
+}
+.text_light {
+    color: white;
+}
+.text_highlight {
+    color: #941c0a;
+}
+.text_main {
+    color: white;
+}
+
+/* NavBar Styling */
+.navbar_container {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+
+    box-shadow: 0 2px 4px black;
+
+    z-index: 5;
+}
+.navbar_container .menu_button {
+    height: 35px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 20px;
+}
+.navbar_container .menu_button i {
+    width: 35px;
+    height: 25px;
+    font-size: 35px;
+}
+.navbar_container h3 {
+    margin: 0;
+    margin-left: 80px;
+    font-size: 36px;
+    height: 80px;
+    line-height: 80px;
+}
+/* Footer Styling */
+.footer {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+}
+/* Component Styling */
+.main_content_container {
+    position: relative;
+    margin-top: 80px;
+    width: 100%;
+}
