@@ -1,0 +1,56 @@
+.message_container {
+    position: absolute;
+    left: 35%;
+    width: 30%;
+    margin-top: 30px;
+    padding: 10px;
+
+    border-radius: 20px;
+    border-width: 2px;
+    border-style: solid;
+}
+.message_container h4 {
+    margin: 0;
+    text-align: center;
+}
+.message_container h5 {
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+}
+.message_container a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.message_container form {
+    padding: 5px;
+    align-items: center;
+}
+.message_container input {
+    width: 100%;
+    margin: 2px;
+
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    text-indent: 5px;
+
+    outline: none;
+}
+::placeholder {
+    color: #7e8860;
+}
+.message_container input[type="text"], .message_container input[type="password"] {
+    padding: 3px;
+}
+.message_container input[type="submit"]:hover {
+    transform: translate(0.5px, 0.5px);
+}
+
+/* Pop-up message styling */
+#popup_message .close_button {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
