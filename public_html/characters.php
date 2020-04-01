@@ -7,7 +7,6 @@
     include_once "./global_components/header.php";
     include_once "./global_components/navbar.php";
 ?>
-<div class='main_content_container'>
 <?php
     if (isset($_SESSION["Logged_in"]) && $_SESSION["Logged_in"]) {
 ?>
@@ -17,7 +16,6 @@
         include_once "./global_components/login_message.php";
     }
 ?>
-</div>
 <?php
     include_once "./global_components/footer.php";
 ?>

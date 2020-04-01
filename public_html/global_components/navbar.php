@@ -14,3 +14,4 @@
     <div class='col-4'></div>
 </div>
 <script src='./scripts/menus.js'></script>
+<div class='main_content_container'>

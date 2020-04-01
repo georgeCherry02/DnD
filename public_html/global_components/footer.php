@@ -1,4 +1,4 @@
-        <div class='footer dark_red'>
         </div>
+        <div class='footer dark_red'></div>
     </body>
 </html>
