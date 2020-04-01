@@ -6,10 +6,10 @@
     // Determine root for constants depending on initial location
     switch($file_location) {
         case "root": 
-            include_once "./inc/constants.php";
+            include_once "../inc/constants.php";
             break;
         case "actions":
-            include_once "../inc/constants.php";
+            include_once "../../inc/constants.php";
             break;
         default:
             include_once "./contants.php";
