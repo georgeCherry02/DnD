@@ -4,9 +4,14 @@
             $user = $_POST["user"];
             $pass = $_POST["pass"];
 
-            $res = DB::query("SELECT COUNT(UserID) AS duplicate, UserID FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
-            return array($res[0]["duplicate"], $res[0]["UserID"]);
+            try {
+                $res = DB::query("SELECT UserID FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
+            } catch (PDOException $e) {
+                return false;
+            }
+            return $res[0]["UserID"];
         }
+
         /* Creates an account and returns an array outlining the result of the process
          * Code key:
          * 0 - Success
