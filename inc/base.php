@@ -7,12 +7,15 @@
     switch($file_location) {
         case "root": 
             include_once "../inc/constants.php";
+            include_once "../inc/classes/Database.php";
             break;
         case "actions":
             include_once "../../inc/constants.php";
+            include_once "../../inc/classes/Database.php";
             break;
         default:
             include_once "./contants.php";
+            include_once "./classes/Database.php";
     }
 
     // Connect to the database

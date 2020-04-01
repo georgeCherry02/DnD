@@ -6,8 +6,19 @@
 
     include_once "./global_components/header.php";
     include_once "./global_components/navbar.php";
+
+    if (isset($_GET["login"])) {
+        if ($_GET["login"] == 0) {
 ?>
-<img style="width: 100%;" src='./resources/images/landing_page_background.jpg'/>
+<div class='dark_green_border temp_green message_container'>
+    <p>Login failed, please try again!</p>
+</div>
+<link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
+<?php
+        }
+    }
+?>
+<img style="width: 100%;" src='../resources/images/landing_page_background.jpg'/>
 <div style='padding: 30px; padding-top: 10px; font-size: 14px;'>
     <p class='dark_red_text'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque enim metus, dictum non mollis ut, viverra sollicitudin leo. Aliquam pretium consequat venenatis. Fusce sollicitudin, ipsum eu efficitur tincidunt, erat libero fringilla mauris, ullamcorper vehicula ante lorem vel justo. Etiam volutpat porta vulputate. Nam euismod dapibus auctor. Nullam dignissim in tortor at malesuada. Ut id augue pharetra, euismod tortor sed, iaculis mi. Donec tincidunt nisi eu orci tempor convallis. Maecenas augue elit, tempus tristique elementum posuere, maximus eget diam. Nulla tempor viverra gravida. Praesent bibendum sit amet augue a suscipit.</p>
     <div class='text_divider dark_red'></div>
