@@ -5,11 +5,11 @@
             $pass = $_POST["pass"];
 
             try {
-                $res = DB::query("SELECT UserID FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
+                $res = DB::query("SELECT ID FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
             } catch (PDOException $e) {
                 return false;
             }
-            return $res[0]["UserID"];
+            return $res[0]["ID"];
         }
 
         /* Creates an account and returns an array outlining the result of the process

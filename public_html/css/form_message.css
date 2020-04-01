@@ -47,3 +47,10 @@
 .message_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
 }
+
+/* Pop-up message styling */
+#popup_message .close_button {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
