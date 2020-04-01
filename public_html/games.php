@@ -2,7 +2,7 @@
     $page_title =       "Games";
     $file_location =    "root";
 
-    include_once "./inc/base.php";
+    include_once "../inc/base.php";
 
     include_once "./global_components/header.php";
     include_once "./global_components/navbar.php";
