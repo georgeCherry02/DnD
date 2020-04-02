@@ -9,7 +9,15 @@
 
     if (isset($_GET["login"])) {
         if ($_GET["login"] == 0) {
-            $popup_message = "<p>Login failed, please try again!</p>";
+            $popup_message_name = "login_failed";
+            include_once "./global_components/popup_message.php";
+        }
+    } else if (isset($_GET["acc"])) {
+        if ($_GET["acc"] == 1) {
+            $popup_message_name = "account_created";
+            include_once "./global_components/popup_message.php";
+        } else if ($_GET["acc"] == 0) {
+            $popup_message_name = "invalid_email_address";
             include_once "./global_components/popup_message.php";
         }
     }

@@ -14,17 +14,12 @@
         // Display verification message
         switch($status[0]) {
             case 0:
-?>
-<div class='dark_green_border temp_green message_container'>
-    <p>You should have been sent an email to verify your account.</p>
-    <p>If not, click <a onclick="alert('test');">here</a> to resend.</p>
-</div>
-<link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
-<?php
+                $popup_message_name = "link_dispatched";
+                include_once "./global_components/popup_message.php";
                 break;
             case 1:
 ?>
-<div class='dark_green_border temp_green message_container'>
+<div class='dark_green_border main_green message_container'>
     <p><?php echo $status[1]; ?></p>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -33,12 +28,16 @@
                 break;
             case 2:
 ?>
-<div class='dark_green_border temp_green message_container'>
-    <p>There was a server error, please try again!</p>
+<div class='dark_green_border main_green message_container'>
+    <h4>There was a server error, please try following the link again!</h4>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
 <?php
                 include_once "./global_components/login_message.php";
+                break;
+            case 3:
+                header("Location: default.php?acc=0");
+                exit;
                 break;
             default:
                 header("Location: default.php");
@@ -56,7 +55,7 @@
                 break;
             case 1:
 ?>
-<div class='dark_green_border temp_green message_container'>
+<div class='dark_green_border main_green message_container'>
     <h4>There was a server error on the first attempt.</h4>
     <h4>Please try again!</h4>
     <form action="" method="POST" onsubmit="return validate_password_choice()">
@@ -77,13 +76,12 @@
     } else if (isset($_GET["ver"])) {
         // Verify account
         $status = UserAdmin::verify_account();
-
         // Determine how to proceed depending on status
         switch($status) {
             case 0:
             // Display password submission form
 ?>
-<div class='dark_green_border temp_green message_container'>
+<div class='dark_green_border main_green message_container'>
     <h4>Please choose a password</h4>
     <form action="" method="POST" onsubmit="return validate_password_choice()">
         <input type="hidden" name="user" value="<?php echo $_GET["user"]; ?>"/>
@@ -99,7 +97,7 @@
             case 1:
             // State why the thing failed and tell them to go back to old link.
 ?>
-<div class='dark_green_border temp_green message_container'>
+<div class='dark_green_border main_green message_container'>
     <p>Server error. Please try following link again.</p>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -109,8 +107,9 @@
             // State why the thing failed and tell them to go back to old link.
             // *** Here I should implement reissuing of link...
 ?>
-<div class='dark_green_border temp_green message_container'>
-    <p>Verification code mismatch. Please try following the link again.</p>
+<div class='dark_green_border main_green message_container'>
+    <p>Verification code mismatch. Attempt to follow the link again.</p>
+    <p>Otherwise click <a href='failed_to_verify.php'>here</a> to re-issue a new link</p>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
 <?php

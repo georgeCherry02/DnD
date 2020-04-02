@@ -18,3 +18,7 @@ function toggle_login_form() {
         login_cont.style.display = "none";
     }
 }
+
+function close_popup_message() {
+    document.getElementById('popup_message').style.display = "none";
+}

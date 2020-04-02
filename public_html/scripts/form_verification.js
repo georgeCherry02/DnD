@@ -1,11 +1,18 @@
 function validate_signup() {
     var username =  document.getElementById('signup_username').value;
+    var email = document.getElementById('signup_email').value;
     // Verify Username
     if (username.length < 3) {
         alert("Username is too short!");
         return false;
     } else if (username.length > 15) {
         alert("Username is too long!");
+        return false;
+    }
+    // Verify email
+    var emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!email.match(emailFormat)) {
+        alert("You haven't entered a valid email address!");
         return false;
     }
     return true;
