@@ -17,8 +17,14 @@
             $popup_message_name = "account_created";
             include_once "./global_components/popup_message.php";
         } else if ($_GET["acc"] == 0) {
-            $popup_message_name = "invalid_email_address";
-            include_once "./global_components/popup_message.php";
+            if (isset($_GET["res"])) {
+                if ($_GET["res"] == "email") {
+                    $popup_message_name = "invalid_email_address";
+                } else if ($_GET["res"] == "username") {
+                    $popup_message_name = "invalid_username";
+                }
+                include_once "./global_components/popup_message.php";
+            }
         }
     }
 ?>
