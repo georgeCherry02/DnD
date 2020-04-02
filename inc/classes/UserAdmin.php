@@ -17,12 +17,18 @@
          * 0 - Success
          * 1 - Duplicate value in database, nature of duplicate in second element of array
          * 2 - SQL error, where the error occured in the process, not a fatal error
+         * 3 - Invalid email reached the server
          */
         public static function create_account() {
             $email = $_POST["email"];
             $user  = $_POST["user"];
             $vercode = sha1(time());
 
+            // Check if the email's valid
+            $pattern = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
+            if (preg_match($pattern, $email)) {
+                return array(3, null);
+            }
             // Check if email is already in use
             if (!DB::query("SELECT Email FROM `Users` WHERE Email=:email;", array(":email" => $email))) {
                 if (!DB::query("SELECT Username FROM `Users` WHERE Username=:user", array(":user" => $user))) {

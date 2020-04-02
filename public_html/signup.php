@@ -35,6 +35,10 @@
 <?php
                 include_once "./global_components/login_message.php";
                 break;
+            case 3:
+                header("Location: default.php?acc=0");
+                exit;
+                break;
             default:
                 header("Location: default.php");
                 exit;
@@ -72,7 +76,6 @@
     } else if (isset($_GET["ver"])) {
         // Verify account
         $status = UserAdmin::verify_account();
-
         // Determine how to proceed depending on status
         switch($status) {
             case 0:
