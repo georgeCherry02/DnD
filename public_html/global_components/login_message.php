@@ -1,4 +1,4 @@
-<div class='dark_green_border temp_green message_container'>
+<div class='dark_green_border main_green message_container'>
     <div id='login_container' style='display: none;'>
         <h4 class='dark_green_text'>Login to access these features!</h4>
         <form action='<?php echo $file_root; ?>actions/login.php' method='POST'>
