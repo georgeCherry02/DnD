@@ -23,6 +23,9 @@
                 case "Welcome":
                     echo "<link rel='stylesheet' href='" . $file_root . "css/landing.css' type='text/css'/>";
                     break;
+                case "Create":
+                    echo "<link rel='stylesheet' href='" . $file_root . "css/create.css' type='text/css'/>";
+                    break;
             }
         ?>
     </head>

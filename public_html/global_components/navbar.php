@@ -10,19 +10,24 @@
     ?>
 </div>
 <div id='navbar_dropdown' class='light_red' style='max-height: 0;'>
-    <div class='col-2'></div>
-    <div class='col-2'>
+    <div class='col-1'></div>
+    <div class='col-1'>
         <p><a href='default.php' class='dark_red_text'>Home</a></p>
     </div>
-    <div class='col-1'></div>
-    <div class='col-2'>
+    <div class='col-2'></div>
+    <div class='col-1'>
         <p><a href='characters.php' class='dark_red_text'>Characters</a></p>
     </div>
     <div class='col-1'></div>
-    <div class='col-2'>
+    <div class='col-1'></div>
+    <div class='col-1'>
         <p><a href='games.php' class='dark_red_text'>Games</a></p>
     </div>
     <div class='col-2'></div>
+    <div class='col-1'>
+        <p><a href='create.php' class='dark_red_text'>Create</a></p>
+    </div>
+    <div class='col-1'></div>
 </div>
 <script src='<?php echo $file_root; ?>scripts/menus.js'></script>
 <div class='main_content_container'>

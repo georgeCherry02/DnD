@@ -1,0 +1,11 @@
+.option_container {
+    margin: 20px;
+    border: 1px;
+    border-radius: 40px;
+    border: 6px solid black;
+    padding: 20px;
+    box-shadow: 3px 3px 10px #222;
+}
+.option_container:hover {
+    transform: translate(1px, 1px);
+}

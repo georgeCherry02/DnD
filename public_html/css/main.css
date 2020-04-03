@@ -153,6 +153,20 @@ body {
     height: 20px;
     width: 100%;
 }
+p.attributions {
+    height: 20px;
+    line-height: 20px;
+    margin: 0;
+    margin-right: 5px;
+    float: right;
+    font-size: 10px;
+}
+.attributions a {
+    text-decoration: none;
+}
+.attributions a:hover {
+    text-decoration: underline;
+}
 
 /* Component Styling */
 .main_content_container {
@@ -164,7 +178,8 @@ body {
 
 /* Functionality Styling */
 [class^='col-'] {
-    display: inline-block;
+    min-height: 1px;
+    float: left;
 }
 .col-1 {
     width: 8.3%;
