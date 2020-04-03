@@ -30,7 +30,7 @@
                 return array(3, "email");
             }
             // Check if username's valid
-            $pattern = "/^[a-zA-Z0-9]$/";
+            $pattern = "/^[a-zA-Z0-9]{3,15}$/";
             if (!preg_match($pattern, $user)) {
                 return array(3, "username");
             }
