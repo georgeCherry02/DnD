@@ -36,7 +36,7 @@
                 include_once "./global_components/login_message.php";
                 break;
             case 3:
-                header("Location: default.php?acc=0");
+                header("Location: default.php?acc=0res=".$status[1]);
                 exit;
                 break;
             default:

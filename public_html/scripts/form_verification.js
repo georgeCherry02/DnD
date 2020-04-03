@@ -9,6 +9,11 @@ function validate_signup() {
         alert("Username is too long!");
         return false;
     }
+    var usernameFormat = /^[a-zA-Z0-9]$/;
+    if (!username.match(usernameFormat)) {
+        alert("You haven't entered a valid username!");
+        return false;
+    }
     // Verify email
     var emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!email.match(emailFormat)) {

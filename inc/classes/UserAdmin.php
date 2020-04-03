@@ -17,7 +17,7 @@
          * 0 - Success
          * 1 - Duplicate value in database, nature of duplicate in second element of array
          * 2 - SQL error, where the error occured in the process, not a fatal error
-         * 3 - Invalid email reached the server
+         * 3 - Invalid email or username reached the server
          */
         public static function create_account() {
             $email = $_POST["email"];
@@ -26,8 +26,13 @@
 
             // Check if the email's valid
             $pattern = "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/";
-            if (preg_match($pattern, $email)) {
-                return array(3, null);
+            if (!preg_match($pattern, $email)) {
+                return array(3, "email");
+            }
+            // Check if username's valid
+            $pattern = "/^[a-zA-Z0-9]$/";
+            if (!preg_match($pattern, $user)) {
+                return array(3, "username");
             }
             // Check if email is already in use
             if (!DB::query("SELECT Email FROM `Users` WHERE Email=:email;", array(":email" => $email))) {
