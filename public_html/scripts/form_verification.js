@@ -9,7 +9,7 @@ function validate_signup() {
         alert("Username is too long!");
         return false;
     }
-    var usernameFormat = /^[a-zA-Z0-9]$/;
+    var usernameFormat = /^[a-zA-Z0-9]{3,15}$/;
     if (!username.match(usernameFormat)) {
         alert("You haven't entered a valid username!");
         return false;
