@@ -8,6 +8,13 @@
     border-radius: 20px;
     border-width: 2px;
     border-style: solid;
+
+    z-index: 200;
+}
+.message_container_in_page {
+    position: relative;
+    left: 0;
+    width: 100%;
 }
 .message_container h4 {
     margin: 0;
@@ -46,6 +53,10 @@
 }
 .message_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
+}
+.message_container input[type="radio"] {
+    width: unset;
+    transform: translateY(2px);
 }
 
 /* Pop-up message styling */

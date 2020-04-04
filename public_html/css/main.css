@@ -51,6 +51,12 @@ body {
 .dark_green_text {
     color: #343c24;
 }
+.light_green_text {
+    color: #b7c199;
+}
+.medium_green_text {
+    color: #7e8860;
+}
 .dark_red_text {
     color: #461a11;
 }

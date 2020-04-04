@@ -16,7 +16,7 @@
                 include_once "./global_components/popup_message.php";
                 break;
             case 1:
-                header("Location: https://flatdragons.com/failed_to_verify.php?err=serv");
+                header("Location: ./default.php?err=server");
                 exit;
                 break;
             case 2:
@@ -31,11 +31,6 @@
                 $popup_message_name = "reissue/no_password";
                 include_once "./global_components/popup_message.php";
                 break;
-        }
-    } else if (isset($_GET["err"])) {
-        if ($_GET["err"] == "serv") {
-            $popup_message_name = "reissue/server_error";
-            include_once "./global_components/popup_message.php";
         }
     } else {
 ?>

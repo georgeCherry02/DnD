@@ -1,0 +1,15 @@
+.armour_card {
+    margin: 30px;
+    padding: 20px;
+    border-radius: 25px;
+    border-width: 2px;
+    border-style: solid;
+}
+.armour_card h2, .armour_card h3, .armour_card h4, .armour_card p {
+    margin: 0;
+}
+
+.duplicate_resolution_response_container {
+    width: 40%;
+    margin-left: 30%;
+}

@@ -1,6 +1,6 @@
 .option_container {
+    position: relative;
     margin: 20px;
-    border: 1px;
     border-radius: 40px;
     border: 6px solid black;
     padding: 20px;
@@ -8,4 +8,111 @@
 }
 .option_container:hover {
     transform: translate(1px, 1px);
+}
+.option_container img {
+    transition: opacity 0.5s linear;
+}
+.option_container img.colour {
+    position: absolute;
+    left: 20px;
+    width: calc(100% - 40px);
+    opacity: 0;
+}
+.option_container:hover img.colour {
+    opacity: 1;
+}
+
+/* Create form styling */
+.create_form_container {
+    width: 50%;
+    margin-left: 25%;
+    padding: 30px;
+    border-radius: 25px;
+    border-width: 2px;
+    border-style: solid;
+}
+.create_form_container input {
+    height: 2em;
+    width: 50%;
+
+    margin: 2px;
+
+    padding: 3px;
+
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    text-indent: 5px;
+
+    outline: none;
+}
+.create_form_container input[type="submit"] {
+    transform: translate(0.5px, 0.5px);
+    width: 25%;
+}
+.create_form_container div.checkbox {
+    position: absolute;
+    left: 0;
+
+    height: calc(2em - 4px);
+    width: calc(2em - 4px);
+
+    margin: 2px;
+    padding: 3px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+
+    background: #b7c199;
+}
+.inputs_container {
+    position: relative;
+}
+.labels_container {
+    width: fit-content;
+    float: left;
+}
+.labels_container label {
+    height: 2em;
+    line-height: 2em;
+    padding: 3px;
+}
+
+.create_form_abilities_dropdown {
+    width: 50%;
+    height: auto;
+    max-height: calc(2em - 4px);
+    position: absolute;
+
+    margin: 2px;
+
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+
+    transition: max-height 1s ease-out;
+    overflow: hidden;
+    z-index: 5;
+}
+.create_form_abilities_dropdown:hover {
+    max-height: calc(14em + 7 * 2px + 5px);
+}
+.create_form_abilities_dropdown label {
+    height: 2em;
+    line-height: 2em;
+    margin: 2px;
+    padding: 3px;
+}
+.create_form_abilities_dropdown div.checkbox {
+    right: 0;
+    left: unset;
+    transform: translateY(-2em);
+}
+div.checkbox.active {
+    background: #343c24;
+}
+.create_form_placeholder {
+    height: 2em;
 }

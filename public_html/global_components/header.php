@@ -26,6 +26,9 @@
                 case "Create":
                     echo "<link rel='stylesheet' href='" . $file_root . "css/create.css' type='text/css'/>";
                     break;
+                case "Duplicate Choice":
+                    echo "<link rel='stylesheet' href='" . $file_root . "css/duplicate.css' type='text/css'/>";
+                    break;
             }
         ?>
     </head>

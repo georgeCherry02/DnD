@@ -22,9 +22,17 @@
                     $popup_message_name = "invalid_email_address";
                 } else if ($_GET["res"] == "username") {
                     $popup_message_name = "invalid_username";
+                } else {
+                    header("Location: ./default.php");
+                    exit;
                 }
                 include_once "./global_components/popup_message.php";
             }
+        }
+    } else if (isset($_GET["err"])) {
+        if ($_GET["err"] == "server") {
+            $popup_message_name = "server_error";
+            include_once "./global_components/popup_message.php";
         }
     }
 ?>
