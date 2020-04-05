@@ -1,108 +1,181 @@
 <?php
     class ItemManager {
 
-        /* Status codes
-         * 0 - Successful execution - null OR if there's a similar/duplicate item return that one's ID
-         * 1 - Server error - Where the error occured
-         * 2 - Reached current armour limit - null
+        /* A general function to create items
+         * 0 - Nominal execution, if there's a duplicate then the ID is passed in second slot of index
+         * 1 - Invalid type supplied, null
+         * 2 - Server error, Location of error
+         * 3 - Reached current item limit, null
+         * 4 - Data corruption, can't json_decode the data, null
          */
-        public static function create_armour() {
-            $name = $_POST["name"];
-            $base_ac = $_POST["base"];
-            $modifiers = array();
-            for ($i = 0; $i < sizeof(ABILITIES); $i++) {
-                if (isset($_POST[ABILITIES[$i] . "_modifier"]) && $_POST[ABILITIES[$i] . "_modifier"] == "1") {
-                    array_push($modifiers, $i + 1);
-                }
+        public static function create_item() {
+            // Validate insert type
+            $type = $_POST["form_type"];
+            switch($type) {
+                case "armour":
+                    $table_name = "Armours";
+                    $id_column_name = "Armour_IDs";
+                    $limit_column_name = "Armours_Limit";
+                    $valid_column_names = VALID_ARMOUR_COLUMNS;
+                    break;
+                case "weapon":
+                    $table_name = "Weapons";
+                    $id_column_name = "Weapon_IDs";
+                    $limit_column_name = "Weapons_Limit";
+                    $valid_column_names = VALID_WEAPON_COLUMNS;
+                    break;
+                case "spell":
+                    $table_name = "Spells";
+                    $id_column_name = "Spell_IDs";
+                    $limit_column_name = "Spells_Limit";
+                    $valid_column_names = VALID_SPELL_COLUMNS;
+                    break;
+                case "stat_block":
+                    $table_name = "NPC_Stat_Blocks";
+                    $id_column_name = "NPC_Stat_Block_IDs";
+                    $limit_column_name = "NPC_Stat_Blocks_Limit";
+                    $valid_column_names = VALID_STAT_BLOCK_COLUMNS;
+                    break;
+                default:
+                    return array(1, null);
             }
-            $modifiers = json_encode($modifiers);
-            $str_required = $_POST["str_required"];
-            if (isset($_POST["stealth_disadvantage"]) && $_POST["stealth_disadvantage"] == "1") {
-                $stealth_disadvantage = 1;
-            } else {
-                $stealth_disadvantage = 0;
-            }
-            $armour_weight = $_POST["weight"];
-            $armour_value = $_POST["value"];
-            
-            // Check if user has capacity to create more armour
-            $sql = "SELECT `Armour_IDs`, `Armours_Limit` FROM `User_Item_IDs` INNER JOIN `User_Limitations` ON User_Item_IDs.User_ID=User_Limitations.User_ID WHERE User_Item_IDs.User_ID=:uid;";
+
+            // Check if the user has the capacity to create the item
+            $sql = "SELECT `".$id_column_name."`, `".$limit_column_name."` FROM `User_Item_IDs` INNER JOIN `User_Limitations` ON User_Item_IDs.User_ID=User_Limitations.User_ID WHERE User_Item_IDs.User_ID=:uid;";
             try {
                 $request = DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
-                return array(1, 'capacity');
+                return array(2, "capacity");
             }
-            $current_armours = json_decode($request[0]["Armour_IDs"]);
-            $current_limit = $request[0]["Armours_Limit"];
-            if (sizeof($current_armours) >= $current_limit) {
-                return array(2, null);
+            $current_item_ids = json_decode($request[0][$id_column_name]);
+            $current_item_limit = $request[0][$limit_column_name];
+            if (sizeof($current_item_ids) >= $current_item_limit) {
+                return array(3, null);
+            }
+            
+            // Structure data
+            $sanitised_data = array();
+            foreach($_POST as $key => $value) {
+                // Check if the $key is a valid column name
+                if (in_array($key, $valid_column_names)) {
+                    // Put into sanitised data 
+                    if (!empty($value)) {
+                        $sanitised_data[$key] = $value;
+                    }
+                }
+            }
+
+            // Gather exceptions foreach type
+            switch($type) {
+                case "armour":
+                    $sanitised_data = self::manage_armour_creation_exceptions($sanitised_data);
+                    break;
+                case "spell":
+                    break;
+                case "stat_block":
+                    break;
+                case "weapon":
+                    break;
             }
 
             // Check a duplicate doesn't exist
-            $sql = "SELECT `ID` FROM `Armours` WHERE `Name` LIKE :name && `Base_AC`=:b_ac && `Additional_Modifiers`=:add_mod";
-            $variables = array(":name" => $name, ":b_ac" => $base_ac, ":add_mod" => $modifiers);
-            if (!empty($str_required)) {
-                $sql .= " && `Strength_Required`=:str_req";
-                $variables[":str_req"] = $str_required;
+            $sql = "SELECT `ID` FROM `".$table_name."` WHERE `Name` LIKE :name";
+            $sql_prepared_variables = array(":name" => $_POST["name"]);
+            foreach ($sanitised_data as $column_name => $column_value) {
+                $sql .= " && `".$column_name."`=:".$column_name;
+                $sql_prepared_variables[":".$column_name] = $column_value;
             }
-            $sql .= " && `Stealth_Disadvantage`=:stealth_disadvantage";
-            $variables[":stealth_disadvantage"] = $stealth_disadvantage;
-            if (!empty($armour_weight)) {
-                $sql .= " && `Weight`=:weight";
-                $variables[":weight"] = $armour_weight;
-            }
-            if (!empty($armour_value)) {
-                $sql .= " && `Value`=:value";
-                $variables[":value"] = $armour_value;
-            }
+            $sql .= ";";
             try {
-                $duplicate_id = DB::query($sql, $variables);
+                $duplicate_id = DB::query($sql, $sql_prepared_variables);
             } catch (PDOException $e) {
-                return array(1, "duplicate_check");
+                return array(2, "duplicate_check");
             }
 
-            // Otherwise insert the armour into the database
-            $column_names_sql = "INSERT INTO `Armours` (`Name`, `Base_AC`, `Additional_Modifiers`, `Stealth_Disadvantage`";
-            $values_sql = ") VALUES (:name, :base_ac, :add_mod, :stealth";
-            $variables = array(":name" => $name, "base_ac" => $base_ac, ":add_mod" => $modifiers, ":stealth" => $stealth_disadvantage);
-            if (!empty($str_required)) {
-                $column_names_sql .= ", `Strength_Required`";
-                $values_sql .= ", :str_req";
-                $variables[":str_req"] = $str_required;
+            // Insert into a database
+            $column_names_sql = "INSERT INTO `".$table_name."` (`Name`";
+            $values_sql = ") VALUES (:name";
+            foreach ($sanitised_data as $column_name => $column_value) {
+                $column_names_sql .= ", `".$column_name."`";
+                $values_sql .= ", :".$column_name;
             }
-            if (!empty($armour_weight)) {
-                $column_names_sql .= ", `Weight`";
-                $values_sql .= ", :weight";
-                $variables[":weight"] = $armour_weight;
-            }
-            if (!empty($armour_value)) {
-                $column_names_sql .= ", `Value`";
-                $values_sql .= ", :value";
-                $variables[":value"] = $armour_value;
-            }
-            $sql = $column_names_sql . $values_sql . ");";
+            $insert_sql = $column_names_sql . $values_sql . ");";
             try {
-                DB::query($sql, $variables);
-                $armour_id = DB::query("SELECT `ID` FROM `Armours` WHERE `Name`=:name ORDER BY `ID` DESC;", array(":name" => $name))[0]["ID"];
+                DB::query($insert_sql, $sql_prepared_variables);
+                // Fetch the item ID
+                $sql = "SELECT `ID` FROM `".$table_name."` WHERE `Name`=:name ORDER BY `ID` DESC;";
+                $item_id = DB::query($sql, array(":name" => $_POST["name"]))[0]["ID"];
             } catch (PDOException $e) {
-                return array(1, "insert");
+                return array(2, "insert");
             }
 
-            // Now update the users item data
-            // Fetch initial data
+            // Update the users item data
+            // Fetch the initial state of the data
+            $item_ids_fetch_sql = "SELECT `".$id_column_name."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
             try {
-                $armour_ids = json_decode(DB::query("SELECT `Armour_IDs` FROM `User_Item_IDs` WHERE `User_ID`=:uid;", array(":uid" => $_SESSION["Logged_in_id"]))[0]["Armour_IDs"]);
+                $item_ids = DB::query($item_ids_fetch_sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
-                return array(1, "fetch_original_ids");
+                return array(2, "fetch_original_ids");
             }
-            array_push($armour_ids, $armour_id);
             try {
-                DB::query("UPDATE `User_Item_IDs` SET `Armour_IDs`=:armour_ids WHERE `User_ID`=:uid;", array(":armour_ids" => json_encode($armour_ids), ":uid" => $_SESSION["Logged_in_id"]));
+                $item_ids_arr = json_decode($item_ids[0][$id_column_name]);
+            } catch (Exception $e) {
+                return array(4, null);
+            }
+
+            // Insert the new ID into this array
+            array_push($item_ids_arr, $item_id);
+
+            // Push to the database
+            $item_ids_push_sql = "UPDATE `User_Item_IDs` SET `".$id_column_name."`=:item_ids WHERE `User_ID`=:uid";
+            try {
+                DB::query($item_ids_push_sql, array(":item_ids" => json_encode($item_ids_arr), ":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
-                return array(1, "final_insert");
+                return array(2, "push_new_ids");
             }
 
             return array(0, $duplicate_id);
+        }
+
+        public static function clean_item_type_data() {
+            $type = $_POST["form_type"];
+            switch($type) {
+                case "armour":
+                    $column_name = "Armour_IDs";
+                    break;
+                case "spell":
+                    $column_name = "Spell_IDs";
+                    break;
+                case "stat_block":
+                    $column_name = "NPC_Stat_Block_IDs";
+                    break;
+                case "weapon":
+                    $column_name = "Weapon_IDs";
+                    break;
+                default:
+                    return FALSE;
+            }
+
+            $sql = "UPDATE `User_Item_IDs` SET `".$column_name."`='[]' WHERE `User_ID`=:uid";
+            try {
+                DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]));
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+
+            return TRUE;
+        }
+
+        private static function manage_armour_creation_exceptions($data) {
+            // Gather additional modifiers for the armour
+            $additional_modifiers = array();
+            for ($i = 0; $i < sizeof(ABILITIES); $i++) {
+                if (isset($_POST[ABILITIES[$i] . "_modifier"]) && $_POST[ABILITIES[$i] . "_modifier"] == "1") {
+                    array_push($additional_modifiers, $i + 1);
+                }
+            }
+            $data["Additional_Modifiers"] = json_encode($additional_modifiers);
+            return $data;
         }
 
         /* Status Codes

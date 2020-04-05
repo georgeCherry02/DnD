@@ -12,7 +12,7 @@
         </div>
         <div class="col-6 inputs_container">
             <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green"/><br/>
-            <input type="number" id="base_ac" name="base" min="1" class="dark_green_text dark_green_border light_green"/>
+            <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green"/>
             <div class='create_form_abilities_dropdown light_green dark_green_border'>
                 <div class='label_container'>
                     <label class="medium_green_text">Abilities:</label><br/>
@@ -28,7 +28,7 @@
                 ?>
             </div>
             <div class='create_form_placeholder'></div>
-            <input type="number" id="str_required" name="str_required" min="1" class="dark_green_text dark_green_border light_green"/>
+            <input type="number" id="str_required" name="strength_required" min="1" class="dark_green_text dark_green_border light_green"/>
             <input type='hidden' name='stealth_disadvantage' id='stealth_disadvantage' value="0"/>
             <div class='checkbox dark_green_border' onclick="toggle_checkbox('stealth_disadvantage')" id="stealth_disadvantage_checkbox"></div>
             <div class='create_form_placeholder'></div>

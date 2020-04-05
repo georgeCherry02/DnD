@@ -43,9 +43,9 @@
     // Sanitise type
     switch($_POST["type"]) {
         case "armour":
-        case "weapon":
         case "spell":
         case "stat_block":
+        case "weapon":
             $type = $_POST["type"];
             break;
         default:
