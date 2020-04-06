@@ -186,14 +186,25 @@
         public static function get_last_inserted_of_type($type) {
             switch($type) {
                 case "armour":
-                    try {
-                        $old_ids = json_decode(DB::query("SELECT `Armour_IDs` FROM `User_Item_IDs` WHERE `User_ID`=:uid;", array(":uid" => $_SESSION["Logged_in_id"]))[0]["Armour_IDs"]);
-                    } catch (PDOException $e) {
-                        return FALSE;
-                    }
+                    $column_name = "Armour_IDs";
+                    break;
+                case "spell":
+                    $column_name = "Spell_IDs";
+                    break;
+                case "stat_block":
+                    $column_name = "NPC_Stat_Block_IDs";
+                    break;
+                case "weapon":
+                    $column_name = "Weapon_IDs";
                     break;
                 default: 
                     return FALSE;
+            }
+            $sql = "SELECT `".$column_name."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
+            try {
+                $old_ids = json_decode($sql, array(":uid" => $_SESSION["Logged_in_id"]));
+            } catch (PDOException $e) {
+                return false;
             }
             return $old_ids[sizeof($old_ids) - 1];
         }
@@ -249,23 +260,29 @@
          * 2 - No type defined - null
          */
         public static function get_all_item_data($ids, $type) {
+            // Switch type and determine base sql
             switch($type) {
                 case "armour":
-                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value` FROM `Armours` WHERE";
-                    $variables = array();
-                    for ($i = 1; $i <= sizeof($ids); $i++) {
-                        $sql .= " `ID`=:id" . $i . " OR";
-                        $variables[":id" . $i] = $ids[$i - 1];
-                    }
-                    $sql = substr($sql, 0, -3) . ";";
-                    try {
-                        $data = DB::query($sql, $variables);
-                    } catch (PDOException $e) {
-                        return FALSE;
-                    }
+                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value` FROM `Armours`";
                     break;
                 default:
                     return FALSE;
+            }
+
+            // Add conditional for $ids array 
+            $sql .= " WHERE";
+            $variables = array();
+            for ($i = 1; $i <= sizeof($ids); $i++) {
+                $sql .= " `ID`=:id" . $i . " OR";
+                $variables[":id" . $i] = $ids[$i - 1];
+            }
+            $sql = substr($sql, 0, -3) . ";";
+
+            // Make request
+            try {
+                $data = DB::query($sql, $variables);
+            } catch (PDOException $e) {
+                return FALSE;
             }
             return $data;
         }
