@@ -11,8 +11,8 @@
             <label for="armour_value">Armour Value:</label><br/>
         </div>
         <div class="col-6 inputs_container">
-            <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green"/><br/>
-            <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green"/>
+            <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
+            <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green" required/>
             <div class='create_form_abilities_dropdown light_green dark_green_border'>
                 <div class='label_container'>
                     <label class="medium_green_text">Abilities:</label><br/>

@@ -1,5 +1,5 @@
 function validate_armour_creation() {
-    // Validate name
+    // Validate name is of correct format
     var name = document.getElementById('armour_name').value;
     var nameFormat = /^[a-zA-Z0-9' ]{1,20}$/;
     if (!name.match(nameFormat)) {
