@@ -13,27 +13,13 @@
         <div class="col-6 inputs_container">
             <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
             <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green" required/>
-            <div class='create_form_abilities_dropdown light_green dark_green_border'>
-                <div class='label_container'>
-                    <label class="medium_green_text">Abilities:</label><br/>
-                </div>
-                <?php
-                    for ($i = 1; $i <= 6; $i++) {
-                        $ability = Abilities::fromValue($i);
-                        echo "<label class='medium_green_text'>" . $ability->getName() . ":</label>";
-                        echo "<input type='hidden' name='" . $ability->getName() . "_modifier' id='" . $ability->getName() . "_modifier' value='0'/>";
-                        echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_checkbox('" . $ability->getName() . "_modifier')\" id=\"" . $ability->getName() . "_modifier_checkbox\"></div>";
-                        echo "<br/>";
-                    }
-                ?>
-            </div>
-            <div class='create_form_placeholder'></div>
+            <?php include $file_root."create_forms/components/AbilitiesBlock.php"; ?>
             <input type="number" id="str_required" name="strength_required" min="1" class="dark_green_text dark_green_border light_green"/>
             <input type='hidden' name='stealth_disadvantage' id='stealth_disadvantage' value="0"/>
             <div class='checkbox dark_green_border' onclick="toggle_checkbox('stealth_disadvantage')" id="stealth_disadvantage_checkbox"></div>
             <div class='create_form_placeholder'></div>
             <input type="number" id="armour_weight" name="weight" min="1" class="dark_green_text dark_green_border light_green"/><br/>
-            <input type="number" id="armour_value" name="value" min="1" class="dark_green_text dark_green_border light_green"/><br/>
+            <?php include $file_root."create_forms/components/ValueBlock.php"; ?>
         </div>
     </div>
     <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>

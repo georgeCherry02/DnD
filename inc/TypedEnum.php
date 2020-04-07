@@ -3,7 +3,7 @@
         private static $_instanced_values;
 
         protected $_value;
-        protected $_name;
+        private $_name;
 
         private function __construct($value, $name) {
             $this->_value = $value;

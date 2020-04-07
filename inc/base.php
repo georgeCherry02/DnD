@@ -19,6 +19,9 @@
     include_once $inc_file_root."classes/Database.php";
     include_once $inc_file_root."TypedEnum.php";
     include_once $inc_file_root."ItemTypeEnum.php";
+    foreach(glob($inc_file_root."enums/*.php") as $file) {
+        include_once $file;
+    }
     include_once $inc_file_root."enums/Abilities.php";
     include_once $inc_file_root."enums/ItemTypes.php";
 ?>

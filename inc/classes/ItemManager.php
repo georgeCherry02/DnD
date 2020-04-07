@@ -141,6 +141,17 @@
                 }
             }
             $data["Additional_Modifiers"] = json_encode($additional_modifiers);
+            // Parse coin value and manage input
+            $coin_amounts = array();
+            for ($i = 1; $i <= 5; $i++) {
+                $coin = Coins::fromValue($i);
+                if (isset($_POST[$coin->getName()."_amount"])) {
+                    array_push($coin_amounts, filter_input(INPUT_POST, $coin->getName()."_amount", FILTER_VALIDATE_INT));
+                } else {
+                    array_push($coin_amounts, "0");
+                }
+            }
+            $data["Value"] = json_encode($coin_amounts);
             return $data;
         }
 

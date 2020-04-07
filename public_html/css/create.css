@@ -33,7 +33,7 @@
 }
 .create_form_container input {
     height: 2em;
-    width: 50%;
+    width: 100%;
 
     margin: 2px;
 
@@ -48,8 +48,10 @@
     outline: none;
 }
 .create_form_container input[type="submit"] {
+    width: 50%;
+}
+.create_form_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
-    width: 25%;
 }
 .create_form_container div.checkbox {
     position: absolute;
@@ -80,8 +82,9 @@
     padding: 3px;
 }
 
-.create_form_abilities_dropdown {
-    width: 50%;
+/* Issue here is regex for determining class */
+[class^="create_form_"][class*="_dropdown"] {
+    width: 100%;
     height: auto;
     max-height: calc(2em - 4px);
     position: absolute;
@@ -94,21 +97,35 @@
 
     transition: max-height 1s ease-out;
     overflow: hidden;
-    z-index: 5;
 }
-.create_form_abilities_dropdown:hover {
-    max-height: calc(14em + 7 * 2px + 5px);
-}
-.create_form_abilities_dropdown label {
+[class^="create_form_"][class*="_dropdown"] label {
     height: 2em;
     line-height: 2em;
     margin: 2px;
     padding: 3px;
 }
-.create_form_abilities_dropdown div.checkbox {
+[class^="create_form_"][class*="_dropdown"] div.checkbox {
     right: 0;
     left: unset;
     transform: translateY(-2em);
+}
+[class^="create_form_"][class*="_dropdown"] input {
+    width: 20%;
+    margin-right: 5px;
+    float: right;
+    text-indent: 2px;
+}
+div.create_form_abilities_dropdown {
+    z-index: 6;
+}
+div.create_form_value_dropdown {
+    z-index: 5;
+}
+div.create_form_abilities_dropdown:hover {
+    max-height: calc(14em + 7 * 3px);
+}
+div.create_form_value_dropdown:hover {
+    max-height: calc(12em + 6 * 3px);
 }
 div.checkbox.active {
     background: #343c24;
