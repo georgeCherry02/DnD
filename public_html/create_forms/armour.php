@@ -1,5 +1,5 @@
 <form action="" method="POST" onsubmit="return validate_armour_creation();">
-    <input type='hidden' name='form_type' value='armour'/>
+    <input type='hidden' name='form_type' value='Armour'/>
     <div>
         <div class="labels_container">
             <label for="name" class="required">Name:</label><br/>
@@ -18,11 +18,11 @@
                     <label class="medium_green_text">Abilities:</label><br/>
                 </div>
                 <?php
-                    for ($i = 0; $i < sizeof(ABILITIES); $i++) {
-                        $value = $i + 1;
-                        echo "<label class='medium_green_text'>" . ABILITIES[$i] . ":</label>";
-                        echo "<input type='hidden' name='" . ABILITIES[$i] . "_modifier' id='" . ABILITIES[$i] . "_modifier' value='0'/>";
-                        echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_checkbox('" . ABILITIES[$i] . "_modifier')\" id=\"" . ABILITIES[$i] . "_modifier_checkbox\"></div>";
+                    for ($i = 1; $i <= 6; $i++) {
+                        $ability = Abilities::fromValue($i);
+                        echo "<label class='medium_green_text'>" . $ability->getName() . ":</label>";
+                        echo "<input type='hidden' name='" . $ability->getName() . "_modifier' id='" . $ability->getName() . "_modifier' value='0'/>";
+                        echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_checkbox('" . $ability->getName() . "_modifier')\" id=\"" . $ability->getName() . "_modifier_checkbox\"></div>";
                         echo "<br/>";
                     }
                 ?>

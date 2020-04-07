@@ -8,8 +8,6 @@
     include_once "./global_components/header.php";
     include_once "./global_components/navbar.php";
 
-    $form_create_types = array("armour", "spell", "stat_block", "weapon");
-
     if (isset($_SESSION["Logged_in"]) && $_SESSION["Logged_in"]) {
         if (isset($_POST["form_type"]) && isset($_POST["name"])) {
             // Form type is sanitised in function
@@ -20,13 +18,18 @@
                     // Check if there was a duplicate
                     if (!empty($status[1])) {
                         // Sanitise type
-                        if (in_array($_POST["form_type"], $form_create_types)) {
+                        try {
+                            $item_type = ItemTypes::fromName($_POST["form_type"]);
+                        } catch (OutOfRangeException $e) {
+                            header("Location: default.php?err=server");
+                            exit;
+                        }
 ?>  
 <div class='dark_green_border main_green message_container'>
     <h4 class='dark_green_text'>There's a similar item already uploaded to the database, would you like to compare them?</h4>
     <p class='dark_green_text'>Any properties of the item you defined will be identical, only properties left undefined by you may differ.</p>
     <form action="./duplicate_resolution.php" method="POST">
-        <input type="hidden" name="type" value="<?php echo filter_input(INPUT_POST, "form_type", FILTER_SANITIZE_SPECIAL_CHARS); ?>"/>
+        <input type="hidden" name="type" value="<?php echo $item_type->getName(); ?>"/>
         <input type="hidden" name="old_id" value="<?php echo filter_var($status[1][0]["ID"], FILTER_SANITIZE_SPECIAL_CHARS); ?>"/>
         <div>
             <div class='col-4'></div>
@@ -46,7 +49,6 @@
 <script src='<?php echo $file_root; ?>scripts/form_verification.js'></script>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
 <?php
-                        }
                     } else {
                         header("Location: ?create=1");
                         exit;
@@ -72,17 +74,13 @@
                 case "4":
                     // Data corruption - null
                     // Maybe reset the appropriate item id column if this occurs?
-                    if (in_array($_POST["form_type"], $form_create_types)) {
-                        $status = ItemManager::clean_item_type_data();
-                        if ($status) {
-                            header("Location: ?err=data_corruption");
-                            exit;
-                        } else {
-                            header("Location: ./default.php?err=server");
-                            exit;
-                        }
+                    $status = ItemManager::clean_item_type_data();
+                    if ($status) {
+                        header("Location: ?err=data_corruption");
+                        exit;
                     } else {
                         header("Location: ./default.php?err=server");
+                        exit;
                     }
                     break;
             }
@@ -117,7 +115,7 @@
 <h2 class='dark_red_text'>What would you like to create?</h2>
 <div>
     <div class='col-3'>
-        <a href='?choice=armour'>
+        <a href='?choice=<?php echo ItemTypes::Armour()->getName(); ?>'>
             <div class='option_container'>
                 <img class='line' src='./resources/icons/helmet.svg'/>
                 <img class='colour' src='./resources/icons/helmet_colour.svg'/>
@@ -125,15 +123,7 @@
         </a>
     </div>
     <div class='col-3'>
-        <a href='?choice=weapon'>
-            <div class='option_container'>
-                <img class='line' src='./resources/icons/swords.svg'/>
-                <img class='colour' src='./resources/icons/swords_colour.svg'/>
-            </div>
-        </a>
-    </div>
-    <div class='col-3'>
-        <a href='?choice=spell'>
+        <a href='?choice=<?php echo ItemTypes::Spell()->getName(); ?>'>
             <div class='option_container'>
                 <img class='line' src='./resources/icons/book.svg'/>
                 <img class='colour' src='./resources/icons/book_colour.svg'/>
@@ -141,30 +131,35 @@
         </a>
     </div>
     <div class='col-3'>
-        <a href='?choice=stat_block'>
+        <a href='?choice=<?php echo ItemTypes::StatBlock()->getName(); ?>'>
             <div class='option_container'>
                 <img class='line' src='./resources/icons/scroll.svg'/>
                 <img class='colour' src='./resources/icons/scroll_colour.svg'/>
             </div>
         </a>
     </div>
+    <div class='col-3'>
+        <a href='?choice=<?php echo ItemTypes::Weapon()->getName(); ?>'>
+            <div class='option_container'>
+                <img class='line' src='./resources/icons/swords.svg'/>
+                <img class='colour' src='./resources/icons/swords_colour.svg'/>
+            </div>
+        </a>
+    </div>
 </div>
 <?php
-        } else {
+        } else if (isset($_GET["choice"])) {
 ?>
 <div class="create_form_container main_green dark_green_border">
 <?php
-            switch($_GET["choice"]) {
-                case "armour":
-                case "weapon":
-                case "spell":
-                case "stat_block":
-                    include_once "./create_forms/".$_GET["choice"].".php";
-                    break;
-                default: 
-                    header("Location: ");
-                    exit;
+            try{
+                $item_type = ItemTypes::fromName($_GET["choice"]);
+            } catch (OutOfRangeException $e) {
+                header("Location: ");
+                exit;
             }
+            include_once "./create_forms/".$item_type->getName().".php";
+            
 ?>
 </div>
 <?php

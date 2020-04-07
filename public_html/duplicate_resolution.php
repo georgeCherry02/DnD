@@ -41,30 +41,21 @@
     }
 
     // Sanitise type
-    switch($_POST["type"]) {
-        case "armour":
-        case "spell":
-        case "stat_block":
-        case "weapon":
-            $type = $_POST["type"];
-            break;
-        default:
-            header("Location: default.php?err=server");
-            exit;
-    }
-    $pretty_type = $type;
-    if ($type == "stat_block") {
-        $pretty_type = "stat block";
+    try {
+        $item_type = ItemTypes::fromName($_POST["type"]);
+    } catch (OutOfRangeException $e) {
+        header("Location: default.php?err=server");
+        exit;
     }
 ?>
-<h4 class="dark_red_text">Here are the two <?php echo $pretty_type; ?>s!</h4>
+<h4 class="dark_red_text">Here are the two <?php echo $item_type->getPrettyName(); ?>!</h4>
 <div class="duplicate_resolution_response_container">
     <div class='message_container message_container_in_page main_green dark_green_text dark_green_border'>
         <h4>Would you like to keep your version or use the new version?</h4>
         <form action="" method="POST" onsubmit="return validate_duplicate_resolution()">
             <div>
                 <input type="hidden" value="<?php echo filter_input(INPUT_POST, "old_id", FILTER_VALIDATE_INT); ?>" name="old_id"/>
-                <input type="hidden" value="<?php echo $type; ?>" name="type"/>
+                <input type="hidden" value="<?php echo $item_type->getName(); ?>" name="type"/>
                 <div class="col-4"></div>
                 <label class="col-1 dark_green_text" for="duplicate_resolution_keep">Keep old</label>
                 <div class="col-1">
@@ -85,22 +76,22 @@
 <div>
     <?php
         $old_item_id = $_POST["old_id"];
-        $new_item_id = ItemManager::get_last_inserted_of_type($type);
+        $new_item_id = ItemManager::get_last_inserted_of_type($item_type);
         if ($new_item_id) {
-            $data = ItemManager::get_all_item_data(array($old_item_id, $new_item_id), $type);
+            $data = ItemManager::get_all_item_data(array($old_item_id, $new_item_id), $item_type);
             if ($data) {
                 $count = 0;
                 foreach ($data as $item_info) {
                     echo "<div class='col-6'>";
-                    include "./duplicate_cards/".$type.".php";
+                    include "./duplicate_cards/".$item_type->getName().".php";
                     echo "</div>";
                 }
             } else {
-                header("Location: default.php?err=server");
+                header("Location: default.php?err=server2");
                 exit;
             }
         } else {
-            header("Location: default.php?err=server");
+            header("Location: default.php?err=server3");
             exit;
         }
     ?>

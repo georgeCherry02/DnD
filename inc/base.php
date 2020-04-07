@@ -6,15 +6,19 @@
     // Determine root for constants depending on initial location
     switch($file_location) {
         case "root": 
-            include_once "../inc/constants.php";
-            include_once "../inc/classes/Database.php";
+            $inc_file_root = "../inc/";
             break;
         case "actions":
-            include_once "../../inc/constants.php";
-            include_once "../../inc/classes/Database.php";
+            $inc_file_root = "../../inc/";
             break;
         default:
-            include_once "./contants.php";
-            include_once "./classes/Database.php";
+            $inc_file_root = "./";
     }
+
+    include_once $inc_file_root."constants.php";
+    include_once $inc_file_root."classes/Database.php";
+    include_once $inc_file_root."TypedEnum.php";
+    include_once $inc_file_root."ItemTypeEnum.php";
+    include_once $inc_file_root."enums/Abilities.php";
+    include_once $inc_file_root."enums/ItemTypes.php";
 ?>

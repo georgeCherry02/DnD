@@ -10,45 +10,21 @@
          */
         public static function create_item() {
             // Validate insert type
-            $type = $_POST["form_type"];
-            switch($type) {
-                case "armour":
-                    $table_name = "Armours";
-                    $id_column_name = "Armour_IDs";
-                    $limit_column_name = "Armours_Limit";
-                    $valid_column_names = VALID_ARMOUR_COLUMNS;
-                    break;
-                case "weapon":
-                    $table_name = "Weapons";
-                    $id_column_name = "Weapon_IDs";
-                    $limit_column_name = "Weapons_Limit";
-                    $valid_column_names = VALID_WEAPON_COLUMNS;
-                    break;
-                case "spell":
-                    $table_name = "Spells";
-                    $id_column_name = "Spell_IDs";
-                    $limit_column_name = "Spells_Limit";
-                    $valid_column_names = VALID_SPELL_COLUMNS;
-                    break;
-                case "stat_block":
-                    $table_name = "NPC_Stat_Blocks";
-                    $id_column_name = "NPC_Stat_Block_IDs";
-                    $limit_column_name = "NPC_Stat_Blocks_Limit";
-                    $valid_column_names = VALID_STAT_BLOCK_COLUMNS;
-                    break;
-                default:
-                    return array(1, null);
+            try {
+                $item_type = ItemTypes::fromName($_POST["form_type"]);
+            } catch (OutOfRangeException $e) {
+                return array(1, null);
             }
 
             // Check if the user has the capacity to create the item
-            $sql = "SELECT `".$id_column_name."`, `".$limit_column_name."` FROM `User_Item_IDs` INNER JOIN `User_Limitations` ON User_Item_IDs.User_ID=User_Limitations.User_ID WHERE User_Item_IDs.User_ID=:uid;";
+            $sql = "SELECT `".$item_type->getItemListColumn()."`, `".$item_type->getItemLimitColumn()."` FROM `User_Item_IDs` INNER JOIN `User_Limitations` ON User_Item_IDs.User_ID=User_Limitations.User_ID WHERE User_Item_IDs.User_ID=:uid;";
             try {
                 $request = DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
                 return array(2, "capacity");
             }
-            $current_item_ids = json_decode($request[0][$id_column_name]);
-            $current_item_limit = $request[0][$limit_column_name];
+            $current_item_ids = json_decode($request[0][$item_type->getItemListColumn()]);
+            $current_item_limit = $request[0][$item_type->getItemLimitColumn()];
             if (sizeof($current_item_ids) >= $current_item_limit) {
                 return array(3, null);
             }
@@ -57,7 +33,7 @@
             $sanitised_data = array();
             foreach($_POST as $key => $value) {
                 // Check if the $key is a valid column name
-                if (in_array($key, $valid_column_names)) {
+                if (in_array($key, $item_type->getValidTableColumns())) {
                     // Put into sanitised data 
                     if (!empty($value)) {
                         $sanitised_data[$key] = $value;
@@ -66,20 +42,20 @@
             }
 
             // Gather exceptions foreach type
-            switch($type) {
-                case "armour":
+            switch($item_type) {
+                case ItemTypes::Armour():
                     $sanitised_data = self::manage_armour_creation_exceptions($sanitised_data);
                     break;
-                case "spell":
+                case ItemTypes::Spell():
                     break;
-                case "stat_block":
+                case ItemTypes::StatBlock():
                     break;
-                case "weapon":
+                case ItemTypes::Weapon():
                     break;
             }
 
             // Check a duplicate doesn't exist
-            $sql = "SELECT `ID` FROM `".$table_name."` WHERE `Name` LIKE :name";
+            $sql = "SELECT `ID` FROM `".$item_type->getTableName()."` WHERE `Name` LIKE :name";
             $sql_prepared_variables = array(":name" => $_POST["name"]);
             foreach ($sanitised_data as $column_name => $column_value) {
                 $sql .= " && `".$column_name."`=:".$column_name;
@@ -93,7 +69,7 @@
             }
 
             // Insert into a database
-            $column_names_sql = "INSERT INTO `".$table_name."` (`Name`";
+            $column_names_sql = "INSERT INTO `".$item_type->getTableName()."` (`Name`";
             $values_sql = ") VALUES (:name";
             foreach ($sanitised_data as $column_name => $column_value) {
                 $column_names_sql .= ", `".$column_name."`";
@@ -103,7 +79,7 @@
             try {
                 DB::query($insert_sql, $sql_prepared_variables);
                 // Fetch the item ID
-                $sql = "SELECT `ID` FROM `".$table_name."` WHERE `Name`=:name ORDER BY `ID` DESC;";
+                $sql = "SELECT `ID` FROM `".$item_type->getTableName()."` WHERE `Name`=:name ORDER BY `ID` DESC;";
                 $item_id = DB::query($sql, array(":name" => $_POST["name"]))[0]["ID"];
             } catch (PDOException $e) {
                 return array(2, "insert");
@@ -111,23 +87,23 @@
 
             // Update the users item data
             // Fetch the initial state of the data
-            $item_ids_fetch_sql = "SELECT `".$id_column_name."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
+            $item_ids_fetch_sql = "SELECT `".$item_type->getItemListColumn()."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
             try {
                 $item_ids = DB::query($item_ids_fetch_sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
                 return array(2, "fetch_original_ids");
             }
+
+            // Insert the new ID into this array
+            $item_ids_arr = json_decode($item_ids[0][$item_type->getItemListColumn()]);
             try {
-                $item_ids_arr = json_decode($item_ids[0][$id_column_name]);
+                array_push($item_ids_arr, $item_id);
             } catch (Exception $e) {
                 return array(4, null);
             }
 
-            // Insert the new ID into this array
-            array_push($item_ids_arr, $item_id);
-
             // Push to the database
-            $item_ids_push_sql = "UPDATE `User_Item_IDs` SET `".$id_column_name."`=:item_ids WHERE `User_ID`=:uid";
+            $item_ids_push_sql = "UPDATE `User_Item_IDs` SET `".$item_type->getItemListColumn()."`=:item_ids WHERE `User_ID`=:uid";
             try {
                 DB::query($item_ids_push_sql, array(":item_ids" => json_encode($item_ids_arr), ":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
@@ -139,24 +115,13 @@
 
         public static function clean_item_type_data() {
             $type = $_POST["form_type"];
-            switch($type) {
-                case "armour":
-                    $column_name = "Armour_IDs";
-                    break;
-                case "spell":
-                    $column_name = "Spell_IDs";
-                    break;
-                case "stat_block":
-                    $column_name = "NPC_Stat_Block_IDs";
-                    break;
-                case "weapon":
-                    $column_name = "Weapon_IDs";
-                    break;
-                default:
-                    return FALSE;
+            try {
+                $item_type = ItemTypes::fromName($type);
+            } catch (OutOfRangeException $e) {
+                return FALSE;
             }
 
-            $sql = "UPDATE `User_Item_IDs` SET `".$column_name."`='[]' WHERE `User_ID`=:uid";
+            $sql = "UPDATE `User_Item_IDs` SET `".$item_type->getItemListColumn()."`='[]' WHERE `User_ID`=:uid";
             try {
                 DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
@@ -169,69 +134,38 @@
         private static function manage_armour_creation_exceptions($data) {
             // Gather additional modifiers for the armour
             $additional_modifiers = array();
-            for ($i = 0; $i < sizeof(ABILITIES); $i++) {
-                if (isset($_POST[ABILITIES[$i] . "_modifier"]) && $_POST[ABILITIES[$i] . "_modifier"] == "1") {
-                    array_push($additional_modifiers, $i + 1);
+            for ($i = 1; $i <= 6; $i++) {
+                $ability = Abilities::fromValue($i);
+                if (isset($_POST[$ability->getName() . "_modifier"]) && $_POST[$ability->getName() . "_modifier"] == "1") {
+                    array_push($additional_modifiers, $ability->getValue());
                 }
             }
             $data["Additional_Modifiers"] = json_encode($additional_modifiers);
             return $data;
         }
 
-        /* Status Codes
-         * 0 - Successful return of last item ID - ID that should be returned
-         * 1 - Server error - null
-         * 2 - No type defined - null
-         */
-        public static function get_last_inserted_of_type($type) {
-            switch($type) {
-                case "armour":
-                    $column_name = "Armour_IDs";
-                    break;
-                case "spell":
-                    $column_name = "Spell_IDs";
-                    break;
-                case "stat_block":
-                    $column_name = "NPC_Stat_Block_IDs";
-                    break;
-                case "weapon":
-                    $column_name = "Weapon_IDs";
-                    break;
-                default: 
-                    return FALSE;
-            }
-            $sql = "SELECT `".$column_name."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
+        public static function get_last_inserted_of_type($item_type) {
+            $sql = "SELECT `".$item_type->getItemListColumn()."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
             try {
-                $old_ids = json_decode($sql, array(":uid" => $_SESSION["Logged_in_id"]));
+                $old_ids = json_decode(DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]))[0][$item_type->getItemListColumn()]);
             } catch (PDOException $e) {
-                return false;
+                return FALSE;
             }
             return $old_ids[sizeof($old_ids) - 1];
         }
-        /* Essentially if this function breaks it's likely a server error or malicious
-         * Therefore returns false if it fails, true if successful
-         */
+
         public static function replace_last_inserted_of_type() {
             // Fetch old item_id array from database
             $type = $_POST["type"];
             $old_id = $_POST["old_id"];
-            switch($type) {
-                case "armour":
-                    $column_name = "Armour_IDs";
-                    break;
-                case "spell":
-                    $column_name = "Spell_IDs";
-                    break;
-                case "stat_block":
-                    $column_name = "NPC_Stat_Block_IDs";
-                    break;
-                case "weapon":
-                    $column_name = "Weapon_IDs";
-                    break;
-                default:
-                    return FALSE;
+
+            try {
+                $item_type = ItemTypes::fromName($type);
+            } catch (OutOfRangeException $e) {
+                return FALSE;
             }
-            $sql = "SELECT `".$column_name."` FROM `User_Item_IDs` WHERE `User_ID`=:uid";
+
+            $sql = "SELECT `".$item_type->getItemListColumn()."` FROM `User_Item_IDs` WHERE `User_ID`=:uid";
             try {
                 $item_ids = DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
@@ -239,13 +173,13 @@
             }
             // Replace old item
             if ($item_ids) {
-                $item_ids_arr = json_decode($item_ids[0][$column_name]);
+                $item_ids_arr = json_decode($item_ids[0][$item_type->getItemListColumn()]);
                 $item_ids_arr[sizeof($item_ids_arr) - 1] = $old_id;
             } else {
                 return FALSE;
             }
             // Update the database
-            $sql = "UPDATE `User_Item_IDs` SET `".$column_name."`=:new_item_ids WHERE `User_ID`=:uid";
+            $sql = "UPDATE `User_Item_IDs` SET `".$item_type->getItemListColumn()."`=:new_item_ids WHERE `User_ID`=:uid";
             try {
                 DB::query($sql, array(":new_item_ids" => json_encode($item_ids_arr), ":uid" => $_SESSION["Logged_in_id"]));
             } catch (PDOException $e) {
@@ -254,15 +188,10 @@
             return TRUE;
         }
 
-        /* Status codes
-         * 0 - Successful return of data - data
-         * 1 - Server error - null
-         * 2 - No type defined - null
-         */
-        public static function get_all_item_data($ids, $type) {
+        public static function get_all_item_data($ids, $item_type) {
             // Switch type and determine base sql
-            switch($type) {
-                case "armour":
+            switch($item_type) {
+                case ItemTypes::Armour():
                     $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value` FROM `Armours`";
                     break;
                 default:

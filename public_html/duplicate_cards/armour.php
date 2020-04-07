@@ -19,8 +19,8 @@
                 echo "None";
             } else {
                 $modifiers = "";
-                foreach (json_decode($item_info["Additional_Modifiers"]) as $modifier) {
-                    $modifiers .= ABILITIES[$modifier] . ", ";
+                foreach (json_decode($item_info["Additional_Modifiers"]) as $modifier_id) {
+                    $modifiers .= Abilities::fromValue($modifier_id)->getName() . ", ";
                 }
                 echo substr($modifiers, 0, -2);
             }
