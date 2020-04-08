@@ -13,13 +13,21 @@
         <div class="col-6 inputs_container">
             <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
             <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green" required/>
-            <?php include $file_root."create_forms/components/AbilitiesBlock.php"; ?>
+            <?php
+                $enum_class_to_use = Abilities::ALL();
+                $unique_descriptor = "modifier";
+                include $file_root."create_forms/components/MultiSelect.php";
+            ?>
             <input type="number" id="str_required" name="strength_required" min="1" class="dark_green_text dark_green_border light_green"/>
             <input type='hidden' name='stealth_disadvantage' id='stealth_disadvantage' value="0"/>
             <div class='checkbox dark_green_border' onclick="toggle_checkbox('stealth_disadvantage')" id="stealth_disadvantage_checkbox"></div>
             <div class='create_form_placeholder'></div>
             <input type="number" id="armour_weight" name="weight" min="1" class="dark_green_text dark_green_border light_green"/><br/>
-            <?php include $file_root."create_forms/components/ValueBlock.php"; ?>
+            <?php
+                $enum_class_to_use = Coins::ALL();
+                $unique_descriptor = "amount";
+                include $file_root."create_forms/components/MultiNumber.php";
+            ?>
         </div>
     </div>
     <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>

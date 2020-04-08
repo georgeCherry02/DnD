@@ -12,7 +12,7 @@
 
         private static function _fromGetter($getter, $value) {
             $reflection_class = new ReflectionClass(get_called_class());
-            $methods = $reflection_class->getMethods(ReflectionMethod::IS_STATIC | ReflectionMethod::IS_PUBLIC);
+            $methods = $reflection_class->getMethods(ReflectionMethod::IS_STATIC && ReflectionMethod::IS_PUBLIC);
             $class_name = get_called_class();
 
             foreach ($methods as $method) {
@@ -52,6 +52,25 @@
             return self::$_instanced_values[$class_name][$value];
         }
 
+        public static function ALL() {
+            $reflection_class = new ReflectionClass(get_called_class());
+            $methods = $reflection_class->getMethods(ReflectionMethod::IS_STATIC && ReflectionMethod::IS_PUBLIC);
+            $class_name = get_called_class();
+
+            $all_types = array();
+
+            foreach ($methods as $method) {
+                if ($method-> class === $class_name) {
+                    $enum_item = $method->invoke(NULL);
+                    if ($enum_item instanceof $class_name) {
+                        array_push($all_types, $enum_item);
+                    }
+                }
+            }
+
+            return $all_types;
+        }
+
         public static function fromValue($value) {
             return self::_fromGetter('getValue', $value);
         }
@@ -66,6 +85,10 @@
 
         public function getName() {
             return $this->_name;
+        }
+
+        public function getClassDisplayName() {
+            return get_called_class();
         }
     }
 ?>
