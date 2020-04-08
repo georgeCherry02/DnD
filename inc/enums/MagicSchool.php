@@ -8,5 +8,9 @@
         public static function Illusion() { return self::_create(6); }
         public static function Necromancy() { return self::_create(7); }
         public static function Transmutation() { return self::_create(8); }
+
+        public function getClassDisplayName() {
+            return "Schools of Magic";
+        }
     }
 ?>
