@@ -72,3 +72,12 @@ function toggle_checkbox(id) {
     form_field.value == "0" ? form_field.value = "1" : form_field.value = "0";
     form_checkbox.classList.toggle("active");
 }
+function toggle_radio(value, group_name, radio_button_elem) {
+    var form_fields = document.getElementsByClassName(group_name + "_radio");
+    for (var i = 0; i < form_fields.length; i++) {
+        form_fields[i].classList.remove("active");
+    }
+    radio_button_elem.classList.add("active");
+
+    document.getElementById(group_name + "_radio_input").value = value;
+}
