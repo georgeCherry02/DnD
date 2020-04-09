@@ -77,9 +77,9 @@
     float: left;
 }
 .labels_container label {
+    display: block;
     height: 2em;
     line-height: 2em;
-    padding: 3px;
 }
 
 .create_form_dropdown {
@@ -113,12 +113,6 @@
     margin-right: 5px;
     float: right;
     text-indent: 2px;
-}
-div.create_form_dropdown {
-    z-index: 5;
-}
-div.create_form_dropdown.Abilities {
-    z-index: 6;
 }
 div.checkbox.active, div[class*="_radio"].active {
     background: #343c24;

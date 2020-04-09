@@ -5,5 +5,9 @@
         public static function Cylinder() { return self::_create(3); }
         public static function Line() { return self::_create(4); }
         public static function Sphere() { return self::_create(5); }
+
+        public function getClassDisplayName() {
+            return "Shapes";
+        }
     } 
 ?>

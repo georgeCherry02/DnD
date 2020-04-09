@@ -80,4 +80,20 @@ function toggle_radio(value, group_name, radio_button_elem) {
     radio_button_elem.classList.add("active");
 
     document.getElementById(group_name + "_radio_input").value = value;
+
+    // Manage aesthetics
+    switch(group_name) {
+        case "range_type":
+            var display_type = value === 1 ? "inline-block" : "none";
+            var location = "range_distance";
+            break;
+        case "shape_type":
+            var display_type = value !== 4 ? "inline-block" : "none";
+            var location = "shape_size";
+            break;
+    }
+
+    document.getElementById(location).style.display = display_type;
+    document.getElementById(location + "_label").style.display = display_type;
+    document.getElementById(location + "_br").style.display = display_type;
 }

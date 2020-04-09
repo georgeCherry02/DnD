@@ -154,7 +154,7 @@
         }
 
         public static function get_last_inserted_of_type($item_type) {
-            $sql = "SELECT `".$item_type->getItemListColumn()."` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
+            $sql = "SELECT `" . $item_type->getItemListColumn() . "` FROM `User_Item_IDs` WHERE `User_ID`=:uid;";
             try {
                 $old_ids = json_decode(DB::query($sql, array(":uid" => $_SESSION["Logged_in_id"]))[0][$item_type->getItemListColumn()]);
             } catch (PDOException $e) {
