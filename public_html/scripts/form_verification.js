@@ -85,11 +85,11 @@ function toggle_radio(value, group_name, radio_button_elem) {
     var display_type, location, placeholder = false;
     switch(group_name) {
         case "range_type":
-            display_type = value === 1 ? "inline-block" : "none";
+            display_type = value === 1 ? "block" : "none";
             location = "range_distance";
             break;
         case "shape_type":
-            display_type = value !== 4 ? "inline-block" : "none";
+            display_type = value !== 4 ? "block" : "none";
             location = "shape_size";
             break;
         case "effect":
@@ -106,4 +106,18 @@ function toggle_radio(value, group_name, radio_button_elem) {
     if (placeholder) {
         document.getElementById(location + "_placeholder").style.display = display_type;
     }
+
+    // Manage form height
+    var form = document.getElementsByTagName("form")[0];
+    // Get labels container
+    var label_container = document.getElementsByClassName("labels_container")[0];
+    var labels = label_container.childNodes;
+    var input_count = 0;
+    for (var i = 0; i < labels.length; i++) {
+        if (labels[i].style !== undefined && labels[i].style.display !== "none") {
+            input_count++;
+        }
+    }
+    var height = (input_count * 2) + "em";
+    form.style.height = height;
 }
