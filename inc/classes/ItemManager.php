@@ -134,8 +134,7 @@
         private static function manage_armour_creation_exceptions($data) {
             // Gather additional modifiers for the armour
             $additional_modifiers = array();
-            for ($i = 1; $i <= 6; $i++) {
-                $ability = Abilities::fromValue($i);
+            foreach (Abilities::ALL() as $ability) {
                 if (isset($_POST[$ability->getName() . "_modifier"]) && $_POST[$ability->getName() . "_modifier"] == "1") {
                     array_push($additional_modifiers, $ability->getValue());
                 }
@@ -143,8 +142,7 @@
             $data["Additional_Modifiers"] = json_encode($additional_modifiers);
             // Parse coin value and manage input
             $coin_amounts = array();
-            for ($i = 1; $i <= 5; $i++) {
-                $coin = Coins::fromValue($i);
+            foreach (Coins::ALL() as $coin) {
                 if (isset($_POST[$coin->getName()."_amount"])) {
                     array_push($coin_amounts, filter_input(INPUT_POST, $coin->getName()."_amount", FILTER_VALIDATE_INT));
                 } else {

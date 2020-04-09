@@ -14,7 +14,7 @@
             <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
             <input type="number" id="base_ac" name="base_ac" min="1" class="dark_green_text dark_green_border light_green" required/>
             <?php
-                $enum_class_to_use = Abilities::ALL();
+                $enums_to_use = Abilities::ALL();
                 $unique_descriptor = "modifier";
                 include $file_root."create_forms/components/MultiSelect.php";
             ?>
@@ -24,7 +24,7 @@
             <div class='create_form_placeholder'></div>
             <input type="number" id="armour_weight" name="weight" min="1" class="dark_green_text dark_green_border light_green"/><br/>
             <?php
-                $enum_class_to_use = Coins::ALL();
+                $enums_to_use = Coins::ALL();
                 $unique_descriptor = "amount";
                 include $file_root."create_forms/components/MultiNumber.php";
             ?>

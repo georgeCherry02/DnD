@@ -24,8 +24,13 @@
             <input type='text' name='name' id='name' class="dark_green_text dark_green_border light_green" required/><br/>
             <input type='number' name='level' id='level' class="dark_green_text dark_green_border light_green" required/><br/>
             <?php
-                $enum_class_to_use = MagicSchools::ALL();
+                $enums_to_use = MagicSchools::ALL();
                 $column_name = "school";
+                include $file_root."create_forms/components/Radio.php";
+            ?>
+            <?php
+                $enums_to_use = ActionPhases::ALL();
+                $column_name = "casting_time";
                 include $file_root."create_forms/components/Radio.php";
             ?>
         </div>

@@ -47,15 +47,15 @@
         }
     ?>
     <?php
-
         if (!empty($item_info["Value"])) {
             $value_output_string = "";
             $coins_arr = json_decode($item_info["Value"]);
-            for ($i = 1; $i <= 5; $i++) {
-                if ($coins_arr[$i-1] > 0) {
-                    $coin = Coins::fromValue($i);
-                    $value_output_string .= $coins_arr[$i-1] . $coin->getAbbreviation() . ", ";
+            $coin_count = 0;
+            foreach (Coins::ALL() as $coin) {
+                if ($coins_arr[$coin_count] > 0) {
+                    $value_output_string .= $coins_arr[$coin_count] . $coin->getValue() . ", ";
                 }
+                $coin_count++;
             }
             $value_output_string = substr($value_output_string, 0, -2);
             if (array_sum($coins_arr) > 0) {
