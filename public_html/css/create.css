@@ -75,6 +75,7 @@
 .labels_container {
     width: fit-content;
     float: left;
+    margin-right: 10px;
 }
 .labels_container label {
     display: block;

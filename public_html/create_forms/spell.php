@@ -18,7 +18,7 @@
             <label for='concentration'>Concentration:</label>
             <label for='effect'>Effect:</label>
             <!-- Only allow damage/healing magnitude visible if effect === "damage" or "healing" -->
-            <label for='effect_magnitude'>Effect Magnitude:</label>
+            <label for='create_form_dropdown_amount' id='create_form_dropdown_amount_label' style="display: none;">Effect Magnitude:</label>
         </div>
         <div class='col-6 inputs_container'>
             <input type='text' name='name' id='name' class="dark_green_text dark_green_border light_green" required/><br/>
@@ -55,6 +55,7 @@
             ?>
             <?php
                 $enums_to_use = Coins::ALL();
+                $unique_descriptor = "pieces";
                 include $form_component_dir."MultiNumber.php";
             ?>
             <?php
@@ -64,10 +65,13 @@
             <?php
                 $enums_to_use = SpellEffects::ALL();
                 $column_name = "effect";
-                include $form_component_dir."MultiNumber.php";
+                include $form_component_dir."Radio.php";
             ?>
             <?php
                 $enums_to_use = EffectDice::ALL();
+                $unique_descriptor = "amount";
+                $dropdown_visible = FALSE;
+                include $form_component_dir."MultiNumber.php";
             ?>
         </div>
     </div>

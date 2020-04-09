@@ -82,18 +82,28 @@ function toggle_radio(value, group_name, radio_button_elem) {
     document.getElementById(group_name + "_radio_input").value = value;
 
     // Manage aesthetics
+    var display_type, location, placeholder = false;
     switch(group_name) {
         case "range_type":
-            var display_type = value === 1 ? "inline-block" : "none";
-            var location = "range_distance";
+            display_type = value === 1 ? "inline-block" : "none";
+            location = "range_distance";
             break;
         case "shape_type":
-            var display_type = value !== 4 ? "inline-block" : "none";
-            var location = "shape_size";
+            display_type = value !== 4 ? "inline-block" : "none";
+            location = "shape_size";
             break;
+        case "effect":
+            display_type = value !== 3 ? "block" : "none";
+            location = "create_form_dropdown_amount";
+            placeholder = true;
+            break;
+        default:
+            return;
     }
 
     document.getElementById(location).style.display = display_type;
     document.getElementById(location + "_label").style.display = display_type;
-    document.getElementById(location + "_br").style.display = display_type;
+    if (placeholder) {
+        document.getElementById(location + "_placeholder").style.display = display_type;
+    }
 }

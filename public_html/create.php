@@ -153,6 +153,7 @@
 <div class="create_form_container main_green dark_green_border">
 <?php
             $dropdown_count = 0;
+            $dropdown_visible = TRUE;
             $form_component_dir = $file_root."create_forms/components/";
             try{
                 $item_type = ItemTypes::fromName($_GET["choice"]);
