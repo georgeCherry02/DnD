@@ -1,6 +1,6 @@
 <div class="armour_card main_green dark_green_border">
     <?php
-        if ($count == 0) {
+        if ($card_count == 1) {
     ?>
     <h2 class="dark_green_text">Your item</h2>
     <?php
@@ -9,7 +9,7 @@
     <h2 class="dark_green_text">Pre-existing item</h2>
     <?php
         }
-        $count++;
+        $card_count++;
     ?>
     <h3 class="dark_green_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
     <h4 class="dark_green_text">Base AC: <?php echo htmlspecialchars($item_info["Base_AC"]); ?></h4>

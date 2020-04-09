@@ -166,7 +166,12 @@
         public static function replace_last_inserted_of_type() {
             // Fetch old item_id array from database
             $type = $_POST["type"];
-            $old_id = $_POST["old_id"];
+            $old_id = filter_input(INPUT_POST, "old_id", FILTER_VALIDATE_INT);
+            $new_id = filter_input(INPUT_POST, "new_id", FILTER_VALIDATE_INT);
+
+            if (!$old_id && !$new_id) {
+                return FALSE;
+            }
 
             try {
                 $item_type = ItemTypes::fromName($type);
@@ -194,6 +199,15 @@
             } catch (PDOException $e) {
                 return FALSE;
             }
+
+            // Delete the item the user uploaded to the database
+            $sql = "DELETE FROM `".$item_type->getTableName()."` WHERE `ID`=:iid;";
+            try {
+                DB::query($sql, array(":iid" => $new_id));
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+
             return TRUE;
         }
 
