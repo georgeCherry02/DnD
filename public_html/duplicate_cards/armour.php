@@ -1,4 +1,4 @@
-<div class="armour_card main_green dark_green_border">
+<div class="duplicate_card armour_card main_green dark_green_border">
     <?php
         if ($card_count == 1) {
     ?>

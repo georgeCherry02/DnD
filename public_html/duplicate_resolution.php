@@ -60,16 +60,16 @@
                 <input type="hidden" value="<?php echo $new_item_id; ?>" name="new_id"/>
                 <input type="hidden" value="<?php echo $old_item_id; ?>" name="old_id"/>
                 <input type="hidden" value="<?php echo $item_type->getName(); ?>" name="type"/>
-                <div class="col-4"></div>
-                <label class="col-1 dark_green_text" for="duplicate_resolution_keep">Keep old</label>
+                <div class="col-3"></div>
+                <label class="col-2 dark_green_text" for="duplicate_resolution_keep">Keep old</label>
                 <div class="col-1">
                     <input type="radio" name="keep_answer" id="duplicate_resolution_keep" value="keep"/>
                 </div>
-                <label class="col-1 dark_green_text" for="duplicate_resolution_new">Use new</label>
+                <label class="col-2 dark_green_text" for="duplicate_resolution_new">Use new</label>
                 <div class="col-1">
                     <input type="radio" name="keep_answer" id="duplicate_resolution_new" value="new"/>
                 </div>
-                <div class="col-4"></div>
+                <div class="col-3"></div>
             </div>
             <input type="submit" value="Proceed" class="light_green dark_green_text dark_green_border"/>
         </form>

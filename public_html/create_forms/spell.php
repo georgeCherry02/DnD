@@ -5,7 +5,7 @@
             <label for='name' class='required'>Name:</label>
             <label for='level' class='required'>Level:</label>
             <label for='school' class='required'>School of Magic:</label>
-            <label for='casting_time' class='required'>Casting Time:</label>
+            <label for='casting_time' class='required'>Casting phase:</label>
             <label for='range_type' class='required'>Range Type:</label>
             <!-- Only if range_type === "ranged" set range_distance input visible -->
             <label for='range_distance' id='range_distance_label' style='display: none;'>Distance:</label>
@@ -21,15 +21,15 @@
             <label for='create_form_dropdown_amount' id='create_form_dropdown_amount_label' style="display: none;">Effect Magnitude:</label>
         </div>
         <div class='col-6 inputs_container'>
-            <input type='text' name='name' id='name' class="dark_green_text dark_green_border light_green" required/><br/>
-            <input type='number' name='level' id='level' class="dark_green_text dark_green_border light_green" required/><br/>
+            <input type='text' name='name' id='spell_name' class="dark_green_text dark_green_border light_green" required/><br/>
+            <input type='number' name='level' id='level' class="dark_green_text dark_green_border light_green" min="0" max="9" required/><br/>
             <?php
                 $enums_to_use = MagicSchools::ALL();
                 $column_name = "school";
                 include $form_component_dir."Radio.php";
             ?>
             <?php
-                $enums_to_use = ActionPhases::ALL();
+                $enums_to_use = SpellCastingDurations::ALL();
                 $column_name = "casting_time";
                 include $form_component_dir."Radio.php";
             ?>
@@ -41,7 +41,7 @@
             <input type='number' name='range_distance' id='range_distance' style='display: none;' min="0" class="dark_green_text dark_green_border light_green"/>
             <?php
                 $enums_to_use = SpellShapes::ALL();
-                $column_name = "shape_type";
+                $column_name = "shape";
                 include $form_component_dir."Radio.php";
             ?>
             <input type='number' name='shape_size' id='shape_size' style='display: none;' min="0" class="dark_green_text dark_green_border light_green"/>

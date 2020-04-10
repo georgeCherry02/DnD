@@ -1,11 +1,11 @@
-.armour_card {
+.duplicate_card {
     margin: 30px;
     padding: 20px;
     border-radius: 25px;
     border-width: 2px;
     border-style: solid;
 }
-.armour_card h2, .armour_card h3, .armour_card h4, .armour_card p {
+.duplicate_card h2, .duplicate_card h3, .duplicate_card h4, .duplicate_card p {
     margin: 0;
 }
 

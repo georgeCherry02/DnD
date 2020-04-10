@@ -1,12 +1,24 @@
 function validate_armour_creation() {
     // Validate name is of correct format
     var name = document.getElementById('armour_name').value;
-    var nameFormat = /^[a-zA-Z0-9' ]{1,20}$/;
-    if (!name.match(nameFormat)) {
+    if (!validate_create_name(name)) {
         alert("Armour name invalid, look at guidance beside input!");
         return false;
     }
     return true;
+}
+function validate_spell_creation() {
+    // Validate name is of correct format
+    var name = document.getElementById('spell_name').value;
+    if (!validate_create_name(name)) {
+        alert("Spell name invalid, look at guidance beside input!");
+        return false;
+    }
+    return true;
+}
+function validate_create_name(name) {
+    const nameFormat = /^[a-zA-Z0-9' ]{1,20}$/;
+    return name.match(nameFormat);
 }
 
 function validate_duplicate_comparison() {
@@ -88,7 +100,7 @@ function toggle_radio(value, group_name, radio_button_elem) {
             display_type = value === 1 ? "block" : "none";
             location = "range_distance";
             break;
-        case "shape_type":
+        case "shape":
             display_type = value !== 4 ? "block" : "none";
             location = "shape_size";
             break;

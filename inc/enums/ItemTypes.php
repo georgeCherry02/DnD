@@ -31,7 +31,7 @@
                     return array("base_ac", "strength_required", "stealth_disadvantage", "weight");
                     break;
                 case ItemTypes::Spell():
-                    return array("level", "school", "casting_time", "range_type", "range_distance", "shape", "shape_size", "vocal", "somatic", "material", "concentration", "effect");
+                    return array("level", "school", "casting_time", "range_type", "range_distance", "shape", "shape_size", "vocal", "somatic", "concentration", "effect");
                     break;
                 case ItemTypes::StatBlock():
                     return array("armour_class", "hit_points", "speed", "skill_proficiencies", "expertise", "experience_reward", "weapon_id_list", "spell_id_list");

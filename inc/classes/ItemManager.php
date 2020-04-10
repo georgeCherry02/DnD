@@ -47,6 +47,7 @@
                     $sanitised_data = self::manage_armour_creation_exceptions($sanitised_data);
                     break;
                 case ItemTypes::Spell():
+                    $sanitised_data = self::manage_spell_creation_exceptions($sanitised_data);
                     break;
                 case ItemTypes::StatBlock():
                     break;
@@ -113,6 +114,48 @@
             return array(0, $duplicate_id);
         }
 
+        private static function manage_armour_creation_exceptions($data) {
+            // Gather additional modifiers for the armour
+            $data = self::gather_multi_select($data, "Additional_Modifiers", "modifier", Abilities::ALL());
+            // Parse coin value and manage input
+            $data = self::gather_multi_number($data, "Value", "pieces", Coins::ALL());
+            return $data;
+        }
+
+        private static function manage_spell_creation_exceptions($data) {
+            // Gather material value
+            $data = self::gather_multi_number($data, "material_value", "pieces", Coins::ALL());
+            // Gather effect magnitude
+            if ($data["effect"] !== 3) {
+                $data = self::gather_multi_number($data, "effect_dice", "amount", EffectDice::ALL());
+            }
+            return $data;
+        }
+
+        private static function gather_multi_number($data, $column_name, $unique_descriptor, $enum_class) {
+            $data_arr = array();
+            foreach ($enum_class as $enum) {
+                if (isset($_POST[$enum->getName()."_".$unique_descriptor]) && filter_input(INPUT_POST, $enum->getName()."_".$unique_descriptor, FILTER_VALIDATE_INT)) {
+                    array_push($data_arr, $_POST[$enum->getName()."_".$unique_descriptor]);
+                } else {
+                    array_push($data_arr, "0");
+                }
+            }
+            $data[$column_name] = json_encode($data_arr);
+            return $data;
+        }
+
+        private static function gather_multi_select($data, $column_name, $unique_descriptor, $enum_class) {
+            $data_arr = array();
+            foreach ($enum_class as $enum) {
+                if (isset($_POST[$enum->getName()."_".$unique_descriptor]) && $_POST[$enum->getName()."_".$unique_descriptor] == "1") {
+                    array_push($data_arr, $enum->getValue());
+                } 
+            }
+            $data[$column_name] = json_encode($data_arr);
+            return $data;
+        }
+        
         public static function clean_item_type_data() {
             $type = $_POST["form_type"];
             try {
@@ -129,28 +172,6 @@
             }
 
             return TRUE;
-        }
-
-        private static function manage_armour_creation_exceptions($data) {
-            // Gather additional modifiers for the armour
-            $additional_modifiers = array();
-            foreach (Abilities::ALL() as $ability) {
-                if (isset($_POST[$ability->getName() . "_modifier"]) && $_POST[$ability->getName() . "_modifier"] == "1") {
-                    array_push($additional_modifiers, $ability->getValue());
-                }
-            }
-            $data["Additional_Modifiers"] = json_encode($additional_modifiers);
-            // Parse coin value and manage input
-            $coin_amounts = array();
-            foreach (Coins::ALL() as $coin) {
-                if (isset($_POST[$coin->getName()."_amount"])) {
-                    array_push($coin_amounts, filter_input(INPUT_POST, $coin->getName()."_amount", FILTER_VALIDATE_INT));
-                } else {
-                    array_push($coin_amounts, "0");
-                }
-            }
-            $data["Value"] = json_encode($coin_amounts);
-            return $data;
         }
 
         public static function get_last_inserted_of_type($item_type) {
@@ -215,12 +236,17 @@
             // Switch type and determine base sql
             switch($item_type) {
                 case ItemTypes::Armour():
-                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value` FROM `Armours`";
+                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value`";
+                    break;
+                case ItemTypes::Spell():
+                    $sql = "SELECT `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_Dice`";
                     break;
                 default:
                     return FALSE;
             }
 
+            // Add table to SQL
+            $sql .= " FROM `".$item_type->getTableName()."`";
             // Add conditional for $ids array 
             $sql .= " WHERE";
             $variables = array();
