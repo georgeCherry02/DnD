@@ -9,6 +9,7 @@
             <label for="stealth_disadvantage" class="required">Stealth Disadvantage:</label>
             <label for="armour_weight">Armour Weight:</label>
             <label for="armour_value">Armour Value:</label>
+            <label for="description">Description:</label>
         </div>
         <div class="col-6 inputs_container">
             <input type="text" id="armour_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
@@ -29,6 +30,7 @@
                 $unique_descriptor = "pieces";
                 include $form_component_dir."MultiNumber.php";
             ?>
+            <textarea name="description" class="dark_green_text dark_green_border light_green description"></textarea>
         </div>
     </div>
     <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>

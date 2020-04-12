@@ -69,9 +69,11 @@
                 return array(2, "duplicate_check");
             }
 
+            // Add description for data base insert
+            $sql_prepared_variables[":desc"] = $_POST["description"];
             // Insert into a database
-            $column_names_sql = "INSERT INTO `".$item_type->getTableName()."` (`Name`";
-            $values_sql = ") VALUES (:name";
+            $column_names_sql = "INSERT INTO `".$item_type->getTableName()."` (`Name`, `Description`";
+            $values_sql = ") VALUES (:name, :desc";
             foreach ($sanitised_data as $column_name => $column_value) {
                 $column_names_sql .= ", `".$column_name."`";
                 $values_sql .= ", :".$column_name;
@@ -236,10 +238,10 @@
             // Switch type and determine base sql
             switch($item_type) {
                 case ItemTypes::Armour():
-                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value`";
+                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value`, `Description`";
                     break;
                 case ItemTypes::Spell():
-                    $sql = "SELECT `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_Dice`";
+                    $sql = "SELECT `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_Dice`, `Description`";
                     break;
                 default:
                     return FALSE;

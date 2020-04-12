@@ -19,6 +19,7 @@
             <label for='effect'>Effect:</label>
             <!-- Only allow damage/healing magnitude visible if effect === "damage" or "healing" -->
             <label for='create_form_dropdown_amount' id='create_form_dropdown_amount_label' style="display: none;">Effect Magnitude:</label>
+            <label for='description'>Description:</label>
         </div>
         <div class='col-6 inputs_container'>
             <input type='text' name='name' id='spell_name' class="dark_green_text dark_green_border light_green" required/><br/>
@@ -73,6 +74,7 @@
                 $dropdown_visible = FALSE;
                 include $form_component_dir."MultiNumber.php";
             ?>
+            <input type="text" name="description" class="dark_green_text dark_green_border light_green description"/>
         </div>
     </div>
     <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>
