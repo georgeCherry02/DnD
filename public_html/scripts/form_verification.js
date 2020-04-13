@@ -16,6 +16,15 @@ function validate_spell_creation() {
     }
     return true;
 }
+function validate_weapon_creation() {
+    // Validate name is correct format
+    var name = documnet.getElementById('weapon_name').value;
+    if (!validate_create_name(name)) {
+        alert("Weapon name invalid, look at guidance beside input!");
+        return false;
+    }
+    return true;
+}
 function validate_create_name(name) {
     const nameFormat = /^[a-zA-Z0-9' ]{1,20}$/;
     return name.match(nameFormat);
@@ -84,6 +93,64 @@ function toggle_checkbox(id) {
     form_field.value == "0" ? form_field.value = "1" : form_field.value = "0";
     form_checkbox.classList.toggle("active");
 }
+function toggle_damage_checkbox(damage_type) {
+    var damage_type_checkbox = document.getElementById(damage_type + "_check");
+    var damage_type_label = document.getElementById(damage_type + "_label");
+    var damage_type_input_container = document.getElementById("create_form_dropdown_" + damage_type + "_damage");
+    var damage_type_input_placeholder = document.getElementById("create_form_dropdown_" + damage_type + "_damage_placeholder");
+    damage_type_checkbox.classList.toggle("active");
+    var display_type = damage_type_label.style.display == "none" ? "block" : "none";
+    damage_type_label.style.display = display_type;
+    damage_type_input_container.style.display = display_type;
+    damage_type_input_placeholder.style.display = display_type;
+    if (display_type == "none") {
+        var num_inputs = document.querySelectorAll("#create_form_dropdown_" + damage_type + "_damage input");
+        for (var i = 0; i < num_inputs.length; i++) {
+            num_inputs[i].value = 0;
+        }
+    }
+}
+function toggle_weapon_prop_checkbox(property) {
+    // Check if it's initially a ranged weapon
+    var ranged_check = document.getElementById("Ammunition_property").value + document.getElementById("Loading_property").value + document.getElementById("Thrown_property").value > 0;
+    if (ranged_check && property == "Range") {
+        return;
+    }
+    toggle_checkbox(property + "_property");
+    if (property == "Versatile") {
+    // If property is Versatile reveal versatile damage field
+        var versatile_damage_label = document.getElementById("versatile_damage_label");
+        var versatile_damage_dropdown = document.getElementById("create_form_dropdown_versatile_damage");
+        var versatile_damage_placeholder = document.getElementById("create_form_dropdown_versatile_damage_placeholder");
+        var display_type = versatile_damage_label.style.display == "none" ? "block" : "none";
+        versatile_damage_label.style.display = display_type;
+        versatile_damage_dropdown.style.display = display_type;
+        versatile_damage_placeholder.style.display = display_type;
+    } else if (property == "Ammunition" || property == "Loading" || property == "Thrown") {
+    // If property is Ammunition, Loading or Thrown toggle the Ranged field appropriately
+        if (document.getElementById(property + "_property").value == 1) {
+            document.getElementById("Range_property").value = 1;
+            if (!document.getElementById("Range_property_checkbox").classList.contains("active")) {
+                document.getElementById("Range_property_checkbox").classList.add("active");
+            }
+        } else {
+            var ranged_weapon = document.getElementById("Ammunition_property").value + document.getElementById("Loading_property").value + document.getElementById("Thrown_property").value > 0;
+            if (!ranged_weapon) {
+                document.getElementById("Range_property").value = 0;
+                document.getElementById("Range_property_checkbox").classList.remove("active");
+            }
+        }
+    }
+
+    // Reveal or remove the range input fields according to the ranged field value
+    var display_type = document.getElementById("Range_property").value == 1 ? "block" : "none";
+    var fields = ["Effective_Range", "Maximum_Range"];
+    for (var i = 0; i < fields.length; i++) {
+        document.getElementById(fields[i] + "_label").style.display = display_type;
+        document.getElementById(fields[i]).style.display = display_type;
+    }
+}
+
 function toggle_radio(value, group_name, radio_button_elem) {
     var form_fields = document.getElementsByClassName(group_name + "_radio");
     for (var i = 0; i < form_fields.length; i++) {

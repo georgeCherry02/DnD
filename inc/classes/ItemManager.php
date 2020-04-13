@@ -52,6 +52,7 @@
                 case ItemTypes::StatBlock():
                     break;
                 case ItemTypes::Weapon():
+                    $sanitised_data = self::manage_weapon_creation_exceptions($sanitised_data);
                     break;
             }
 
@@ -132,6 +133,103 @@
                 $data = self::gather_multi_number($data, "effect_dice", "amount", EffectDice::ALL());
             }
             return $data;
+        }
+        
+        private static function manage_weapon_creation_exceptions($data) {
+            // Gather weapon properties
+            $weapon_properties = array();
+            foreach (WeaponProperties::ALL() as $property) {
+                if (isset($_POST[$property->getName()."_property"]) && $_POST[$property->getName()."_property"] == "1") {
+                    array_push($weapon_properties, $property->getName());
+                }
+            }
+            $data["Properties"] = json_encode($weapon_properties);
+
+            // Declare damage id array
+            $damage_ids = array();
+            // Gather damage summary
+            $damage_summary = self::gather_damage_summary();
+            // Insert into database and put damage distribution IDs into array
+            foreach ($damage_summary as $damage_type => $damage_distribution) {
+                $sql = "INSERT INTO `Damage_Distributions` (d4, d6, d8, d10, d12, `Type`) VALUES (:d4, :d6, :d8, :d10, :d12, :damage_type)";
+                $sql_variables = $damage_distribution;
+                $sql_variables[":damage_type"] = $damage_type;
+                // Add distribution to database
+                try {
+                    DB::query($sql, $sql_variables);
+                } catch (PDOException $e) {
+                    return FALSE;
+                }
+                // Fetch the ID of that distribution
+                try {
+                    $distribution_id = DB::query("SELECT `ID` FROM `Damage_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+                } catch (PDOException $e) {
+                    return FALSE;
+                }
+                // Add that ID to the damage_ids array
+                array_push($damage_ids, $distribution_id);
+            }
+            // Add the encoded damage_ids to the weapon SQL variables
+            $data["Damage_Distribution_IDs"] = json_encode($damage_ids);
+
+            // If the weapons versatile, gather that damage
+            // Set damage type to versatile as a flag
+            if (in_array("Versatile", $weapon_properties)) {
+                // Gather the versatile damage
+                $versatile_damage = array();
+                $running_total = 0;
+                foreach (EffectDice::ALL() as $die) {
+                    if (isset($_POST[$die->getName()."_versatile_damage"]) && filter_input(INPUT_POST, $die->getName()."_versatile_damage", FILTER_VALIDATE_INT)) {
+                        $value = $_POST[$die->getName()."_versatile_damage"];
+                        $versatile_damage[":".$die->getName()] = $value;
+                        $running_total = $running_total + $value;
+                    } else {
+                        $versatile_damage[":".$die->getName()] = 0;
+                    }
+                }
+                // If there's damage dealt, put this damage in database and add id to weapon SQL variables
+                if ($running_total > 0) {
+                    $sql = "INSERT INTO `Damage_Distributions` (d4, d6, d8, d10, d12, `Type`) VALUES (:d4, :d6, :d8, :d10, :d12, :damage_type)";
+                    $sql_variables = $versatile_damage;
+                    $sql_variables[":damage_type"] = "Versatile";
+                    try {
+                        DB::query($sql, $sql_variables);
+                    } catch (PDOException $e) {
+                        return FALSE;
+                    }
+                    try {
+                        $damage_distribution_id = DB::query("SELECT `ID` FROM `Damage_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+                    } catch (PDOException $e) {
+                        return FALSE;
+                    }
+                    $data["Versatile_Damage_ID"] = $damage_distribution_id;
+                }
+            }
+
+            // Gather weapon value information
+            $data = self::gather_multi_number($data, "Value", "pieces", Coins::ALL());
+            return $data;
+        }
+
+        private static function gather_damage_summary() {
+            $damage_summary = array();
+            foreach (DamageType::ALL() as $damage_type) {
+                $damage_type_summary = array();
+                $running_total = 0;
+                foreach (EffectDice::ALL() as $die) {
+                    if (isset($_POST[$die->getName()."_".$damage_type->getName()."_damage"]) && filter_input(INPUT_POST, $die->getName()."_".$damage_type->getName()."_damage", FILTER_VALIDATE_INT)) {
+                        $value = $_POST[$die->getName()."_".$damage_type->getName()."_damage"];
+                        $damage_type_summary[":".$die->getName()] = $value;
+                        $running_total = $running_total + $value;
+                    } else {
+                        $damage_type_summary[":".$die->getName()] = 0;
+                    }
+                }
+                if ($running_total > 0) {
+                    $damage_summary[$damage_type->getName()] = $damage_type_summary;
+                }
+            }
+            return $damage_summary;
         }
 
         private static function gather_multi_number($data, $column_name, $unique_descriptor, $enum_class) {
@@ -243,6 +341,9 @@
                 case ItemTypes::Spell():
                     $sql = "SELECT `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_Dice`, `Description`";
                     break;
+                case ItemTypes::Weapon():
+                    $sql = "SELECT `Name`, `Properties`, `Damage_Distribution_IDs`, `Effective_Range`, `Maximum_Range`, `Versatile_Damage_ID`, `Weight`, `Value`, `Description`";
+                    break;
                 default:
                     return FALSE;
             }
@@ -257,6 +358,24 @@
                 $variables[":id" . $i] = $ids[$i - 1];
             }
             $sql = substr($sql, 0, -3) . ";";
+
+            // Make request
+            try {
+                $data = DB::query($sql, $variables);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            return $data;
+        }
+
+        public static function get_damage_distributions($ids) {
+            $sql = "SELECT `d4`, `d6`, `d8`, `d10`, `d12`, `Type` FROM `Damage_Distributions` WHERE";
+            $variables = array();
+            for ($i = 1; $i <= sizeof($ids); $i++) {
+                $sql .= " `ID`=:id" . $i . " OR";
+                $variables[":id".$i] = $ids[$i - 1];
+            }
+            $sql = substr($sql, 0, -3).";";
 
             // Make request
             try {

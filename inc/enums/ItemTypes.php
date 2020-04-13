@@ -37,7 +37,7 @@
                     return array("armour_class", "hit_points", "speed", "skill_proficiencies", "expertise", "experience_reward", "weapon_id_list", "spell_id_list");
                     break;
                 case ItemTypes::Weapon():
-                    return array("properties", "damage_type", "effective_range", "maximum_range");
+                    return array("Effective_Range", "Maximum_Range", "Weight");
                     break;
                 default:
                     throw new OutOfRangeException();

@@ -10,9 +10,8 @@
     <?php
         }
         $card_count++;
-    ?>
-    <?php
-        // Gather variables
+
+        // Gather and parse spell information
         // Fetch school of magic
         try {
             $magic_school = MagicSchools::fromValue($item_info["School"]);

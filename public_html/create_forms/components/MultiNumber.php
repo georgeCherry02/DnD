@@ -7,7 +7,7 @@
         $visibility_style = "none";
         $placeholder_visibility_style = "none";
     }
-    $z_index = 10 - $dropdown_count;
+    $z_index = 30 - $dropdown_count;
     $dropdown_count++;
 ?>
 <div id='create_form_dropdown_<?php echo $unique_descriptor; ?>' class="create_form_dropdown <?php echo get_class($enums_to_use[0]); ?> light_green dark_green_border" onmouseover="this.style.maxHeight='<?php echo $max_height_on_hover; ?>'" onmouseout="this.style.maxHeight= 'calc(2em - 4px)'" style="z-index: <?php echo $z_index; ?>; display: <?php echo $visibility_style; ?>;">

@@ -74,7 +74,7 @@
                 $dropdown_visible = FALSE;
                 include $form_component_dir."MultiNumber.php";
             ?>
-            <input type="text" name="description" class="dark_green_text dark_green_border light_green description"/>
+            <textarea name="description" class="dark_green_text dark_green_border light_green description"></textarea>
         </div>
     </div>
     <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>
