@@ -26,10 +26,10 @@
         $weapon_damage_output_string = "";
         $versatile_damage_output_string = "";
         foreach ($damage_distributions as $damage_dist) {
-            foreach (EffectDice::ALL() as $piece) {
-                $value = $damage_dist[$piece->getName()];
+            foreach (EffectDice::ALL() as $die) {
+                $value = $damage_dist[$die->getName()];
                 if ($value > 0) {
-                    $addition = $value . $piece->getName() . ", ";
+                    $addition = $value . $die->getName() . ", ";
                     if ($damage_dist["Type"] == "Versatile") {
                         $versatile_damage_output_string .= $addition;  
                     } else {
