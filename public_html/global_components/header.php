@@ -16,8 +16,8 @@
         <title><?php echo "DnD | " . $page_title; ?></title>
         <link rel='stylesheet' href='<?php echo $file_root; ?>css/main.css' type='text/css'/> 
         <script src="https://kit.fontawesome.com/fd361f6e33.js"></script>
-        <link   rel="stylesheet"
-                href="https://fonts.googleapis.com/css?family=Gotu">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gotu"/>
+        <script src="<?php echo $file_root; ?>scripts/constants.js"></script>
         <?php
             switch ($page_title) {
                 case "Welcome":
