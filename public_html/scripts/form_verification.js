@@ -93,13 +93,17 @@ function toggle_checkbox(id) {
     form_field.value == "0" ? form_field.value = "1" : form_field.value = "0";
     form_checkbox.classList.toggle("active");
 }
-function toggle_damage_checkbox(damage_type) {
+function toggle_damage_checkbox(damage_type, hide = false) {
     var damage_type_checkbox = document.getElementById(damage_type + "_check");
     var damage_type_label = document.getElementById(damage_type + "_label");
     var damage_type_input_container = document.getElementById("create_form_dropdown_" + damage_type + "_damage");
     var damage_type_input_placeholder = document.getElementById("create_form_dropdown_" + damage_type + "_damage_placeholder");
-    damage_type_checkbox.classList.toggle("active");
-    var display_type = damage_type_label.style.display == "none" ? "block" : "none";
+    if (!hide) {
+        damage_type_checkbox.classList.toggle("active");
+    } else {
+        damage_type_checkbox.classList.remove("active");
+    }
+    var display_type = damage_type_label.style.display == "none" && !hide ? "block" : "none";
     damage_type_label.style.display = display_type;
     damage_type_input_container.style.display = display_type;
     damage_type_input_placeholder.style.display = display_type;
@@ -172,10 +176,8 @@ function toggle_radio(value, group_name, radio_button_elem) {
             location = "shape_size";
             break;
         case "effect":
-            display_type = value !== 3 ? "block" : "none";
-            location = "create_form_dropdown_amount";
-            placeholder = true;
-            break;
+            handle_spell_effect_change(value);
+            return;
         default:
             return;
     }
@@ -199,4 +201,37 @@ function toggle_radio(value, group_name, radio_button_elem) {
     }
     var height = (input_count * 2) + "em";
     form.style.height = height;
+}
+
+function handle_spell_effect_change(value) {
+    document.getElementById("damage_types_label").style.display = "none";
+    document.getElementById("create_form_dropdown_damage").style.display = "none";
+    document.getElementById("create_form_dropdown_damage_types_placeholder").style.display = "none";
+    document.getElementById("healing_amount_label").style.display = "none";
+    document.getElementById("create_form_dropdown_healing").style.display = "none";
+    document.getElementById("create_form_dropdown_healing_placeholder").style.display = "none";
+    for (var i = 0; i < DAMAGE_TYPES.length; i++) {
+        toggle_damage_checkbox(DAMAGE_TYPES[i], true);
+    }
+    var num_inputs = document.querySelectorAll("#create_form_dropdown_healing input");
+    for (var i = 0; i < num_inputs.length; i++) {
+        num_inputs[i].value = 0;
+    }
+    // A value of 3 represents an rp role yet there's no other field necessary in this case
+    // Need to make the individual damage types disappear too
+    // Finally need to get rid of all values that don't exist either
+    switch(value) {
+        case 1:
+            // Damage value
+            document.getElementById("damage_types_label").style.display = "block";
+            document.getElementById("create_form_dropdown_damage").style.display = "block";
+            document.getElementById("create_form_dropdown_damage_types_placeholder").style.display = "block";
+            break;
+        case 2:
+            // Heal value
+            document.getElementById("healing_amount_label").style.display = "block";
+            document.getElementById("create_form_dropdown_healing").style.display = "block";
+            document.getElementById("create_form_dropdown_healing_placeholder").style.display = "block";
+            break;
+    }
 }

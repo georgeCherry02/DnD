@@ -129,9 +129,45 @@
             // Gather material value
             $data = self::gather_multi_number($data, "material_value", "pieces", Coins::ALL());
             // Gather effect magnitude
-            if ($data["effect"] !== 3) {
-                $data = self::gather_multi_number($data, "effect_dice", "amount", EffectDice::ALL());
+            $effect_summary = array();
+            if ($data["effect"] == 1) {
+                // Already have written a method to parse damages
+                $effect_summary = self::gather_damage_summary();
+            } else if ($data["effect"] == 2) {
+                // This will fetch a healing summary if that's how the spell works
+                $healing_summary = array();
+                foreach (EffectDice::ALL() as $die) {
+                    $value = 0;
+                    if (isset($_POST[$die->getName()."_healing"]) && filter_input(INPUT_POST, $die->getName()."_healing", FILTER_VALIDATE_INT)) {
+                        $value = $_POST[$die->getName()."_healing"];
+                    }
+                    $healing_summary[":".$die->getName()] = $value;
+                }
+                $effect_summary["healing"] = $healing_summary;
             }
+
+            // Push effects into database and fetch a list of IDs
+            $effect_ids = array();
+            foreach ($effect_summary as $effect => $effect_distribution) {
+                $sql = "INSERT INTO `Damage_Distributions` (d4, d6, d8, d10, d12, `Type`) VALUES (:d4, :d6, :d8, :d10, :d12, :effect_type)";
+                $sql_variables = $effect_distribution;
+                // Note this could be "healing" hence the word effect rather than just damage_type
+                $sql_variables[":effect_type"] = $effect;
+                // Add distribution to database
+                try {
+                    DB::query($sql, $sql_variables);
+                } catch (PDOException $e) {
+                    return FALSE;
+                }
+                // Fetch the ID of that distribution
+                try {
+                    $distribution_id = DB::query("SELECT `ID` FROM `Damage_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+                } catch (PDOException $e) {
+                    return FALSE;
+                }
+                array_push($effect_ids, $distribution_id);
+            }
+            $data["Effect_IDs"] = json_encode($effect_ids);
             return $data;
         }
         

@@ -18,7 +18,13 @@
             <label for='concentration'>Concentration:</label>
             <label for='effect'>Effect:</label>
             <!-- Only allow damage/healing magnitude visible if effect === "damage" or "healing" -->
-            <label for='create_form_dropdown_amount' id='create_form_dropdown_amount_label' style="display: none;">Effect Magnitude:</label>
+            <label id='damage_types_label' style='display: none;'>Damage Types:</label>
+            <?php
+                foreach (DamageType::ALL() as $damage_type) {
+                    echo "<label id='".$damage_type->getName()."_label' style='display: none;'>".$damage_type->getName()." Damage:</label>";
+                }
+            ?>
+            <label id='healing_amount_label' style='display: none;'>Healing Amount:</label>
             <label for='description'>Description:</label>
         </div>
         <div class='col-6 inputs_container'>
@@ -28,13 +34,11 @@
                 $enums_to_use = MagicSchools::ALL();
                 $column_name = "school";
                 include $form_component_dir."Radio.php";
-            ?>
-            <?php
+
                 $enums_to_use = SpellCastingDurations::ALL();
                 $column_name = "casting_time";
                 include $form_component_dir."Radio.php";
-            ?>
-            <?php 
+                
                 $enums_to_use = SpellRangeTypes::ALL();
                 $column_name = "range_type";
                 include $form_component_dir."Radio.php";
@@ -49,28 +53,27 @@
             <?php
                 $column_name = "vocal";
                 include $form_component_dir."Checkbox.php";
-            ?>
-            <?php
+
                 $column_name = "somatic";
                 include $form_component_dir."Checkbox.php";
-            ?>
-            <?php
+
                 $enums_to_use = Coins::ALL();
                 $unique_descriptor = "pieces";
                 include $form_component_dir."MultiNumber.php";
-            ?>
-            <?php
+
                 $column_name = "concentration";
                 include $form_component_dir."Checkbox.php";
-            ?>
-            <?php
+
                 $enums_to_use = SpellEffects::ALL();
                 $column_name = "effect";
                 include $form_component_dir."Radio.php";
-            ?>
-            <?php
+
+                $dropdown_visible = FALSE;
+                $unique_descriptor = "damage_types";
+                include $form_component_dir."Damage.php";
+
                 $enums_to_use = EffectDice::ALL();
-                $unique_descriptor = "amount";
+                $unique_descriptor = "healing";
                 $dropdown_visible = FALSE;
                 include $form_component_dir."MultiNumber.php";
             ?>

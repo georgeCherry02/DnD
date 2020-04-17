@@ -81,23 +81,26 @@
             $concentration = "No";
         }
         // Determine effect
+        $effect_output_str = "";
         try {
             $effect = SpellEffects::fromValue($item_info["Effect"]);
         } catch (OutOfRangeException $e) {
             $effect = SpellEffects::Rollplay();
         }
         if ($effect === SpellEffects::Damage() || $effect === SpellEffects::Healing()) {
-            $effect_dice = json_decode($item_info["Effect_Dice"]);
-            $dice_output = "";
-            $die_count = 0;
-            foreach (EffectDice::ALL() as $dice) {
-                if ($effect_dice[$die_count] > 0) {
-                    $dice_output .= $effect_dice[$die_count] . $dice->getName() . ", ";
+            $effect_ids = json_encode($item_info["Effect_IDs"]);
+            $effect_distributions = ItemManager::get_damage_distributions($effect_ids);
+            foreach ($effect_distributions as $eff_dist) {
+                foreach (EffectDice::ALL() as $die) {
+                    $value = $effect_distributions[$die->getName()];
+                    if ($value > 0) {
+                        $effect_output_str .= $value . $die->getName() . ", ";
+                    }
                 }
-                $die_count++;
+                $effect_output_str = substr($effect_output_str, 0, -2);
+                $effect_output_str .= " ".$eff_dist.", ";
             }
-            $dice_output = substr($dice_output, 0, -2);
-            $spell_effect = $dice_output . " " . $effect->getName();
+            $effect_output_str = substr($effect_output_str, 0, -2);
         } else {
             $spell_effect = $effect->getName();
         }
