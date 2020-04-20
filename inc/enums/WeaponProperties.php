@@ -1,7 +1,7 @@
 <?php
     final class WeaponProperties extends TypedEnum {
         public static function Ammunition() { return self::_create("Weapons with the <i>Ammunition</i> property requires ammunition to make a ranged attack."); }
-        public static function Finesse() { return self::_create("Weapons with the <i>Finesse</i> property can use either the Strength or Dexterity modifier for \"Attack\" and \"Damage\" rolls."); }
+        public static function Finesse() { return self::_create("Weapons with the <i>Finesse</i> property can use either the Strength or Dexterity modifier for &#34Attack&#34 and &#34Damage&#34 rolls."); }
         public static function Heavy() { return self::_create("Small creatures have disadvantage on attack rolls with <i>Heavy</i> weapons."); }
         public static function Light() { return self::_create("Weapons with the <i>Light</i> property are easy to handle. This makes them ideal for two-weapon fighting."); }
         public static function Loading() { return self::_create("Weapons with the <i>Loading</i> property can only fire one piece of ammunition when you use an <i>Action</i>, <i>Bonus Action</i> or <i>Reaction</i> to fire it."); }

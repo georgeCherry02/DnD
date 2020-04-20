@@ -16,6 +16,15 @@ function validate_spell_creation() {
     }
     return true;
 }
+function validate_stat_block_creation() {
+    // Validate name is of correct format
+    var name = document.getElementById("npc_name").value;
+    if (!validate_create_name(name)) {
+        alert("This NPC's name is invalid, look at guidance beside input!");
+        return false;
+    }
+    return true;
+}
 function validate_weapon_creation() {
     // Validate name is correct format
     var name = documnet.getElementById('weapon_name').value;
@@ -26,7 +35,7 @@ function validate_weapon_creation() {
     return true;
 }
 function validate_create_name(name) {
-    const nameFormat = /^[a-zA-Z0-9' ]{1,20}$/;
+    const nameFormat = /^[a-zA-Z0-9' ]{1,25}$/;
     return name.match(nameFormat);
 }
 

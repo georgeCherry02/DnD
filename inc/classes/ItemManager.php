@@ -50,6 +50,7 @@
                     $sanitised_data = self::manage_spell_creation_exceptions($sanitised_data);
                     break;
                 case ItemTypes::StatBlock():
+                    $sanitised_data = self::manage_stat_block_exceptions($sanitised_data);
                     break;
                 case ItemTypes::Weapon():
                     $sanitised_data = self::manage_weapon_creation_exceptions($sanitised_data);
@@ -170,6 +171,124 @@
             $data["Effect_IDs"] = json_encode($effect_ids);
             return $data;
         }
+
+        private static function manage_stat_block_exceptions($data) {
+            // Gather ability scores
+            $ability_summary = self::gather_ability_summary();
+            $beginning_of_sql = "INSERT INTO `Ability_Distributions` (";
+            $end_of_sql = ") VALUES (";
+            foreach (Abilities::ALL() as $ability) {
+                $beginning_of_sql .= $ability->getName() . ", ";
+                $end_of_sql .= ":" . $ability->getName() . ", ";
+            }
+            $sql = substr($beginning_of_sql, 0, -2) . substr($end_of_sql, 0, -2) . ")";
+            // Commit abilities to database
+            try {
+                DB::query($sql, $ability_summary);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            // Fetch the ID of that distribution
+            try {
+                $distribution_id = DB::query("SELECT `ID` FROM `Ability_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            $data["Ability_Scores_ID"] = $distribution_id;
+
+            // Gather skill proficiencies
+            $data = self::gather_multi_select($data, "Skill_Proficiencies", "proficiency", Skills::ALL());
+
+            // Gather expertise
+            $data = self::gather_multi_select($data, "Expertise", "expertise", Skills::ALL());
+
+            // Gather item IDs and push to lists
+            $data["Spell_ID_List"] = array();
+            $data["Weapon_ID_List"] = array();
+            // Fetch the list of owned item IDs so that you can validate these items have been added by the user
+            $owned_item_ids = self::get_owned_items();
+            foreach($_POST as $key => $value) {
+                // Define patterns to filter POSTed variables
+                $weapon_pattern = "/^" . ItemTypes::Weapon()->getName() . "_/";
+                $spell_pattern = "/^" . ItemTypes::Spell()->getName() . "_/";
+                if (preg_match($weapon_pattern, $key)) {
+                    $current_item_type = ItemTypes::Weapon();
+                } else if (preg_match($spell_pattern, $key)) {
+                    $current_item_type = ItemTypes::Spell();
+                } else {
+                    // Skip this POST variable if it doesn't fit one of the patterns
+                    continue;
+                }
+                // Parse the item ID from the key, strpos returns the last occurence of the "needle" so this will always work
+                $item_id = substr($key, strpos($key, "_") + 1);
+                // Check if the item associated with the ID is owned by the user
+                if (in_array($item_id, $owned_item_ids[$current_item_type->getItemListColumn()])) {
+                    if (filter_input(INPUT_POST, $key, FILTER_VALIDATE_INT) && $value == 1) {
+                        array_push($data[$current_item_type->getName()."_ID_List"], $item_id);
+                    }
+                }
+            }
+            // Encode appropriately for upload to database
+            $data["Spell_ID_List"] = json_encode($data["Spell_ID_List"]);
+            $data["Weapon_ID_List"] = json_encode($data["Weapon_ID_List"]);
+
+            // Gather spell slots
+            $spell_slot_sql_variables = array();
+            $beginning_of_spell_slot_sql = "INSERT INTO `Spell_Slot_Distributions` (";
+            $end_of_spell_slot_sql = ") VALUES (";
+            for ($i = 1; $i <= 9; $i++) {
+                // Determine the number of spell slots for each level, using 0 as a default
+                $value = 0;
+                if (isset($_POST["spell_slot_level_".$i]) && filter_input(INPUT_POST, "spell_slot_level_".$i, FILTER_VALIDATE_INT)) {
+                    $value = $_POST["spell_slot_level_".$i];
+                }
+                // Put these values into an array ready to create a request
+                $spell_slot_sql_variables[":level".$i] = $value;
+                // Assemble the SQL for the request
+                $beginning_of_spell_slot_sql .= "`Level_".$i."`, ";
+                $end_of_spell_slot_sql .= ":level".$i.", ";
+            }
+            // Trim the sections of SQL appropriately and concatenate into final SQL
+            $spell_slot_sql = substr($beginning_of_spell_slot_sql, 0, -2) . substr($end_of_spell_slot_sql, 0, -2) . ")";
+            try {
+                DB::query($spell_slot_sql, $spell_slot_sql_variables);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            // Go fetch the ID of the inserted variables
+            try {
+                $distribution_id = DB::query("SELECT `ID` FROM `Spell_Slot_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"]; 
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            $data["Spell_Slot_Distribution_ID"] = $distribution_id;
+
+            // Fetch and validate the number of features first
+            $feature_ids = array();
+            if (filter_input(INPUT_POST, "feature_amount", FILTER_VALIDATE_INT)) {
+                $number_of_features = $_POST["feature_amount"];
+                for ($i = 1; $i <= $number_of_features; $i++) {
+                    $feature_sql_variables = array();
+                    $feature_sql_variables[":name"] = $_POST["feature_".$i."_name"];
+                    $feature_sql_variables[":desc"] = $_POST["feature_".$i."_desc"];
+                    $feature_sql = "INSERT INTO `Features` (`Name`, `Description`) VALUES (:name, :desc)";
+                    try {
+                        DB::query($feature_sql, $feature_sql_variables);
+                    } catch (PDOException $e) {
+                        return FALSE;
+                    }
+                    try {
+                        $feature_id = DB::query("SELECT `ID` FROM `Features` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+                    } catch (PDOException $e) {
+                        return FALSE;
+                    }
+                    array_push($feature_ids, $feature_id);
+                }
+            }
+            $data["Features_ID_List"] = json_encode($feature_ids);
+
+            return $data;
+        }
         
         private static function manage_weapon_creation_exceptions($data) {
             // Gather weapon properties
@@ -268,6 +387,18 @@
             return $damage_summary;
         }
 
+        private static function gather_ability_summary() {
+            $ability_summary = array();
+            foreach (Abilities::ALL() as $ability) {
+                if (isset($_POST[$ability->getName()."_modifier"]) && filter_input(INPUT_POST, $ability->getName()."_modifier", FILTER_VALIDATE_INT)) {
+                    $ability_summary[":".$ability->getName()] = $_POST[$ability->getName()."_modifier"];
+                } else {
+                    $ability_summary[":".$ability->getName()] = 0;
+                }
+            }
+            return $ability_summary;
+        }
+
         private static function gather_multi_number($data, $column_name, $unique_descriptor, $enum_class) {
             $data_arr = array();
             foreach ($enum_class as $enum) {
@@ -285,7 +416,11 @@
             $data_arr = array();
             foreach ($enum_class as $enum) {
                 if (isset($_POST[$enum->getName()."_".$unique_descriptor]) && $_POST[$enum->getName()."_".$unique_descriptor] == "1") {
-                    array_push($data_arr, $enum->getValue());
+                    if ($enum instanceof Skills) {
+                        array_push($data_arr, $enum->getName());
+                    } else {
+                        array_push($data_arr, $enum->getValue());
+                    }
                 } 
             }
             $data[$column_name] = json_encode($data_arr);
@@ -368,17 +503,28 @@
             return TRUE;
         }
 
+        public static function get_owned_items() {
+            $sql = "SELECT `Armour_IDs`, `Spell_IDs`, `Weapon_IDs` FROM `User_Item_IDs` WHERE `User_ID`=:uid";
+            $sql_variables = array(":uid" => $_SESSION["Logged_in_id"]);
+            try {
+                $result = DB::query($sql, $sql_variables);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            return $result[0];
+        }
+
         public static function get_all_item_data($ids, $item_type) {
             // Switch type and determine base sql
             switch($item_type) {
                 case ItemTypes::Armour():
-                    $sql = "SELECT `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value`, `Description`";
+                    $sql = "SELECT `ID`, `Name`, `Base_AC`, `Additional_Modifiers`, `Strength_Required`, `Stealth_Disadvantage`, `Weight`, `Value`, `Description`";
                     break;
                 case ItemTypes::Spell():
-                    $sql = "SELECT `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_Dice`, `Description`";
+                    $sql = "SELECT `ID`, `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_IDs`, `Description`";
                     break;
                 case ItemTypes::Weapon():
-                    $sql = "SELECT `Name`, `Properties`, `Damage_Distribution_IDs`, `Effective_Range`, `Maximum_Range`, `Versatile_Damage_ID`, `Weight`, `Value`, `Description`";
+                    $sql = "SELECT `ID`, `Name`, `Properties`, `Damage_Distribution_IDs`, `Effective_Range`, `Maximum_Range`, `Versatile_Damage_ID`, `Weight`, `Value`, `Description`";
                     break;
                 default:
                     return FALSE;

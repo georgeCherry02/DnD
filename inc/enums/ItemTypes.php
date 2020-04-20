@@ -34,7 +34,7 @@
                     return array("level", "school", "casting_time", "range_type", "range_distance", "shape", "shape_size", "vocal", "somatic", "concentration", "effect");
                     break;
                 case ItemTypes::StatBlock():
-                    return array("armour_class", "hit_points", "speed", "skill_proficiencies", "expertise", "experience_reward", "weapon_id_list", "spell_id_list");
+                    return array("Hit_Points", "Speed", "Experience_Reward", "Armour_ID");
                     break;
                 case ItemTypes::Weapon():
                     return array("Effective_Range", "Maximum_Range", "Weight");

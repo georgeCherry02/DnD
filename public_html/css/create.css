@@ -53,7 +53,8 @@
     outline: none;
 }
 .create_form_container input[type="submit"] {
-    width: 50%;
+    margin-left: 75%;
+    width: 25%;
 }
 .create_form_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
@@ -117,7 +118,7 @@
 
     padding-bottom: 3px;
 
-    transition: max-height 1s ease-out;
+    transition: max-height 1s ease-in-out;
     overflow: hidden;
 }
 .create_form_dropdown label {
@@ -137,6 +138,15 @@
     margin-right: 5px;
     float: right;
     text-indent: 2px;
+}
+.create_form_dropdown.features input {
+    width: calc(100% - 7px);
+    margin: 2px;
+    margin-left: 5px;
+}
+.create_form_dropdown.features #feature_descriptions input {
+    width: calc(100% - 10px);
+    margin-right: 5px;
 }
 div.checkbox.active, div[class*="_radio"].active {
     background: #343c24;
