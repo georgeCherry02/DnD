@@ -14,7 +14,8 @@
         $weapon_properties_output_string = "";
         $weapon_properties = json_decode($item_info["Properties"]);
         for ($i = 0; $i < sizeof($weapon_properties); $i++) {
-            $weapon_properties_output_string .= $weapon_properties[$i] . ", ";
+            $weapon_property = WeaponProperties::fromName($weapon_properties[$i]);
+            $weapon_properties_output_string .= $weapon_property->getPrettyName() . ", ";
         }
         $weapon_properties_output_string = substr($weapon_properties_output_string, 0, -2);
         // Fetch damage distributions

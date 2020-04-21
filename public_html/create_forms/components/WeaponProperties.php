@@ -9,7 +9,7 @@
     </div>
     <?php
         foreach (WeaponProperties::ALL() as $weapon_prop) {
-            echo "<label class='medium_green_text'>".$weapon_prop->getName().":</label>";
+            echo "<label class='medium_green_text'>".$weapon_prop->getPrettyName().":</label>";
             echo "<input type='hidden' name='".$weapon_prop->getName()."_property' id='".$weapon_prop->getName()."_property' value='0'/>";
             echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_weapon_prop_checkbox('".$weapon_prop->getName()."');\" id=\"".$weapon_prop->getName()."_property_checkbox\"></div>";
             echo "<br/>";

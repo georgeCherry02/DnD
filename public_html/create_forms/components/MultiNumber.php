@@ -16,7 +16,7 @@
     </div>
     <?php
         foreach ($enums_to_use as $enum) {
-            echo "<label class='medium_green_text'>" . $enum->getName() . ":</label>";
+            echo "<label class='medium_green_text'>" . $enum->getPrettyName() . ":</label>";
             echo "<input type='number' name='" . $enum->getName() . "_" . $unique_descriptor . "' value='0' min='0' class='dark_green_text dark_green_border light_green'/>";
             echo "<br/>";
         }

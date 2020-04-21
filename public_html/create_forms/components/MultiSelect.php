@@ -16,7 +16,7 @@
     </div>
     <?php
         foreach($enums_to_use as $enum) {
-            echo "<label class='medium_green_text'>" . $enum->getName() . ":</label>";
+            echo "<label class='medium_green_text'>" . $enum->getPrettyName() . ":</label>";
             echo "<input type='hidden' name='" . $enum->getName() . "_". $unique_descriptor ."' id='" . $enum->getName() . "_" . $unique_descriptor . "' value='0'/>";
             echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_checkbox('" . $enum->getName() . "_" . $unique_descriptor . "')\" id=\"" . $enum->getName() . "_" . $unique_descriptor . "_checkbox\"></div>";
             echo "<br/>";

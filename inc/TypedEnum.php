@@ -87,6 +87,12 @@
             return $this->_name;
         }
 
+        public function getPrettyName() {
+            $name = $this->_name;
+            preg_match_all('/[A-Z][^A-Z]*/', $name, $matches);
+            return implode(" ", $matches[0]);
+        }
+
         public function getClassDisplayName() {
             return get_called_class();
         }

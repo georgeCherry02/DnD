@@ -17,7 +17,7 @@
     <input type='hidden' name='<?php echo $column_name; ?>' id='<?php echo $column_name; ?>_radio_input'/>
     <?php
         foreach($enums_to_use as $enum) {
-            echo "<label class='medium_green_text'>" . $enum->getName() . ":</label>";
+            echo "<label class='medium_green_text'>" . $enum->getPrettyName() . ":</label>";
             echo "<div class=\"" . $column_name . "_radio dark_green_border\" onclick=\"toggle_radio(" . $enum->getValue() . ", '" . $column_name . "', this)\" id=\"" . $enum->getName() . "_radio\"></div>";
             echo "<br/>";
         }
