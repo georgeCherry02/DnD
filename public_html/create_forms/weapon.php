@@ -1,7 +1,7 @@
 <form action="" method="POST" onsubmit="return validate_weapon_creation();">
     <input type="hidden" name="form_type" value="Weapon"/>
     <div>
-        <div class="labels_container">
+        <div class="col-4 labels_container">
             <label for='name' class='required'>Name:</label>
             <label for='properties' class='required'>Properties:</label>
             <label for='damage_types'>Damage Types:</label>
@@ -18,7 +18,7 @@
             <label for='description'>Description:</label>
         </div>
         <div class='col-6 inputs_container'>
-            <input type="text" id="weapon_name" name="name" class="dark_green_text dark_green_border light_green" required/><br/>
+            <input type="text" id="weapon_name" name="name" class="grey_text grey_border white_background" required/><br/>
             <?php
                 include $form_component_dir."WeaponProperties.php";
 
@@ -29,17 +29,17 @@
                 $dropdown_visible = FALSE;
                 include $form_component_dir."MultiNumber.php";
             ?>
-            <input type="number" id="Effective_Range" name="Effective_Range" class="dark_green_text dark_green_border light_green" min="5" style="display: none;"/>
-            <input type="number" id="Maximum_Range" name="Maximum_Range" class="dark_green_text dark_green_border light_green" min="5" style="display: none;"/>
-            <input type="number" name="weight" min="1" class="dark_green_text dark_green_border light_green"/><br/>
+            <input type="number" id="Effective_Range" name="Effective_Range" class="grey_text grey_border white_background" min="5" style="display: none;"/>
+            <input type="number" id="Maximum_Range" name="Maximum_Range" class="grey_text grey_border white_background" min="5" style="display: none;"/>
+            <input type="number" name="weight" min="1" class="grey_text grey_border white_background"/><br/>
             <?php
                 $enums_to_use = Coins::ALL();
                 $unique_descriptor = "pieces";
                 include $form_component_dir."MultiNumber.php";
             ?>
-            <textarea name="description" class="dark_green_text dark_green_border light_green description"></textarea>
+            <textarea name="description" class="grey_text grey_border white_background description"></textarea>
         </div>
     </div>
-    <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>
+    <input type="submit" value="Create" class="highlight_text grey_border white_background"/>
 </form>
 <script src="<?php echo $file_root; ?>scripts/form_verification.js"></script>

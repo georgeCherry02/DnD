@@ -19,7 +19,7 @@
 <form action="" method="POST" onsubmit="return validate_stat_block_creation();">
     <input type='hidden' name='form_type' value='StatBlock'/>
     <div>
-        <div class="labels_container">
+        <div class="col-4 labels_container highlight_text">
             <label for="name" class="required">Name:</label>
             <label class="required">Hit Points:</label>
             <label class="required">Speed:</label>
@@ -35,9 +35,9 @@
             <label>Description:</label>
         </div>
         <div class="col-6 inputs_container">
-            <input type="text" id="npc_name" name="name" class="dark_green_text dark_green_border light_green" required/>
-            <input type="number" name="Hit_Points" class="dark_green_text dark_green_border light_green" required/>
-            <input type="number" name="Speed" class="dark_green_text dark_green_border light_green" required/>
+            <input type="text" id="npc_name" name="name" class="grey_text grey_border white_background" required/>
+            <input type="number" name="Hit_Points" class="grey_text grey_border white_background" required/>
+            <input type="number" name="Speed" class="grey_text grey_border white_background" required/>
             <?php
                 $enums_to_use = Abilities::ALL();
                 $unique_descriptor = "modifier";
@@ -51,7 +51,7 @@
                 $unique_descriptor = "expertise";
                 include $form_component_dir."MultiSelect.php";
             ?>
-            <input type="number" name="Experience_Reward" class="dark_green_text dark_green_border light_green"/>
+            <input type="number" name="Experience_Reward" class="grey_text grey_border white_background"/>
             <?php
                 $item_type = ItemTypes::Armour();
                 include $form_component_dir."ItemRadio.php";
@@ -66,9 +66,9 @@
 
                 include $form_component_dir."Features.php";
             ?>
-            <textarea name="description" class="dark_green_text dark_green_border light_green description"></textarea>
+            <textarea name="description" class="grey_text grey_border white_background description"></textarea>
         </div>
-        <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>
+        <input type="submit" value="Create" class="highlight_text grey_border white_background"/>
     </div>
 </form>
 <script src="<?php echo $file_root; ?>scripts/form_verification.js"></script>

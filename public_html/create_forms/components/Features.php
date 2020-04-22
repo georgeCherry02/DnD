@@ -1,19 +1,19 @@
-<div id="create_form_dropdown_features" class="create_form_dropdown features light_green dark_green_border" onmouseover="expand_feature_dropdown();" onmouseout="this.style.maxHeight='calc(2em - 4px)';">
+<div id="create_form_dropdown_features" class="create_form_dropdown features white_background grey_border" onmouseover="expand_feature_dropdown();" onmouseout="this.style.maxHeight='calc(2em - 4px)';">
     <div class="label_container">
-        <label class="medium_green_text">Features:</label>
-        <div onclick="add_feature()" style="width: 20px; height: 20px; float: right;">
-            <i style="color: green; font-size: 16px;" class="fas fa-plus"></i>
+        <label class="grey_text">Features:</label>
+        <div onclick="add_feature()" class="icon_container">
+            <i class="fas fa-plus"></i>
         </div>
-        <div onclick="remove_feature()" style="width: 20px; height: 20px; float: right;">
-            <i style="color: red; font-size: 16px;" class="fas fa-minus"></i>
+        <div onclick="remove_feature()" class="icon_container">
+            <i class="fas fa-minus"></i>
         </div>
     </div>
     <div>
         <div class="col-4" id="feature_names">
-            <input type="text" name="feature_1_name" id="feature_1_name" class="light_green dark_green_border dark_green_text"/>
+            <input type="text" name="feature_1_name" id="feature_1_name" class="white_background grey_border grey_text"/>
         </div>
         <div class="col-8" id="feature_descriptions">
-            <input type="text" name="feature_1_desc" id="feature_1_desc" class="light_green dark_green_border dark_green_text"/>
+            <input type="text" name="feature_1_desc" id="feature_1_desc" class="white_background grey_border grey_text"/>
         </div>
         <input type="hidden" name="feature_amount" id="feature_amount_input" value="1"/>
     </div>
@@ -55,8 +55,8 @@
             }
 
             // Add new inputs
-            document.getElementById("feature_names").innerHTML = document.getElementById("feature_names").innerHTML + "<input type='text' name='feature_" + (number_of_features + 1) + "_name' id='feature_" + (number_of_features + 1) + "_name' class='light_green dark_green_border dark_green_text'/>";
-            document.getElementById("feature_descriptions").innerHTML = document.getElementById("feature_descriptions").innerHTML + "<input type='text' name='feature_" + (number_of_features + 1) + "_desc' id='feature_" + (number_of_features + 1) + "_desc' class='light_green dark_green_border dark_green_text'/>";
+            document.getElementById("feature_names").innerHTML = document.getElementById("feature_names").innerHTML + "<input type='text' name='feature_" + (number_of_features + 1) + "_name' id='feature_" + (number_of_features + 1) + "_name' class='white_background grey_border grey_text'/>";
+            document.getElementById("feature_descriptions").innerHTML = document.getElementById("feature_descriptions").innerHTML + "<input type='text' name='feature_" + (number_of_features + 1) + "_desc' id='feature_" + (number_of_features + 1) + "_desc' class='white_background grey_border grey_text'/>";
 
             // Re-insert old values
             for (var i = 1; i <= current_features.length; i++) {

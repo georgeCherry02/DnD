@@ -1,12 +1,12 @@
-<div class="duplicate_card spell_card main_green dark_green_border">
+<div class="duplicate_card spell_card light_background grey_border">
     <?php
         if ($card_count == 1) {
     ?>
-    <h2 class="dark_green_text">Your item</h2>
+    <h2 class="grey_text">Your item</h2>
     <?php
         } else {
     ?>
-    <h2 class="dark_green_text">Pre-existing item</h2>
+    <h2 class="grey_text">Pre-existing item</h2>
     <?php
         }
         $card_count++;
@@ -105,13 +105,13 @@
             $spell_effect = $effect->getName();
         }
     ?>
-    <h3 class="dark_green_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
-    <h4 class="dark_green_text">Level: <?php echo filter_var($item_info["Level"], FILTER_VALIDATE_INT); ?></h4>
-    <h4 class="dark_green_text">School of Magic: <?php echo $magic_school->getName(); ?></h4>
-    <h4 class="dark_green_text">Casting phase: <?php echo $casting_time->getName(); ?></h4>
-    <h4 class="dark_green_text">Range: <?php echo $range_info; ?></h4>
-    <h4 class="dark_green_text">Shape: <?php echo $shape_info; ?></h4>
-    <h4 class="dark_green_text">Requirements: <?php echo $spell_requirements; ?></h4>
-    <h4 class="dark_green_text">Concentration: <?php echo $concentration; ?></h4>
-    <h4 class="dark_green_text">Effect: <?php echo $spell_effect; ?></h4>
+    <h3 class="grey_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
+    <h4 class="grey_text">Level: <?php echo filter_var($item_info["Level"], FILTER_VALIDATE_INT); ?></h4>
+    <h4 class="grey_text">School of Magic: <?php echo $magic_school->getName(); ?></h4>
+    <h4 class="grey_text">Casting phase: <?php echo $casting_time->getName(); ?></h4>
+    <h4 class="grey_text">Range: <?php echo $range_info; ?></h4>
+    <h4 class="grey_text">Shape: <?php echo $shape_info; ?></h4>
+    <h4 class="grey_text">Requirements: <?php echo $spell_requirements; ?></h4>
+    <h4 class="grey_text">Concentration: <?php echo $concentration; ?></h4>
+    <h4 class="grey_text">Effect: <?php echo $spell_effect; ?></h4>
 </div>

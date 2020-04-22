@@ -112,13 +112,14 @@
                 include_once "./global_components/popup_message.php";
             }
 ?>
-<h2 class='dark_red_text'>What would you like to create?</h2>
+<h1 class='title black_text'>What would you like to create?</h1>
 <div>
     <div class='col-3'>
         <a href='?choice=<?php echo ItemTypes::Armour()->getName(); ?>'>
             <div class='option_container'>
                 <img class='line' src='./resources/icons/helmet.svg'/>
                 <img class='colour' src='./resources/icons/helmet_colour.svg'/>
+                <p class="option_description black_text">Armour</p>
             </div>
         </a>
     </div>
@@ -127,6 +128,7 @@
             <div class='option_container'>
                 <img class='line' src='./resources/icons/book.svg'/>
                 <img class='colour' src='./resources/icons/book_colour.svg'/>
+                <p class='option_description black_text'>Spells</p>
             </div>
         </a>
     </div>
@@ -135,6 +137,7 @@
             <div class='option_container'>
                 <img class='line' src='./resources/icons/scroll.svg'/>
                 <img class='colour' src='./resources/icons/scroll_colour.svg'/>
+                <p class='option_description black_text'>Stat Blocks</p>
             </div>
         </a>
     </div>
@@ -143,6 +146,7 @@
             <div class='option_container'>
                 <img class='line' src='./resources/icons/swords.svg'/>
                 <img class='colour' src='./resources/icons/swords_colour.svg'/>
+                <p class='option_description black_text'>Weapons</p>
             </div>
         </a>
     </div>
@@ -150,7 +154,7 @@
 <?php
         } else if (isset($_GET["choice"])) {
 ?>
-<div class="create_form_container main_green dark_green_border">
+<div class="create_form_container light_background grey_border">
 <?php
             $dropdown_count = 0;
             $dropdown_visible = TRUE;

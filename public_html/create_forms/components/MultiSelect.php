@@ -10,15 +10,15 @@
     $z_index = 30 - $dropdown_count;
     $dropdown_count++;
 ?>
-<div id='create_form_dropdown_<?php echo $unique_descriptor; ?>' class='create_form_dropdown <?php echo get_class($enums_to_use[0]); ?> light_green dark_green_border' onmouseover="this.style.maxHeight='<?php echo $max_height_on_hover; ?>'" onmouseout="this.style.maxHeight= 'calc(2em - 4px)'" style="z-index: <?php echo $z_index; ?>; display: <?php echo $visibility_style; ?>;">
+<div id='create_form_dropdown_<?php echo $unique_descriptor; ?>' class='create_form_dropdown <?php echo get_class($enums_to_use[0]); ?> white_background grey_border' onmouseover="this.style.maxHeight='<?php echo $max_height_on_hover; ?>'" onmouseout="this.style.maxHeight= 'calc(2em - 4px)'" style="z-index: <?php echo $z_index; ?>; display: <?php echo $visibility_style; ?>;">
     <div class='label_container'>
-        <label class='medium_green_text'><?php echo $enums_to_use[0]->getClassDisplayName(); ?>:</label><br/>
+        <label class='grey_text'><?php echo $enums_to_use[0]->getClassDisplayName(); ?>:</label><br/>
     </div>
     <?php
         foreach($enums_to_use as $enum) {
-            echo "<label class='medium_green_text'>" . $enum->getPrettyName() . ":</label>";
+            echo "<label class='grey_text'>" . $enum->getPrettyName() . ":</label>";
             echo "<input type='hidden' name='" . $enum->getName() . "_". $unique_descriptor ."' id='" . $enum->getName() . "_" . $unique_descriptor . "' value='0'/>";
-            echo "<div class=\"checkbox dark_green_border\" onclick=\"toggle_checkbox('" . $enum->getName() . "_" . $unique_descriptor . "')\" id=\"" . $enum->getName() . "_" . $unique_descriptor . "_checkbox\"></div>";
+            echo "<div class=\"checkbox grey_border white_background\" onclick=\"toggle_checkbox('" . $enum->getName() . "_" . $unique_descriptor . "')\" id=\"" . $enum->getName() . "_" . $unique_descriptor . "_checkbox\"></div>";
             echo "<br/>";
         }
     ?>

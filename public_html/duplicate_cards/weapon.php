@@ -1,4 +1,4 @@
-<div class='duplicate_card weapon_card main_green dark_green_border'>
+<div class='duplicate_card weapon_card light_background grey_border'>
     <?php
         if ($card_count == 1) {
     ?>
@@ -64,35 +64,35 @@
             $description .= filter_var($description_lines[$i], FILTER_SANITIZE_SPECIAL_CHARS) . "<br/>";
         }
     ?>
-    <h3 class="dark_green_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
-    <h4 class="dark_green_text">Properties: <?php echo $weapon_properties_output_string; ?></h4>
-    <h4 class="dark_green_text">Damage: <?php echo $weapon_damage_output_string ?></h4>
+    <h3 class="grey_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
+    <h4 class="grey_text">Properties: <?php echo $weapon_properties_output_string; ?></h4>
+    <h4 class="grey_text">Damage: <?php echo $weapon_damage_output_string ?></h4>
     <?php
         if (in_array("Versatile", $weapon_properties)) {
     ?>
-    <h4 class="dark_green_text">Versatile Damage: <?php echo $versatile_damage_output_string; ?></h4>
+    <h4 class="grey_text">Versatile Damage: <?php echo $versatile_damage_output_string; ?></h4>
     <?php
         }
     ?>
     <?php 
         if ($weapon_is_ranged) {
     ?>
-    <h4 class="dark_green_text">Effective Range: <?php echo $item_info["Effective_Range"]; ?></h4>
-    <h4 class="dark_green_text">Maximum Range: <?php echo $item_info["Maximum_Range"]; ?></h4>
+    <h4 class="grey_text">Effective Range: <?php echo $item_info["Effective_Range"]; ?></h4>
+    <h4 class="grey_text">Maximum Range: <?php echo $item_info["Maximum_Range"]; ?></h4>
     <?php
         }
     ?>
     <?php
         if (!empty($item_info["Weight"])) {
     ?>
-    <h4 class="dark_green_text">Weight: <?php echo $item_info["Weight"]; ?>lb</h4>
+    <h4 class="grey_text">Weight: <?php echo $item_info["Weight"]; ?>lb</h4>
     <?php
         }
     ?>
     <?php
         if ($weapon_has_defined_value) {
     ?>
-    <h4 class="dark_green_text">Value: <?php echo $value_output_string; ?></h4>
+    <h4 class="grey_text">Value: <?php echo $value_output_string; ?></h4>
     <?php
         }
     ?>

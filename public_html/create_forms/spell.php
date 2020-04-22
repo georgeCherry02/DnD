@@ -1,7 +1,7 @@
 <form action="" method="POST" onsubmit="return validate_spell_creation();">
     <input type="hidden" name="form_type" value="Spell"/>
     <div>
-        <div class='labels_container'>
+        <div class='col-4 labels_container highlight_text'>
             <label for='name' class='required'>Name:</label>
             <label for='level' class='required'>Level:</label>
             <label for='school' class='required'>School of Magic:</label>
@@ -28,8 +28,8 @@
             <label for='description'>Description:</label>
         </div>
         <div class='col-6 inputs_container'>
-            <input type='text' name='name' id='spell_name' class="dark_green_text dark_green_border light_green" required/><br/>
-            <input type='number' name='level' id='level' class="dark_green_text dark_green_border light_green" min="0" max="9" required/><br/>
+            <input type='text' name='name' id='spell_name' class="grey_text grey_border white_background" required/><br/>
+            <input type='number' name='level' id='level' class="white_background grey_text grey_border" min="0" max="9" required/><br/>
             <?php
                 $enums_to_use = MagicSchools::ALL();
                 $column_name = "school";
@@ -43,13 +43,13 @@
                 $column_name = "range_type";
                 include $form_component_dir."Radio.php";
             ?>
-            <input type='number' name='range_distance' id='range_distance' style='display: none;' min="0" class="dark_green_text dark_green_border light_green"/>
+            <input type='number' name='range_distance' id='range_distance' style='display: none;' min="0" class="white_background grey_text grey_border"/>
             <?php
                 $enums_to_use = SpellShapes::ALL();
                 $column_name = "shape";
                 include $form_component_dir."Radio.php";
             ?>
-            <input type='number' name='shape_size' id='shape_size' style='display: none;' min="0" class="dark_green_text dark_green_border light_green"/>
+            <input type='number' name='shape_size' id='shape_size' style='display: none;' min="0" class="white_background grey_text grey_border"/>
             <?php
                 $column_name = "vocal";
                 include $form_component_dir."Checkbox.php";
@@ -77,9 +77,11 @@
                 $dropdown_visible = FALSE;
                 include $form_component_dir."MultiNumber.php";
             ?>
-            <textarea name="description" class="dark_green_text dark_green_border light_green description"></textarea>
+            <textarea name="description" class="white_background grey_text grey_border description"></textarea>
         </div>
     </div>
-    <input type="submit" value="Create" class="dark_green_text dark_green_border light_green"/>
+    <div>
+        <input type="submit" value="Create" class="white_background highlight_text grey_border"/>
+    </div>
 </form>
 <script src="<?php echo $file_root; ?>scripts/form_verification.js"></script>

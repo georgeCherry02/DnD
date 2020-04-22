@@ -196,20 +196,6 @@ function toggle_radio(value, group_name, radio_button_elem) {
     if (placeholder) {
         document.getElementById(location + "_placeholder").style.display = display_type;
     }
-
-    // Manage form height
-    var form = document.getElementsByTagName("form")[0];
-    // Get labels container
-    var label_container = document.getElementsByClassName("labels_container")[0];
-    var labels = label_container.childNodes;
-    var input_count = 0;
-    for (var i = 0; i < labels.length; i++) {
-        if (labels[i].style !== undefined && labels[i].style.display !== "none") {
-            input_count++;
-        }
-    }
-    var height = (input_count * 2) + "em";
-    form.style.height = height;
 }
 
 function handle_spell_effect_change(value) {

@@ -1,19 +1,19 @@
-<div class="duplicate_card armour_card main_green dark_green_border">
+<div class="duplicate_card armour_card light_background grey_border">
     <?php
         if ($card_count == 1) {
     ?>
-    <h2 class="dark_green_text">Your item</h2>
+    <h2 class="grey_text">Your item</h2>
     <?php
         } else {
     ?>
-    <h2 class="dark_green_text">Pre-existing item</h2>
+    <h2 class="grey_text">Pre-existing item</h2>
     <?php
         }
         $card_count++;
     ?>
-    <h3 class="dark_green_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
-    <h4 class="dark_green_text">Base AC: <?php echo htmlspecialchars($item_info["Base_AC"]); ?></h4>
-    <h4 class="dark_green_text">Additional Modifiers: <?php
+    <h3 class="grey_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
+    <h4 class="grey_text">Base AC: <?php echo htmlspecialchars($item_info["Base_AC"]); ?></h4>
+    <h4 class="grey_text">Additional Modifiers: <?php
         $modifiers_arr = json_decode($item_info["Additional_Modifiers"]);
         if (sizeof($modifiers_arr) == 0) {
             echo "None";
@@ -28,11 +28,11 @@
     <?php
         if (!empty($item_info["Strength_Required"])) {
     ?>
-    <h4 class="dark_green_text">Strength Required: <?php echo htmlspecialchars($item_info["Strength_Required"]); ?></h4>
+    <h4 class="grey_text">Strength Required: <?php echo htmlspecialchars($item_info["Strength_Required"]); ?></h4>
     <?php
         }
     ?>
-    <h4 class="dark_green_text">Stealth Disadvantage: <?php
+    <h4 class="grey_text">Stealth Disadvantage: <?php
         if ($item_info["Stealth_Disadvantage"] == 1) {
             echo "Yes";
         } else {
@@ -42,7 +42,7 @@
     <?php
         if (!empty($item_info["Weight"])) {
     ?>
-    <h4 class="dark_green_text">Weight: <?php echo htmlspecialchars($item_info["Weight"]); ?>lb</h4>
+    <h4 class="grey_text">Weight: <?php echo htmlspecialchars($item_info["Weight"]); ?>lb</h4>
     <?php
         }
     ?>
@@ -60,7 +60,7 @@
             $value_output_string = substr($value_output_string, 0, -2);
             if (array_sum($coins_arr) > 0) {
     ?>
-    <h4 class="dark_green_text">Value: <?php echo $value_output_string; ?></h4>
+    <h4 class="grey_text">Value: <?php echo $value_output_string; ?></h4>
     <?php
             }
         }

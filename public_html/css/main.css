@@ -1,6 +1,6 @@
 /* General Styling */
 * {
-    font-family: 'Gotu';
+    font-family: 'Raleway';
     box-sizing: border-box;
 }
 h1, h2, h3, h4, h5, h6, p {
@@ -17,71 +17,40 @@ html {
 body {
     width: 100%;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 
 /* Colour scheme */
-.light_brown {
-    background-color: #d1ba9b;
+.black_background {
+    background-color: black;
 }
-.light_green {
-    background-color: #b7c199;
+.grey_background {
+    background-color: grey;
 }
-.main_green {
-    background-color: #7e8860;
+.white_background {
+    background-color: white;
 }
-.dark_red {
-    background-color: #461a11;
-}
-.light_red {
-    background-color: #926358;
-}
-.medium_red {
-    background-color: #662924;
+.light_background {
+    background-color: #d7dee0;
 }
 
-.dark_red_border {
-    border-color: #461a11;
+.black_text {
+    color: black;
 }
-.dark_green_border {
-    border-color: #343c24;
+.grey_text {
+    color: grey;
 }
-
-.light_brown_text {
-    color: #d1ba9b;
+.highlight_text {
+    color: #4682bf;
 }
-.dark_green_text {
-    color: #343c24;
-}
-.light_green_text {
-    color: #b7c199;
-}
-.medium_green_text {
-    color: #7e8860;
-}
-.dark_red_text {
-    color: #461a11;
-}
-.light_red_text {
-    color: #926358;
-}
-
-
-
-
-
-.light {
-    background-color: #49add1;
-}
-.text_dark {
-    color: #012f42;
-}
-.text_light {
+.white_text {
     color: white;
 }
-.text_highlight {
-    color: #941c0a;
-}
-.text_main {
-    color: white;
+
+
+.grey_border {
+    border-color: grey;
 }
 
 /* NavBar Styling */
@@ -93,7 +62,7 @@ body {
 
     box-shadow: 0 2px 4px black;
 
-    z-index: 5;
+    z-index: 50;
 }
 .navbar_container div.logout_button {
     right: 30px;
@@ -130,7 +99,7 @@ body {
     width: 100%;
 
     box-shadow: 0 2px 4px black;
-    z-index: 5;
+    z-index: 51;
 
     overflow: hidden;
     transition: max-height 0.5s;
@@ -148,14 +117,16 @@ body {
     text-decoration: none;
 }
 #navbar_dropdown a:hover {
-    text-decoration: underline;
     cursor: pointer;
+    color: #4682bf;
 }
 
 /* Footer Styling */
 .footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    z-index: 50;
+
     height: 20px;
     width: 100%;
 }

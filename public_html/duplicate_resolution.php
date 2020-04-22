@@ -51,9 +51,9 @@
     $old_item_id = filter_input(INPUT_POST, "old_id", FILTER_VALIDATE_INT);
     $new_item_id = ItemManager::get_last_inserted_of_type($item_type);
 ?>
-<h4 class="dark_red_text">Here are the two <?php echo $item_type->getPrettyName(); ?>!</h4>
+<h4 class="black_text">Here are the two <?php echo $item_type->getPrettyName(); ?>!</h4>
 <div class="duplicate_resolution_response_container">
-    <div class='message_container message_container_in_page main_green dark_green_text dark_green_border'>
+    <div class='message_container message_container_in_page light_background grey_text grey_border'>
         <h4>Would you like to keep your version or use the new version?</h4>
         <form action="" method="POST" onsubmit="return validate_duplicate_resolution()">
             <div>
@@ -61,17 +61,17 @@
                 <input type="hidden" value="<?php echo $old_item_id; ?>" name="old_id"/>
                 <input type="hidden" value="<?php echo $item_type->getName(); ?>" name="type"/>
                 <div class="col-3"></div>
-                <label class="col-2 dark_green_text" for="duplicate_resolution_keep">Keep old</label>
+                <label class="col-2 grey_text" for="duplicate_resolution_keep">Keep old</label>
                 <div class="col-1">
                     <input type="radio" name="keep_answer" id="duplicate_resolution_keep" value="keep"/>
                 </div>
-                <label class="col-2 dark_green_text" for="duplicate_resolution_new">Use new</label>
+                <label class="col-2 grey_text" for="duplicate_resolution_new">Use new</label>
                 <div class="col-1">
                     <input type="radio" name="keep_answer" id="duplicate_resolution_new" value="new"/>
                 </div>
                 <div class="col-3"></div>
             </div>
-            <input type="submit" value="Proceed" class="light_green dark_green_text dark_green_border"/>
+            <input type="submit" value="Proceed" class="white_background highlight_text grey_border"/>
         </form>
     </div>
 </div>

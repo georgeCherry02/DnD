@@ -1,3 +1,3 @@
 <div>
-    <p class="dark_green_text">Item created successfully!</p>
+    <p>Item created successfully!</p>
 </div>

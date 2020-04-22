@@ -64,4 +64,8 @@
     position: absolute;
     right: 8px;
     top: 8px;
+    cursor: pointer;
+}
+#popup_message .close_button:hover i {
+    color: #4682bf;
 }

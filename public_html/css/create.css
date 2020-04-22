@@ -1,3 +1,8 @@
+h1.title {
+    text-align: center;
+    font-size: 64px;
+}
+
 .option_container {
     position: relative;
     margin: 20px;
@@ -18,7 +23,22 @@
     width: calc(100% - 40px);
     opacity: 0;
 }
+.option_description {
+    position: absolute;
+    margin: 0px;
+    width: calc(100% - 40px);
+
+    transform: translate(0, 2em);
+
+    text-align: center;
+
+    transition: opacity 0.5s linear;
+    opacity: 0;
+}
 .option_container:hover img.colour {
+    opacity: 1;
+}
+.option_container:hover p.option_description {
     opacity: 1;
 }
 
@@ -53,8 +73,8 @@
     outline: none;
 }
 .create_form_container input[type="submit"] {
-    margin-left: 75%;
-    width: 25%;
+    margin-left: calc(33.33% + 10px + 2px);
+    width: 50%;
 }
 .create_form_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
@@ -73,8 +93,6 @@
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
-
-    background: #b7c199;
 }
 .create_form_container textarea.description {
     font-size: 8px;
@@ -94,7 +112,6 @@
     position: relative;
 }
 .labels_container {
-    width: fit-content;
     float: left;
     margin-right: 10px;
 }
@@ -111,6 +128,8 @@
     position: absolute;
 
     margin: 2px;
+    /* Accounts for footer */
+    margin-bottom: 22px;
 
     border-radius: 5px;
     border-width: 1px;
@@ -149,8 +168,21 @@
     margin-right: 5px;
 }
 div.checkbox.active, div[class*="_radio"].active {
-    background: #343c24;
+    background: #4682bf;
 }
 .create_form_placeholder {
     height: 2em;
+}
+.icon_container {
+    margin-top: calc((2em - 20px) / 2 - 2px);
+    width: 20px;
+    height: 20px;
+    float: right;
+}
+.icon_container i {
+    font-size: 16px;
+    color: grey;
+}
+.icon_container i:hover {
+    color: #4682bf;
 }
