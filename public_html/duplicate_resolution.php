@@ -102,7 +102,7 @@
                     foreach ($prepared_info as $info_name => $info_value) {
                         $output_html .= "<div class='feature_container'>";
                         $output_html .= "<label class='highlight_text'>".$info_name.":</label>";
-                        if ($info_name == "Features" || $info_name = "Spells") {
+                        if ($info_name == "Features" || $info_name == "Spells") {
                             $output_html .= $info_value;
                         } else {
                             $output_html .= "<p class='grey_text'>".$info_value."</p>";
