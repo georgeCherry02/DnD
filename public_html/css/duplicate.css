@@ -1,9 +1,14 @@
 .duplicate_card {
+    display: inline-block;
+    width: calc(50% - 60px);
+
     margin: 30px;
-    padding: 20px;
+
     border-radius: 25px;
     border-width: 2px;
     border-style: solid;
+
+    padding: 20px;
 }
 .duplicate_card h2, .duplicate_card h3, .duplicate_card h4, .duplicate_card p {
     margin: 0;

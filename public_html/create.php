@@ -25,25 +25,25 @@
                             exit;
                         }
 ?>  
-<div class='dark_green_border main_green message_container'>
-    <h4 class='dark_green_text'>There's a similar item already uploaded to the database, would you like to compare them?</h4>
-    <p class='dark_green_text'>Any properties of the item you defined will be identical, only properties left undefined by you may differ.</p>
+<div class='grey_border light_background message_container'>
+    <h4 class='grey_text'>There's a similar item already uploaded to the database, would you like to compare them?</h4>
+    <p class='grey_text'>Any properties of the item you defined will be identical, only properties left undefined by you may differ.</p>
     <form action="./duplicate_resolution.php" method="POST">
         <input type="hidden" name="type" value="<?php echo $item_type->getName(); ?>"/>
         <input type="hidden" name="old_id" value="<?php echo filter_var($status[1][0]["ID"], FILTER_SANITIZE_SPECIAL_CHARS); ?>"/>
         <div>
             <div class='col-4'></div>
-            <label for="yes" class='col-1 dark_green_text'>Yes</label>
+            <label for="yes" class='col-1 grey_text'>Yes</label>
             <div class='col-1'>
                 <input type="radio" name="compare_answer" value="yes" id="yes" class="light_green"/>
             </div>
-            <label for="no" class='col-1 dark_green_text'>No</label>
+            <label for="no" class='col-1 grey_text'>No</label>
             <div class='col-1'>
                 <input type="radio" name="compare_answer" value="no" id="no"/>
             </div>
             <div class='col-4'></div>
         </div>
-        <input type="submit" value="Proceed" class="light_green dark_green_text dark_green_border"/>
+        <input type="submit" value="Proceed" class="white_background highlight_text grey_border"/>
     </form>
 </div>
 <script src='<?php echo $file_root; ?>scripts/form_verification.js'></script>

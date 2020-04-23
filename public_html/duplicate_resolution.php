@@ -51,7 +51,7 @@
     $old_item_id = filter_input(INPUT_POST, "old_id", FILTER_VALIDATE_INT);
     $new_item_id = ItemManager::get_last_inserted_of_type($item_type);
 ?>
-<h4 class="black_text">Here are the two <?php echo $item_type->getPrettyName(); ?>!</h4>
+<h4 class="black_text">Here are the two <?php echo $item_type->getPrettyName(); ?>s!</h4>
 <div class="duplicate_resolution_response_container">
     <div class='message_container message_container_in_page light_background grey_text grey_border'>
         <h4>Would you like to keep your version or use the new version?</h4>
@@ -85,7 +85,7 @@
                 $card_count = 0;
                 foreach ($data as $item_info) {
                     // Create Card wrapper
-                    echo "<div class='col-6 duplicate_card spell_card light_background grey_border'>";
+                    echo "<div class='duplicate_card spell_card light_background grey_border'>";
                     $prepared_info = array();
                     // Parse information
                     include "./duplicate_cards/".$item_type->getName().".php";
@@ -116,7 +116,7 @@
                         $description .= htmlspecialchars($description_lines[$i]) . "<br/>";
                     }
                     $output_html .= "<div class='feature_container'><label class='highlight_text'>Description:</label>";
-                    $output_html .= "<p class='grey_text'>".$description."</p></div>";
+                    $output_html .= "<p class='grey_text item_description'>".$description."</p></div>";
                     // Close and echo information container
                     $output_html .= "</div>";
                     echo $output_html;
