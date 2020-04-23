@@ -1,5 +1,6 @@
 .duplicate_card {
     display: inline-block;
+    vertical-align: top;
     width: calc(50% - 60px);
 
     margin: 30px;

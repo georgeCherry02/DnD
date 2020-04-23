@@ -43,5 +43,24 @@
                     throw new OutOfRangeException();
             }
         }
+
+        public function getDuplicateCheckColumns() {
+            switch($this) {
+                case ItemTypes::Armour():
+                    return array("Base_AC", "Additional_Modifiers", "Stealth_Disadvantage");
+                    break;
+                case ItemTypes::Spell():
+                    return array();
+                    break;
+                case ItemTypes::StatBlock():
+                    return array();
+                    break;
+                case ItemTypes::Weapon():
+                    return array("Properties", "Effective_Range", "Maximum_Range");
+                    break;
+                default:
+                    throw new OutOfRangeException();
+            }
+        }
     }
 ?>

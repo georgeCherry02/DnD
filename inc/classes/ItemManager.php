@@ -57,18 +57,34 @@
                     break;
             }
 
-            // Check a duplicate doesn't exist
+            // Define some common SQL
             $sql = "SELECT `ID` FROM `".$item_type->getTableName()."` WHERE `Name` LIKE :name";
             $sql_prepared_variables = array(":name" => $_POST["name"]);
+            // Assemble SQL for checking for a duplicate and final insert
+
+            // Create copies of SQL for duplicate check SQL
+            $duplicate_check_sql = $sql;
+            $duplicate_check_sql_variables = $sql_prepared_variables;
             foreach ($sanitised_data as $column_name => $column_value) {
                 $sql .= " && `".$column_name."`=:".$column_name;
                 $sql_prepared_variables[":".$column_name] = $column_value;
+                if (in_array($column_name, $item_type->getDuplicateCheckColumns())) {
+                    $duplicate_check_sql .= " && `".$column_name."`=:".$column_name;
+                    $duplicate_check_sql_variables[":".$column_name] = $column_value;
+                }
             }
+            // Close the two SQL expressions
             $sql .= ";";
-            try {
-                $duplicate_id = DB::query($sql, $sql_prepared_variables);
-            } catch (PDOException $e) {
-                return array(2, "duplicate_check");
+            $duplicate_check_sql .= ";";
+
+            // Check if there's a duplicate in the database
+            // Currently this is only really appropriate for armour
+            if ($item_type == ItemTypes::Armour()) {
+                try {
+                    $duplicate_id = DB::query($duplicate_check_sql, $duplicate_check_sql_variables);
+                } catch (PDOException $e) {
+                    return array(2, "duplicate_check");
+                }
             }
 
             // Add description for data base insert

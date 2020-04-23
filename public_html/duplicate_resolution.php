@@ -115,8 +115,10 @@
                     for ($i = 0; $i < sizeof($description_lines); $i++) {
                         $description .= htmlspecialchars($description_lines[$i]) . "<br/>";
                     }
-                    $output_html .= "<div class='feature_container'><label class='highlight_text'>Description:</label>";
-                    $output_html .= "<p class='grey_text item_description'>".$description."</p></div>";
+                    if (strlen($item_info["Description"]) > 0) {
+                        $output_html .= "<div class='feature_container'><label class='highlight_text'>Description:</label>";
+                        $output_html .= "<p class='grey_text item_description'>".$description."</p></div>";
+                    }
                     // Close and echo information container
                     $output_html .= "</div>";
                     echo $output_html;

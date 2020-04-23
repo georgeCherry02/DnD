@@ -31,7 +31,7 @@
             ?>
             <input type="number" id="Effective_Range" name="Effective_Range" class="grey_text grey_border white_background" min="5" style="display: none;"/>
             <input type="number" id="Maximum_Range" name="Maximum_Range" class="grey_text grey_border white_background" min="5" style="display: none;"/>
-            <input type="number" name="weight" min="1" class="grey_text grey_border white_background"/><br/>
+            <input type="number" name="Weight" min="1" class="grey_text grey_border white_background"/><br/>
             <?php
                 $enums_to_use = Coins::ALL();
                 $unique_descriptor = "pieces";
