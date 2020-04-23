@@ -1,68 +1,44 @@
-<div class="duplicate_card armour_card light_background grey_border">
-    <?php
-        if ($card_count == 1) {
-    ?>
-    <h2 class="grey_text">Your item</h2>
-    <?php
-        } else {
-    ?>
-    <h2 class="grey_text">Pre-existing item</h2>
-    <?php
-        }
-        $card_count++;
-    ?>
-    <h3 class="grey_text"><?php echo htmlspecialchars($item_info["Name"]); ?></h3><br/>
-    <h4 class="grey_text">Base AC: <?php echo htmlspecialchars($item_info["Base_AC"]); ?></h4>
-    <h4 class="grey_text">Additional Modifiers: <?php
-        $modifiers_arr = json_decode($item_info["Additional_Modifiers"]);
-        if (sizeof($modifiers_arr) == 0) {
-            echo "None";
-        } else {
-            $modifiers = "";
-            foreach (json_decode($item_info["Additional_Modifiers"]) as $modifier_id) {
-                $modifiers .= Abilities::fromValue($modifier_id)->getName() . ", ";
+<?php
+    $prepared_info["Base Armour Class"] = filter_var($item_info["Base_AC"], FILTER_VALIDATE_INT);
+    $modifiers_arr = json_decode($item_info["Additional_Modifiers"]);
+    if (sizeof($modifiers_arr) > 0) {
+        $modifiers = "";
+        foreach ($modifiers_arr as $modifier_id) {
+            try {
+                $modifier = Abilities::fromValue($modifier_id);
+            } catch (OutOfRangeException $e) {
+                continue;
             }
-            echo substr($modifiers, 0, -2);
+            $modifiers .= $modifier->getName().", ";
         }
-    ?></h4>
-    <?php
-        if (!empty($item_info["Strength_Required"])) {
-    ?>
-    <h4 class="grey_text">Strength Required: <?php echo htmlspecialchars($item_info["Strength_Required"]); ?></h4>
-    <?php
-        }
-    ?>
-    <h4 class="grey_text">Stealth Disadvantage: <?php
+        $prepared_info["Additional Modifiers"] = substr($modifiers, 0, -2);
+    }
+    if (!empty($item_info["Strength_Required"])) {
+        $prepared_info["Strength Required"] = filter_var($item_info["Strength_Required"], FILTER_VALIDATE_INT);
+    }
+    if (!empty($item_info["Stealth_Disadvantage"])) {
+        $stealth_dis = "No";
         if ($item_info["Stealth_Disadvantage"] == 1) {
-            echo "Yes";
-        } else {
-            echo "No";
+            $stealth_dis = "Yes";
         }
-    ?></h4><br/>
-    <?php
-        if (!empty($item_info["Weight"])) {
-    ?>
-    <h4 class="grey_text">Weight: <?php echo htmlspecialchars($item_info["Weight"]); ?>lb</h4>
-    <?php
-        }
-    ?>
-    <?php
-        if (!empty($item_info["Value"])) {
-            $value_output_string = "";
-            $coins_arr = json_decode($item_info["Value"]);
-            $coin_count = 0;
-            foreach (Coins::ALL() as $coin) {
-                if ($coins_arr[$coin_count] > 0) {
-                    $value_output_string .= $coins_arr[$coin_count] . $coin->getValue() . ", ";
-                }
-                $coin_count++;
+        $prepared_info["Stealth Disadvantage"] = $stealth_dis;
+    }
+    if (!empty($item_info["Weight"])) {
+        $prepared_info["Weight"] = filter_var($item_info["Weight"], FILTER_VALIDATE_INT);
+    }
+    if (!empty($item_info["Value"])) {
+        $value_output_string = "";
+        $coins_arr = json_decode($item_info["Value"]);
+        $coin_count = 0;
+        foreach (Coins::ALL() as $coin) {
+            if ($coins_arr[$coin_count] > 0) {
+                $value_output_string .= $coins_arr[$coin_count].$coin->getValue().", ";
             }
-            $value_output_string = substr($value_output_string, 0, -2);
-            if (array_sum($coins_arr) > 0) {
-    ?>
-    <h4 class="grey_text">Value: <?php echo $value_output_string; ?></h4>
-    <?php
-            }
+            $coin_count++;
         }
-    ?>
-</div>
+        $value_output_string = substr($value_output_string, 0, -2);
+        if (array_sum($coins_arr) > 0) {
+            $prepared_info["Value"] = $value_output_string;
+        }
+    }
+?>

@@ -222,7 +222,8 @@
                 // Parse the item ID from the key, strpos returns the last occurence of the "needle" so this will always work
                 $item_id = substr($key, strpos($key, "_") + 1);
                 // Check if the item associated with the ID is owned by the user
-                if (in_array($item_id, $owned_item_ids[$current_item_type->getItemListColumn()])) {
+                $owned_items_of_type = json_decode($owned_item_ids[$current_item_type->getItemListColumn()]);
+                if (in_array($item_id, $owned_items_of_type)) {
                     if (filter_input(INPUT_POST, $key, FILTER_VALIDATE_INT) && $value == 1) {
                         array_push($data[$current_item_type->getName()."_ID_List"], $item_id);
                     }
@@ -523,6 +524,9 @@
                 case ItemTypes::Spell():
                     $sql = "SELECT `ID`, `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_IDs`, `Description`";
                     break;
+                case ItemTypes::StatBlock():
+                    $sql = "SELECT `ID`, `Name`, `Armour_ID`, `Hit_Points`, `Speed`, `Ability_Scores_ID`, `Skill_Proficiencies`, `Expertise`, `Experience_Reward`, `Weapon_ID_List`, `Spell_ID_List`, `Spell_Slot_Distribution_ID`, `Features_ID_List`, `Description`";
+                    break;
                 case ItemTypes::Weapon():
                     $sql = "SELECT `ID`, `Name`, `Properties`, `Damage_Distribution_IDs`, `Effective_Range`, `Maximum_Range`, `Versatile_Damage_ID`, `Weight`, `Value`, `Description`";
                     break;
@@ -550,6 +554,16 @@
             return $data;
         }
 
+        public static function get_ability_distribution($id) {
+            $sql = "SELECT `Strength`, `Dexterity`, `Constitution`, `Intelligence`, `Wisdom`, `Charisma` FROM `Ability_Distributions` WHERE `ID`=:id";
+            try {
+                $data = DB::query($sql, array(":id" => $id))[0];
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            return $data;
+        }
+
         public static function get_damage_distributions($ids) {
             $sql = "SELECT `d4`, `d6`, `d8`, `d10`, `d12`, `Type` FROM `Damage_Distributions` WHERE";
             $variables = array();
@@ -562,6 +576,38 @@
             // Make request
             try {
                 $data = DB::query($sql, $variables);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            return $data;
+        }
+
+        public static function get_features($ids) {
+            $sql = "SELECT `Name`, `Description` FROM `Features` WHERE";
+            $variables = array();
+            for ($i = 1; $i <= sizeof($ids); $i++) {
+                $sql .= " `ID`=:id".$i." OR";
+                $variables[":id".$i] = $ids[$i - 1];
+            }
+            $sql = substr($sql, 0, -3).";";
+
+            // Make request
+            try {
+                $data = DB::query($sql, $variables);
+            } catch (PDOException $e) {
+                return FALSE;
+            }
+            return $data;
+        }
+
+        public static function get_spell_slot_distribution($id) {
+            $sql = "SELECT ";
+            for ($i = 1; $i <= 9; $i++) {
+                $sql .= "`Level_".$i."`, ";
+            }
+            $sql = substr($sql, 0, -2)." FROM `Spell_Slot_Distributions` WHERE `ID`=:id";
+            try {
+                $data = DB::query($sql, array(":id" => $id))[0];
             } catch (PDOException $e) {
                 return FALSE;
             }

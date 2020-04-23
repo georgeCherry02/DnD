@@ -84,9 +84,45 @@
             if ($data) {
                 $card_count = 0;
                 foreach ($data as $item_info) {
-                    echo "<div class='col-6'>";
+                    // Create Card wrapper
+                    echo "<div class='col-6 duplicate_card spell_card light_background grey_border'>";
+                    $prepared_info = array();
+                    // Parse information
                     include "./duplicate_cards/".$item_type->getName().".php";
+                    // Manage Name
+                    $item_ownership_description = "Pre-existing item";
+                    if ($card_count == 1) {
+                        $item_ownership_description = "Your item";
+                    }
+                    $name = htmlspecialchars($item_info["Name"]);
+                    echo "<h2 class='grey_text'>".$item_ownership_description.": ".$name."</h2>";
+                    // Create information container html
+                    $output_html = "<div class='information_container grey_border'>";
+                    // Render information by adding to output html in sections
+                    foreach ($prepared_info as $info_name => $info_value) {
+                        $output_html .= "<div class='feature_container'>";
+                        $output_html .= "<label class='highlight_text'>".$info_name.":</label>";
+                        if ($info_name == "Features" || $info_name = "Spells") {
+                            $output_html .= $info_value;
+                        } else {
+                            $output_html .= "<p class='grey_text'>".$info_value."</p>";
+                        }
+                        $output_html .= "</div>";
+                    }
+                    // Manage Description
+                    $description = "";
+                    $description_lines = explode("\n", $item_info["Description"]);
+                    for ($i = 0; $i < sizeof($description_lines); $i++) {
+                        $description .= htmlspecialchars($description_lines[$i]) . "<br/>";
+                    }
+                    $output_html .= "<div class='feature_container'><label class='highlight_text'>Description:</label>";
+                    $output_html .= "<p class='grey_text'>".$description."</p></div>";
+                    // Close and echo information container
+                    $output_html .= "</div>";
+                    echo $output_html;
+                    // Close Card wrapper
                     echo "</div>";
+                    $card_count++;
                 }
             } else {
                 header("Location: default.php?err=server2");

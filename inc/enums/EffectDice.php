@@ -9,5 +9,9 @@
         public function getClassDisplayName() {
             return "Dice";
         }
+
+        public function getPrettyName() {
+            return self::fromValue($this->_value)->getName();
+        }
     }
 ?>

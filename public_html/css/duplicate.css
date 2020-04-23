@@ -13,3 +13,53 @@
     width: 40%;
     margin-left: 30%;
 }
+
+.duplicate_card .labels_container {
+    margin-right: 10px;
+    text-align: right;
+    width: calc(40% - 10px);
+}
+.duplicate_card .values_container {
+    width: 60%;
+}
+.duplicate_card .information_container {
+    margin-top: 10px;
+    border-top-width: 2px;
+    border-top-style: solid;
+    padding-top: 10px;
+}
+.duplicate_card .information_container div {
+    display: inline-block;
+}
+
+.duplicate_card .feature_container {
+    width: 100%;
+}
+.duplicate_card .feature_container label {
+    display: inline-block;
+    width: calc(40% - 10px);
+    margin-right: 10px;
+    text-align: right;
+    vertical-align: top;
+}
+.duplicate_card .feature_container p {
+    display: inline-block;
+    width: 60%;
+}
+.duplicate_card .sub_features_container {
+    display: inline-block;
+    width: 60%;
+}
+.duplicate_card .npc_feature_container {
+    width: 100%;
+}
+.duplicate_card p.sub_feature_name {
+    vertical-align: top;
+    width: 30%;
+    font-size: 12px;
+}
+.duplicate_card p.sub_feature_description {
+    vertical-align: top;
+    width: 70%;
+    font-size: 12px;
+}
