@@ -6,6 +6,8 @@
             <label for='level' class='required'>Level:</label>
             <label for='school' class='required'>School of Magic:</label>
             <label for='casting_time' class='required'>Casting phase:</label>
+            <label class='required'>Duration Type:</label>
+            <label id='duration_label' style='display: none;'>Duration:</label>
             <label for='range_type' class='required'>Range Type:</label>
             <!-- Only if range_type === "ranged" set range_distance input visible -->
             <label for='range_distance' id='range_distance_label' style='display: none;'>Distance:</label>
@@ -28,8 +30,8 @@
             <label for='description'>Description:</label>
         </div>
         <div class='col-6 inputs_container'>
-            <input type='text' name='name' id='spell_name' class="grey_text grey_border white_background" required/><br/>
-            <input type='number' name='level' id='level' class="white_background grey_text grey_border" min="0" max="9" required/><br/>
+            <input type='text' name='name' id='spell_name' class="grey_text grey_border white_background" required/>
+            <input type='number' name='level' id='level' class="white_background grey_text grey_border" min="0" max="9" required/>
             <?php
                 $enums_to_use = MagicSchools::ALL();
                 $column_name = "school";
@@ -38,7 +40,13 @@
                 $enums_to_use = SpellCastingDurations::ALL();
                 $column_name = "casting_time";
                 include $form_component_dir."Radio.php";
-                
+
+                $enums_to_use = SpellDurations::ALL();
+                $column_name = "duration_type";
+                include $form_component_dir."Radio.php";
+            ?>
+            <input type="number" name="duration" id="duration" class="white_background grey_text grey_border" min="0" style="display: none;"/>
+            <?php
                 $enums_to_use = SpellRangeTypes::ALL();
                 $column_name = "range_type";
                 include $form_component_dir."Radio.php";

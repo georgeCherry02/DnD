@@ -6,7 +6,7 @@
         public static function Ritual() { return self::_create(4); }
 
         public function getClassDisplayName() {
-            return "Durations";
+            return "Casting Durations";
         }
     }
 ?>

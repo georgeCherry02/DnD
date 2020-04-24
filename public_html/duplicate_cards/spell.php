@@ -16,6 +16,17 @@
         $casting_time = SpellCastingDurations::Action();
     }
     $prepared_info["Casting phase"] = $casting_time->getPrettyName();
+    // Fetch spell duration
+    try {
+        $duration_type = SpellDurations::fromValue($item_info["Duration_Type"]);
+    } catch (OutOfRangeException $e) {
+        $duration_type = SpellDurations::Instantaneous();
+    }
+    if ($duration_type == SpellDurations::Instantaneous()) {
+        $prepared_info["Duration"] = $duration_type->getName();
+    } else {
+        $prepared_info["Duration"] = filter_var($item_info["Duration"], FILTER_VALIDATE_INT)." ".$duration_type->getUnits();
+    }
     // Gather range info
     try {
         $range_type = SpellRangeTypes::fromValue($item_info["Range_Type"]);

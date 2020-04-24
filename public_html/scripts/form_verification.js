@@ -103,19 +103,23 @@ function toggle_checkbox(id) {
     form_checkbox.classList.toggle("active");
 }
 function toggle_damage_checkbox(damage_type, hide = false) {
+    // Grab relevant DOM elements
     var damage_type_checkbox = document.getElementById(damage_type + "_check");
     var damage_type_label = document.getElementById(damage_type + "_label");
     var damage_type_input_container = document.getElementById("create_form_dropdown_" + damage_type + "_damage");
     var damage_type_input_placeholder = document.getElementById("create_form_dropdown_" + damage_type + "_damage_placeholder");
+    // Handle appearance of type checkbox
     if (!hide) {
         damage_type_checkbox.classList.toggle("active");
     } else {
         damage_type_checkbox.classList.remove("active");
     }
+    // Manage whether the damage type is visible
     var display_type = damage_type_label.style.display == "none" && !hide ? "block" : "none";
     damage_type_label.style.display = display_type;
     damage_type_input_container.style.display = display_type;
     damage_type_input_placeholder.style.display = display_type;
+    // Handle actual values of all these inputs
     if (display_type == "none") {
         var num_inputs = document.querySelectorAll("#create_form_dropdown_" + damage_type + "_damage input");
         for (var i = 0; i < num_inputs.length; i++) {
@@ -176,6 +180,13 @@ function toggle_radio(value, group_name, radio_button_elem) {
     // Manage aesthetics
     var display_type, location, placeholder = false;
     switch(group_name) {
+        case "effect":
+            handle_spell_effect_change(value);
+            return;
+        case "duration_type":
+            display_type = value !== 0 ? "block" : "none";
+            location = "duration"
+            break;
         case "range_type":
             display_type = value === 1 ? "block" : "none";
             location = "range_distance";
@@ -184,9 +195,6 @@ function toggle_radio(value, group_name, radio_button_elem) {
             display_type = value !== 4 ? "block" : "none";
             location = "shape_size";
             break;
-        case "effect":
-            handle_spell_effect_change(value);
-            return;
         default:
             return;
     }

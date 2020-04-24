@@ -15,7 +15,7 @@
     </div>
     <?php
         foreach(DamageType::ALL() as $damage_type) {
-            echo "<label class='grey_text'>".$damage_type->getName().":</label>";
+            echo "<label class='grey_text'>".$damage_type->getPrettyName().":</label>";
             echo "<div class='checkbox white_background grey_border' onclick=\"toggle_damage_checkbox('".$damage_type->getName()."');\" id='".$damage_type->getName()."_check'></div>";
             echo "<br/>";
         }
