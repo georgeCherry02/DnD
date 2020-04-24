@@ -39,31 +39,44 @@
             <input type="number" name="Hit_Points" class="grey_text grey_border white_background" required/>
             <input type="number" name="Speed" class="grey_text grey_border white_background" required/>
             <?php
+                // Create ability scores input
                 $enums_to_use = Abilities::ALL();
                 $unique_descriptor = "modifier";
                 include $form_component_dir."MultiNumber.php";
 
+                // Create proficient saving throws input
+                // Uses same enum as above
+                $unique_descriptor = "saving";
+                include $form_component_dir."MultiSelect.php";
+
+                // Create skills input
                 $enums_to_use = Skills::ALL();
                 $unique_descriptor = "proficiency";
                 include $form_component_dir."MultiSelect.php";
 
+                // Create expertise input
                 // Uses same enum as above
                 $unique_descriptor = "expertise";
                 include $form_component_dir."MultiSelect.php";
             ?>
             <input type="number" name="Experience_Reward" class="grey_text grey_border white_background"/>
             <?php
+                // Create Armour selection input
                 $item_type = ItemTypes::Armour();
                 include $form_component_dir."ItemRadio.php";
 
+                // Create Spell selection input... this could be improved upon
                 $item_type = ItemTypes::Spell();
                 include $form_component_dir."ItemSelect.php";
 
+                // Create Spell Slot input
                 include $form_component_dir."SpellSlot.php";
 
+                // Create Weapon selection input
                 $item_type = ItemTypes::Weapon();
                 include $form_component_dir."ItemSelect.php";
 
+                // Create Features input
                 include $form_component_dir."Features.php";
             ?>
             <textarea name="description" class="grey_text grey_border white_background description"></textarea>

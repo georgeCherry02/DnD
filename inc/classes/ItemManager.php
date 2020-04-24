@@ -212,6 +212,9 @@
             }
             $data["Ability_Scores_ID"] = $distribution_id;
 
+            // Gather proficient saving throws
+            $data = self::gather_multi_select($data, "Proficient_Saving_Throws", "saving", Abilities::ALL());
+
             // Gather skill proficiencies
             $data = self::gather_multi_select($data, "Skill_Proficiencies", "proficiency", Skills::ALL());
 
@@ -541,7 +544,7 @@
                     $sql = "SELECT `ID`, `Name`, `Level`, `School`, `Casting_Time`, `Range_Type`, `Range_Distance`, `Shape`, `Shape_Size`, `Vocal`, `Somatic`, `Material_Value`, `Concentration`, `Effect`, `Effect_IDs`, `Description`";
                     break;
                 case ItemTypes::StatBlock():
-                    $sql = "SELECT `ID`, `Name`, `Armour_ID`, `Hit_Points`, `Speed`, `Ability_Scores_ID`, `Skill_Proficiencies`, `Expertise`, `Experience_Reward`, `Weapon_ID_List`, `Spell_ID_List`, `Spell_Slot_Distribution_ID`, `Features_ID_List`, `Description`";
+                    $sql = "SELECT `ID`, `Name`, `Armour_ID`, `Hit_Points`, `Speed`, `Ability_Scores_ID`, `Proficient_Saving_Throws`, `Skill_Proficiencies`, `Expertise`, `Experience_Reward`, `Weapon_ID_List`, `Spell_ID_List`, `Spell_Slot_Distribution_ID`, `Features_ID_List`, `Description`";
                     break;
                 case ItemTypes::Weapon():
                     $sql = "SELECT `ID`, `Name`, `Properties`, `Damage_Distribution_IDs`, `Effective_Range`, `Maximum_Range`, `Versatile_Damage_ID`, `Weight`, `Value`, `Description`";

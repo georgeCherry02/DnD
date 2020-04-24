@@ -24,6 +24,10 @@
         $prepared_info["Abilities"] = $ability_output;
     }
 
+    // Manage saving throws
+    $proficient_saving_throws = json_decode($item_info["Proficient_Saving_Throws"]);
+    $prepared_info["Saving Throws"] = htmlspecialchars(implode(", ", $proficient_saving_throws));
+
     // Manage skills and expertise
     $skills = json_decode($item_info["Skill_Proficiencies"]);
     $expertise_skills = json_decode($item_info["Expertise"]);

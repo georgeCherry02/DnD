@@ -43,18 +43,18 @@
 }
 .duplicate_card .feature_container label {
     display: inline-block;
-    width: calc(40% - 10px);
+    width: calc(30% - 10px);
     margin-right: 10px;
     text-align: right;
     vertical-align: top;
 }
 .duplicate_card .feature_container p {
     display: inline-block;
-    width: 60%;
+    width: 70%;
 }
 .duplicate_card .sub_features_container {
     display: inline-block;
-    width: 60%;
+    width: 70%;
 }
 .duplicate_card .npc_feature_container {
     width: 100%;
