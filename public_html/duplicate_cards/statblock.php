@@ -70,7 +70,7 @@
         array_push($spells_summary_remapped[$spell["Level"]], $spell["Name"]);
     }
     $spell_output = "<div class='sub_features_container'>";
-    for ($i = 1; $i <= 9; $i++) {
+    for ($i = 0; $i <= 9; $i++) {
         if (isset($spells_summary_remapped[$i])) {
             $spell_output .= "<p class='grey_text sub_feature_name'>Level ".$i.":</p>";
             $spell_output .= "<p class='grey_text sub_feature_description'>";
