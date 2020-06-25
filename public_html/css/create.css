@@ -158,12 +158,12 @@ h1.title {
     float: right;
     text-indent: 2px;
 }
-.create_form_dropdown.features input {
+.create_form_dropdown.features input, .create_form_dropdown.players input {
     width: calc(100% - 7px);
     margin: 2px;
     margin-left: 5px;
 }
-.create_form_dropdown.features #feature_descriptions input {
+.create_form_dropdown.features #feature_descriptions input, .create_form_dropdown.players #player_descriptions input {
     width: calc(100% - 10px);
     margin-right: 5px;
 }

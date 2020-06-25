@@ -17,6 +17,7 @@
         <link rel='stylesheet' href='<?php echo $file_root; ?>css/main.css' type='text/css'/> 
         <script src="https://kit.fontawesome.com/fd361f6e33.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="<?php echo $file_root; ?>scripts/constants.js"></script>
         <?php
             switch ($page_title) {
@@ -29,6 +30,13 @@
                 case "Duplicate Choice":
                     echo "<link rel='stylesheet' href='" . $file_root . "css/duplicate.css' type='text/css'/>";
                     break;
+            }
+            if (isset($game_id)) {
+?>
+                <script src="https://unpkg.com/paper@0.11.5/dist/paper-full.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+                <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<?php
             }
         ?>
     </head>
