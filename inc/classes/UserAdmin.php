@@ -1,11 +1,20 @@
 <?php
     class UserAdmin {
+        public static function id_from_username($name) {
+            $sql = "SELECT `ID` from `Users` WHERE `Username`=:user";
+            try {
+                $res = DB::query($sql, array(":user" => $name));
+            } catch (PDOException $e) {
+                return false;
+            }
+            return $res[0]["ID"];
+        }
         public static function login_user() {
             $user = $_POST["user"];
             $pass = $_POST["pass"];
 
             try {
-                $res = DB::query("SELECT ID FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
+                $res = DB::query("SELECT `ID` FROM `Users` WHERE Username=:user AND `Password`=MD5(:pass);", array(":user" => $user, ":pass" => $pass));
             } catch (PDOException $e) {
                 return false;
             }

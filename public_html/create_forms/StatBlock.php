@@ -24,7 +24,8 @@
             <label class="required">Hit Points:</label>
             <label class="required">Speed:</label>
             <label class="required">Abilities:</label>
-            <label>Skill Proficiencies</label>
+            <label>Saving Throws:</label>
+            <label>Skill Proficiencies:</label>
             <label>Expertise:</label>
             <label>Experience Reward:</label>
             <label>Armour:</label>
