@@ -188,9 +188,8 @@ function toggle_radio(value, group_name, radio_button_elem) {
             location = "duration"
             break;
         case "range_type":
-            display_type = value === 1 ? "block" : "none";
-            location = "range_distance";
-            break;
+            handle_range_effect_change(value);
+            return;
         case "shape":
             display_type = value !== 4 ? "block" : "none";
             location = "shape_size";
@@ -237,4 +236,32 @@ function handle_spell_effect_change(value) {
             document.getElementById("create_form_dropdown_healing_placeholder").style.display = "block";
             break;
     }
+}
+
+function handle_range_effect_change(value) {
+    var distance_display_type = value === 1 ? "block" : "none";
+    var shape_display_type = value === 1 || value === 3 ? "block" : "none";
+    // Handle distance insert
+    document.getElementById("range_distance").style.display = distance_display_type;
+    document.getElementById("range_distance").value = 0;
+    document.getElementById("range_distance_label").style.display = distance_display_type;
+    // Handle shape info
+    const shape_types = ["Cone", "Cube", "Cylinder", "Beam", "Sphere"];
+    if (shape_display_type == "none") {
+        // Handle actual input value
+        delete document.getElementById("shape_radio_input").value;
+        // Handle aesthetics of input
+        for (var i = 0; i < shape_types.length; i++) {
+            document.getElementById(shape_types[i] + "_radio").classList.remove("active");
+        }
+    }
+    // Make form elements disappear 
+    // Handle shape types
+    document.getElementById("shape_type_label").style.display = shape_display_type;
+    document.getElementById("create_form_dropdown_shape").style.display = shape_display_type;
+    document.getElementById("create_form_dropdown_shape_placeholder").style.display = shape_display_type;
+    // Handle shape size
+    document.getElementById("shape_size_label").style.display = shape_display_type;
+    document.getElementById("shape_size").style.display = shape_display_type;
+    document.getElementById("shape_size").value = 0;
 }

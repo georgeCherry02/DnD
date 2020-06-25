@@ -11,7 +11,7 @@
             <label for='range_type' class='required'>Range Type:</label>
             <!-- Only if range_type === "ranged" set range_distance input visible -->
             <label for='range_distance' id='range_distance_label' style='display: none;'>Distance:</label>
-            <label for='shape_type' class='required'>Shape:</label>
+            <label for='shape_type' class='required' id="shape_type_label">Shape:</label>
             <!-- Only if a shape other than beam is selected allow shape_size input visible -->
             <label for='shape_size' id='shape_size_label' style="display: none;">Shape Size:</label>
             <label for='vocal'>Vocal:</label>

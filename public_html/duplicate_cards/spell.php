@@ -41,18 +41,21 @@
     }
     $prepared_info["Range"] = $range_info;
     // Gather shape info
-    try {
-        $shape_type = SpellShapes::fromValue($item_info["Shape"]);
-    } catch (OutOfRangeException $e) {
-        $shape_type = SpellShapes::Beam();
+    if (!empty($item_info["Shape"])) {
+        try {
+            $shape_type = SpellShapes::fromValue($item_info["Shape"]);
+        } catch (OutOfRangeException $e) {
+            $shape_type = SpellShapes::Beam();
+        }
+
+        if ($shape_type !== SpellShapes::Beam()) {
+            $shape_size = filter_var($item_info["Shape_Size"], FILTER_VALIDATE_INT);
+            $shape_info = $shape_size . "ft " . $shape_type->getPrettyName();
+        } else {
+            $shape_info = $shape_type->getPrettyName();
+        }
+        $prepared_info["Shape"] = $shape_info;
     }
-    if ($shape_type !== SpellShapes::Beam()) {
-        $shape_size = filter_var($item_info["Shape_Size"], FILTER_VALIDATE_INT);
-        $shape_info = $shape_size . "ft " . $shape_type->getPrettyName();
-    } else {
-        $shape_info = $shape_type->getPrettyName();
-    }
-    $prepared_info["Shape"] = $shape_info;
     // Gather requirements
     $spell_requirements = "";
     if ($item_info["Vocal"] == "1") {
