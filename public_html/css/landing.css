@@ -1,6 +1,12 @@
 .text_divider {
     height: 0.5px;
-    width: 40%;
+    width: 50%;
     margin: 10px;
     margin-left: 30%;
+}
+h1.hero {
+    width: 60%;
+    text-align: left;
+    font-size: 80px;
+    margin-top: 0;
 }

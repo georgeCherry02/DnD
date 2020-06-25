@@ -8,6 +8,13 @@
     border-radius: 20px;
     border-width: 2px;
     border-style: solid;
+
+    z-index: 40;
+}
+.message_container_in_page {
+    position: relative;
+    left: 0;
+    width: 100%;
 }
 .message_container h4 {
     margin: 0;
@@ -47,10 +54,18 @@
 .message_container input[type="submit"]:hover {
     transform: translate(0.5px, 0.5px);
 }
+.message_container input[type="radio"] {
+    width: unset;
+    transform: translateY(2px);
+}
 
 /* Pop-up message styling */
 #popup_message .close_button {
     position: absolute;
     right: 8px;
     top: 8px;
+    cursor: pointer;
+}
+#popup_message .close_button:hover i {
+    color: #4682bf;
 }

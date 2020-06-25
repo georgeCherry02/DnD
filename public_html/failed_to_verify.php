@@ -16,7 +16,7 @@
                 include_once "./global_components/popup_message.php";
                 break;
             case 1:
-                header("Location: https://flatdragons.com/failed_to_verify.php?err=serv");
+                header("Location: ./default.php?err=server");
                 exit;
                 break;
             case 2:
@@ -32,18 +32,13 @@
                 include_once "./global_components/popup_message.php";
                 break;
         }
-    } else if (isset($_GET["err"])) {
-        if ($_GET["err"] == "serv") {
-            $popup_message_name = "reissue/server_error";
-            include_once "./global_components/popup_message.php";
-        }
     } else {
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <p>If you're email validation has failed, enter your email here to re-issue a new link.</p>
     <form action='' method="POST">
-        <input type='text' name='email' placeholder='Email' class='light_green dark_green_text dark_green_border'/>
-        <input type='submit' value='Send link' class='light_green dark_green_text dark_green_border'/>
+        <input type='text' name='email' placeholder='Email' class='white_background grey_text grey_border'/>
+        <input type='submit' value='Send link' class='white_background highlight_text grey_border'/>
     </form>
 </div>
 <link rel='stylesheet' href='./css/form_message.css' type='text/css'/>

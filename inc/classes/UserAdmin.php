@@ -81,6 +81,25 @@ EMAIL;
             } else {
                 return 2;
             }
+
+            // Determine User ID
+            try {
+                $user_id = DB::query("SELECT `ID` FROM `Users` WHERE `Username`=:user;", array(":user" => $user))[0]["ID"];
+            } catch (PDOException $e) {
+                return 1;
+            }
+
+            // Insert into User_Limitations and User_IDs
+            if ($user_id) {
+                try {
+                    DB::query("INSERT INTO `User_limitations` (`User_ID`) VALUES (:uid);", array(":uid" => $user_id));
+                    DB::query("INSERT INTO `User_Item_Ids` (`User_ID`, `Armour_IDs`, `NPC_Stat_Block_IDs`, `Spell_IDs`, `Weapon_IDs`) VALUES (:uid, :armour, :npc_stat_blocks, :spells, :weapons);", array(":uid" => $user_id, ":armour" => json_encode(array()), ":npc_stat_blocks" => json_encode(array()), ":spells" => json_encode(array()), ":weapons" => json_encode(array())));
+                } catch (PDOException $e) {
+                    return 1;
+                }
+            } else {
+                return 2; // It should not be possible for this should not occur... But worth putting in
+            }
             return 0;
         }
 

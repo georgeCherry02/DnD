@@ -1,0 +1,71 @@
+.duplicate_card {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(50% - 60px);
+
+    margin: 30px;
+
+    border-radius: 25px;
+    border-width: 2px;
+    border-style: solid;
+
+    padding: 20px;
+}
+.duplicate_card h2, .duplicate_card h3, .duplicate_card h4, .duplicate_card p {
+    margin: 0;
+}
+
+.duplicate_resolution_response_container {
+    width: 40%;
+    margin-left: 30%;
+}
+
+.duplicate_card .labels_container {
+    margin-right: 10px;
+    text-align: right;
+    width: calc(40% - 10px);
+}
+.duplicate_card .values_container {
+    width: 60%;
+}
+.duplicate_card .information_container {
+    margin-top: 10px;
+    border-top-width: 2px;
+    border-top-style: solid;
+    padding-top: 10px;
+}
+.duplicate_card .information_container div {
+    display: inline-block;
+}
+
+.duplicate_card .feature_container {
+    width: 100%;
+}
+.duplicate_card .feature_container label {
+    display: inline-block;
+    width: calc(30% - 10px);
+    margin-right: 10px;
+    text-align: right;
+    vertical-align: top;
+}
+.duplicate_card .feature_container p {
+    display: inline-block;
+    width: 70%;
+}
+.duplicate_card .sub_features_container {
+    display: inline-block;
+    width: 70%;
+}
+.duplicate_card .npc_feature_container {
+    width: 100%;
+}
+.duplicate_card p.sub_feature_name {
+    vertical-align: top;
+    width: 30%;
+    font-size: 12px;
+}
+.duplicate_card p.sub_feature_description {
+    vertical-align: top;
+    width: 70%;
+    font-size: 12px;
+}

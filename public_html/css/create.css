@@ -1,0 +1,188 @@
+h1.title {
+    text-align: center;
+    font-size: 64px;
+}
+
+.option_container {
+    position: relative;
+    margin: 20px;
+    border-radius: 40px;
+    border: 6px solid black;
+    padding: 20px;
+    box-shadow: 3px 3px 10px #222;
+}
+.option_container:hover {
+    transform: translate(1px, 1px);
+}
+.option_container img {
+    transition: opacity 0.5s linear;
+}
+.option_container img.colour {
+    position: absolute;
+    left: 20px;
+    width: calc(100% - 40px);
+    opacity: 0;
+}
+.option_description {
+    position: absolute;
+    margin: 0px;
+    width: calc(100% - 40px);
+
+    transform: translate(0, 2em);
+
+    text-align: center;
+
+    transition: opacity 0.5s linear;
+    opacity: 0;
+}
+.option_container:hover img.colour {
+    opacity: 1;
+}
+.option_container:hover p.option_description {
+    opacity: 1;
+}
+
+/* Create form styling */
+.create_form_container {
+    width: 50%;
+    margin-left: 25%;
+    padding: 30px;
+    border-radius: 25px;
+    border-width: 2px;
+    border-style: solid;
+    font-size: 16px;
+}
+.create_form_container form {
+    transition: height 0.2s;
+}
+.create_form_container input {
+    font-size: 16px;
+    height: calc(2em - 4px);
+    width: 100%;
+
+    margin: 2px;
+
+    padding: 3px;
+
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    text-indent: 5px;
+
+    outline: none;
+}
+.create_form_container input[type="submit"] {
+    margin-left: calc(33.33% + 10px + 2px);
+    width: 50%;
+}
+.create_form_container input[type="submit"]:hover {
+    transform: translate(0.5px, 0.5px);
+}
+.create_form_container div.checkbox, .create_form_container div[class*="_radio"] {
+    position: absolute;
+    left: 0;
+
+    height: calc(2em - 4px);
+    width: calc(2em - 4px);
+
+    margin: 2px;
+    margin-right: 5px;
+    padding: 3px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+.create_form_container textarea.description {
+    font-size: 8px;
+    line-height: 1em;
+
+    min-height: calc(4em - 4px);
+    max-height: 16em;
+    max-width: 100%;
+    min-width: 100%;
+
+    margin: 2px;
+    border-radius: 5px;
+    padding: 5px;
+    text-indent: -2px;
+}
+.inputs_container {
+    position: relative;
+}
+.labels_container {
+    float: left;
+    margin-right: 10px;
+}
+.labels_container label {
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    text-align: right;
+}
+.create_form_dropdown {
+    width: 100%;
+    height: auto;
+    max-height: calc(2em - 4px);
+    position: absolute;
+
+    margin: 2px;
+    /* Accounts for footer */
+    margin-bottom: 22px;
+
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+
+    padding-bottom: 3px;
+
+    transition: max-height 1s ease-in-out;
+    overflow: hidden;
+}
+.create_form_dropdown label {
+    height: 2em;
+    line-height: 2em;
+    margin: 2px;
+    padding: 3px;
+}
+.create_form_dropdown div.checkbox, .create_form_dropdown div[class*="_radio"] {
+    right: 0;
+    left: unset;
+    transform: translateY(-2em);
+}
+.create_form_dropdown input {
+    width: 20%;
+    margin: 1px;
+    margin-right: 5px;
+    float: right;
+    text-indent: 2px;
+}
+.create_form_dropdown.features input {
+    width: calc(100% - 7px);
+    margin: 2px;
+    margin-left: 5px;
+}
+.create_form_dropdown.features #feature_descriptions input {
+    width: calc(100% - 10px);
+    margin-right: 5px;
+}
+div.checkbox.active, div[class*="_radio"].active {
+    background: #4682bf;
+}
+.create_form_placeholder {
+    height: 2em;
+}
+.icon_container {
+    margin-top: calc((2em - 20px) / 2 - 2px);
+    width: 20px;
+    height: 20px;
+    float: right;
+}
+.icon_container i {
+    font-size: 16px;
+    color: grey;
+}
+.icon_container i:hover {
+    color: #4682bf;
+}

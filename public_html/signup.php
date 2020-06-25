@@ -19,7 +19,7 @@
                 break;
             case 1:
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <p><?php echo $status[1]; ?></p>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -28,7 +28,7 @@
                 break;
             case 2:
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <h4>There was a server error, please try following the link again!</h4>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -55,14 +55,14 @@
                 break;
             case 1:
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <h4>There was a server error on the first attempt.</h4>
     <h4>Please try again!</h4>
     <form action="" method="POST" onsubmit="return validate_password_choice()">
         <input type="hidden" name="user" value="<?php echo $_POST["user"]; ?>"/>
-        <input id="password_choice_field" type="password" name="pass" placeholder="Password" class='light_green dark_green_text dark_green_border'/>
-        <input id="confirm_password_choice_field" type="password" name="confirm_pass" placeholder="Confirm Password" class='light_green dark_green_text dark_green_border'/>
-        <input type="submit" value="Continue" class='light_green dark_green_text dark_green_border'/>
+        <input id="password_choice_field" type="password" name="pass" placeholder="Password" class='white_background grey_text grey_border'/>
+        <input id="confirm_password_choice_field" type="password" name="confirm_pass" placeholder="Confirm Password" class='white_background grey_text grey_border'/>
+        <input type="submit" value="Continue" class='white_background highlight_text grey_border'/>
     </form>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -81,13 +81,13 @@
             case 0:
             // Display password submission form
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <h4>Please choose a password</h4>
     <form action="" method="POST" onsubmit="return validate_password_choice()">
         <input type="hidden" name="user" value="<?php echo $_GET["user"]; ?>"/>
-        <input id="password_choice_field" type="password" name="pass" placeholder="Password" class='light_green dark_green_text dark_green_border'/>
-        <input id="confirm_password_choice_field" type="password" name="confirm_pass" placeholder="Confirm Password" class='light_green dark_green_text dark_green_border'/>
-        <input type="submit" value="Continue" class='light_green dark_green_text dark_green_border'/>
+        <input id="password_choice_field" type="password" name="pass" placeholder="Password" class='white_background grey_text grey_border'/>
+        <input id="confirm_password_choice_field" type="password" name="confirm_pass" placeholder="Confirm Password" class='white_background grey_text grey_border'/>
+        <input type="submit" value="Continue" class='white_background highlight_text grey_border'/>
     </form>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -97,7 +97,7 @@
             case 1:
             // State why the thing failed and tell them to go back to old link.
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <p>Server error. Please try following link again.</p>
 </div>
 <link rel='stylesheet' href='<?php echo $file_root; ?>css/form_message.css' type='text/css'/>
@@ -107,7 +107,7 @@
             // State why the thing failed and tell them to go back to old link.
             // *** Here I should implement reissuing of link...
 ?>
-<div class='dark_green_border main_green message_container'>
+<div class='grey_border light_background message_container'>
     <p>Verification code mismatch. Attempt to follow the link again.</p>
     <p>Otherwise click <a href='failed_to_verify.php'>here</a> to re-issue a new link</p>
 </div>
