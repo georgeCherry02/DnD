@@ -55,7 +55,7 @@ h1.title {
 .create_form_container form {
     transition: height 0.2s;
 }
-.create_form_container input {
+.create_form_container input, .create_form_container label.input_label {
     font-size: 16px;
     height: calc(2em - 4px);
     width: 100%;
@@ -71,6 +71,9 @@ h1.title {
     text-indent: 5px;
 
     outline: none;
+}
+.create_form_container label.input_label {
+    display: inline-block;
 }
 .create_form_container input[type="submit"] {
     margin-left: calc(33.33% + 10px + 2px);

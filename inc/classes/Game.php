@@ -106,5 +106,15 @@
             }
             return true;
         }
+        public static function fetch_rooms($game_id) {
+            $room_sql = "SELECT `ID`, `Name` FROM `Rooms` WHERE `Game_ID`=:gid";
+            $room_var = array(":gid" => $game_id);
+            try {
+                $rooms = DB::query($room_sql, $room_var);
+            } catch (PDOException $e) {
+                return false;
+            }
+            return $rooms;
+        }
     }
 ?>

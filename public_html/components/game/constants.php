@@ -1,6 +1,8 @@
 <script>
     const PLAYER_ID = <?php echo $game_info["Owner_ID"]; ?>;
     const GAME_ID = <?php echo $game_id; ?>;
+    const ROOM_ID = <?php echo $room_id; ?>;
+    const BACKGROUND_HEIGHT = <?php echo $end_height; ?>;
     const PLAYER_COLOURS = {
 <?php
     $colours = "";
