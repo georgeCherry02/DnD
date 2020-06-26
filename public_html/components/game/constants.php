@@ -1,5 +1,5 @@
 <script>
-    const PLAYER_ID = <?php echo $game_info["Owner_ID"]; ?>;
+    const PLAYER_ID = <?php echo $_SESSION["Logged_in_id"]; ?>;
     const GAME_ID = <?php echo $game_id; ?>;
     const ROOM_ID = <?php echo $room_id; ?>;
     const BACKGROUND_HEIGHT = <?php echo $end_height; ?>;
