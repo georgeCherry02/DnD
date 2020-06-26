@@ -40,6 +40,7 @@ with (paper) {
         }
         
         this.addConnection(PLAYER_ID);
+        this.renderBackground();
     }
 
     game.updateMouseAppearance = function(point_location) {
@@ -176,11 +177,23 @@ with (paper) {
             }
         })
     }
+    game.renderBackground = function() {
+        this.base_layer.activate();
+        this.background = new Raster({
+            source: "./resources/rooms/background"+ROOM_ID+".jpg",
+            position: view.center
+        });
+        this.background.width = 1024;
+        this.background.height = BACKGROUND_HEIGHT;
+    }
 }
 
 window.onload = function() {
     // Initialise game
     game.initialise();
+    // Failsafe
+    game.background.width = 1024;
+    game.background.height = BACKGROUND_HEIGHT;
     // Actions for each frame
     game._intervalId = setInterval(game.fetchPuddles, 200);
     paper.view.onFrame = function(event) {

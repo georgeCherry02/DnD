@@ -523,6 +523,16 @@
             return TRUE;
         }
 
+        public static function get_owned_npcs() {
+            $sql = "SELECT `NPC_Stat_Block_IDs` FROM `User_Item_IDs` WHERE `User_ID`=:uid";
+            $sql_var = array(":uid" => $_SESSION["Logged_in_id"]);
+            try {
+                $result = DB::query($sql, $sql_var);
+            } catch (PDOException $e) {
+                return false;
+            }
+            return $result[0]["NPC_Stat_Block_IDs"];
+        }
         public static function get_owned_items() {
             $sql = "SELECT `Armour_IDs`, `Spell_IDs`, `Weapon_IDs` FROM `User_Item_IDs` WHERE `User_ID`=:uid";
             $sql_variables = array(":uid" => $_SESSION["Logged_in_id"]);
@@ -535,6 +545,9 @@
         }
 
         public static function get_all_item_data($ids, $item_type) {
+            if (sizeof($ids) == 0) {
+                return array();
+            }
             // Switch type and determine base sql
             switch($item_type) {
                 case ItemTypes::Armour():

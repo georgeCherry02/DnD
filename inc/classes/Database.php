@@ -7,11 +7,15 @@
         }
 
         public static function query($query, $params = array()) {
-            $statement = self::connect()->prepare($query);
+            $conn = self::connect();
+            $statement = $conn->prepare($query);
             $statement->execute($params);
             if (explode(' ', $query)[0] == 'SELECT') {
                 $data = $statement->fetchAll(PDO::FETCH_ASSOC);
                 return $data;
+            } else if (explode(' ', $query)[0] == "INSERT") {
+                $id = $conn->lastInsertId();
+                return $id;
             }
         }
     }
