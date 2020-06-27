@@ -15,14 +15,24 @@
             include_once "./global_components/navbar.php";
             if (isset($_GET["room"])) {
                 $room_id = $_GET["room"];
+                include_once "../inc/classes/Room.php";
+                $room_grid_dim = Room::fetch_dim($room_id);
                 $background_size = getimagesize("./resources/rooms/background".$room_id.".jpg");
                 $width_ratio = 1024 / $background_size[0];
                 $end_height = floor($width_ratio * $background_size[1]);
                 include_once "./global_components/ajax.php";
                 include_once "./components/game/constants.php";
+                if ($game_info["Owner_ID"] == $_SESSION["Logged_in_id"]) {
+?>
+<div class="gm_control_panel">
+    <div class="tool_button" id="comm_tool" onclick="game.use_point_tool();"></div>
+    <div class="tool_button" id="fog_tool" onclick="game.use_fog_tool();"></div>
+</div>
+<?php
+                }
 ?>
 <div class="canvas_container">
-    <canvas id="game_canvas" width="1024" height="<?php echo $end_height; ?>" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 1024px; height: <?php echo $end_height; ?>px; border: blue 1px solid;"></canvas>
+    <canvas id="game_canvas" width="1024" height="<?php echo $end_height; ?>" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 1024px; height: <?php echo $end_height; ?>px; border: 1px solid black; cursor: none;"></canvas>
 </div>
 <script src="./scripts/game.js" type="application/javascript"></script>
 <?php

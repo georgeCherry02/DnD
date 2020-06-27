@@ -19,6 +19,9 @@
                 header("Location: default.php");
                 exit;
             }
+            $width = $_POST["grid_width"];
+            $height = $_POST["grid_height"];
+            $grid_dim = array("width" => $width, "height" => $height);
             $imageFileType = strtolower(pathinfo(basename($_FILES["background"]["name"]), PATHINFO_EXTENSION));
             if ($imageFileType != "jpg") {
                 header("Location: create_room.php?id=".$game_id."&err=type");
@@ -35,8 +38,8 @@
                 array_push($room_stat_blocks["amounts"], $post_val);
             }
             // Commit to database
-            $room_sql = "INSERT INTO `Rooms` (`Game_ID`, `Name`, `NPC_IDs`) VALUES (:gid, :name, :npcs)";
-            $room_var = array(":gid" => $game_id, ":name" => $room_name, ":npcs" => json_encode($room_stat_blocks));
+            $room_sql = "INSERT INTO `Rooms` (`Game_ID`, `Name`, `Grid_Dimensions`, `NPC_IDs`) VALUES (:gid, :name, :grid_dim, :npcs)";
+            $room_var = array(":gid" => $game_id, ":name" => $room_name, ":grid_dim" => json_encode($grid_dim), ":npcs" => json_encode($room_stat_blocks));
             try {
                 $room_id = DB::query($room_sql, $room_var);
             } catch (PDOException $e) {
@@ -59,9 +62,11 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="game_id" value="<?php echo $_GET["id"]; ?>"/>
                     <div class="col-4 labels_container highlight_text">
-                        <label for="name" class="required">Name</label>
-                        <label for="background_image">Background</label>
-                        <label for="npc_list">NPCs</label>
+                        <label for="name" class="required">Name:</label>
+                        <label for="background_image">Background:</label>
+                        <label for="grid_width">Grid Width:</label>
+                        <label for="grid_height">Grid Height:</label>
+                        <label for="npc_list">NPCs:</label>
                     </div>
                     <div class="col-6 inputs_container">
                         <input type="text" name="name" id="room_name" class="white_background grey_text grey_border" required/><br/>
@@ -69,6 +74,8 @@
                             Background:
                             <input type="file" name="background" id="background_upload" style="display: none;">
                         </label>
+                        <input type="number" name="grid_width" id="grid_width" class="white_background grey_text grey_border"/><br/>
+                        <input type="number" name="grid_height" id="grid_height" class="white_background grey_text grey_border"/><br/>
                         <?php
                             // Fetch the players NPCs
                             $item_type = ItemTypes::StatBlock();

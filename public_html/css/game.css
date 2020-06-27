@@ -1,3 +1,18 @@
 .canvas_container {
     text-align: center;
 }
+.gm_control_panel {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+}
+.tool_button {
+    width: 30px;
+    height: 30px;
+}
+#comm_tool {
+    background-color: blue;
+}
+#fog_tool {
+    background-color: red;
+}
