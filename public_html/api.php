@@ -75,6 +75,33 @@
             $response["puddles"] = $res;
             $response["status"] = "Success";
             break;
+        case "fetchGrid":
+            if (!isset($request_data["game_id"])) {
+                $response["error_message"] = "Failed to provide necessary data";
+                break;
+            }
+            $res = Game::fetch_grid($request_data["game_id"]);
+            $response["grid"] = $res;
+            $response["status"] = "Success";
+            break;
+        case "updateGrid":
+            if (!isset($request_data["game_id"]) || !isset($request_data["grid_state"])) {
+                $response["error_message"] = "Failed to provide necessary data";
+                break;
+            }
+            // Double check session is owner
+            $game_info = Game::fetch_display_information($request_data["game_id"]);
+            if ($_SESSION["Logged_in_id"] !== $game_info["Owner_ID"]) {
+                $response["error_message"] = "As you're not the owner of this game you can't do this";
+                break;
+            }
+            $res = Game::set_grid_state($request_data["game_id"], $request_data["grid_state"]);
+            if ($res) {
+                $response["status"] = "Success";
+            } else {
+                $response["error_message"] = "Failed to set initial state";
+            }
+            break;
         default:
             $response["error_message"] = "Failed to provide valid process";
     }

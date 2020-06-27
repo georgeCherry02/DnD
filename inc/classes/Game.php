@@ -116,5 +116,28 @@
             }
             return $rooms;
         }
+        public static function fetch_grid($game_id) {
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            $res = $state["grid"];
+            return $res;
+        }
+        // Game owner operations
+        private static function verify_owner($game_id) {
+            $game_owner = self::fetch_display_information($game_id)["Owner_ID"];
+            return $game_owner == $_SESSION["Logged_in_id"];
+        }
+        public static function set_grid_state($game_id, $grid_state) {
+            // Final verification
+            if (!self::verify_owner($game_id)) {
+                return false;
+            }
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            // Modify state
+            $state["grid"] = $grid_state;
+            // Set final state
+            return self::set_state($game_id, $state);
+        }
     }
 ?>
