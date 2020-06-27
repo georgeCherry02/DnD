@@ -11,7 +11,7 @@ with (paper) {
         setup(this.canvas);
         this.base_layer = new Layer();
         this.fog_layer  = new Layer();
-        this.fog_layer.opacity = 0.9;
+        this.fog_layer.opacity = 0.95;
         this.mouse_puddle_layer = new Layer();
         this.mouse_circling_layer = new Layer();
         this.mouse_circling_layer.opacity = 0.25;
