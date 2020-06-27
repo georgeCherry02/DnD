@@ -6,17 +6,23 @@ with (paper) {
     game.canvas = document.getElementById("game_canvas");
     game.canvas_size = new Size(1024, BACKGROUND_HEIGHT);
     game.puddles = [];
+    game.markers = {};
+    game.markers.list = [];
+    game.markers.paths = [];
+    game.grid = {};
+    game.grid.state = {};
     // Initialise mouse tools
     game.initialise = function() {
         setup(this.canvas);
         this.base_layer = new Layer();
+        this.marker_layer = new Layer();
+        this.marker_layer.opacity = 0.7;
         this.fog_layer  = new Layer();
         this.fog_layer.opacity = 0.95;
         this.mouse_puddle_layer = new Layer();
         this.mouse_circling_layer = new Layer();
-        this.mouse_circling_layer.opacity = 0.25;
+        this.mouse_circling_layer.opacity = 0.5;
         this.mouse_track_layer = new Layer();
-        this.mouse_track_layer.opacity = 0.5;
 
         // Initialise custom mouse tracker
         this.mouse_circling_layer.activate()
@@ -54,11 +60,22 @@ with (paper) {
             view.draw();
             event.stopPropagation();
         }
+        this.marker_tool = new Tool();
+        this.marker_tool.onMouseDown = function(event) {
+            game.owner.checkMarker(event.point);
+            view.draw();
+            event.stopPropagation();
+        }
+        this.marker_tool.onMouseMove = function(event) {
+            game.updateMouseAppearance(event.point);
+            view.draw();
+            event.stopPropagation();
+        }
         this.point_tool.activate();
 
         this.addConnection(PLAYER_ID);
         this.renderBackground();
-        this.generateGrid();
+        this.grid.generate();
     }
 
     game.use_point_tool = function() {
@@ -66,6 +83,9 @@ with (paper) {
     }
     game.use_fog_tool = function() {
         this.fog_tool.activate();
+    }
+    game.use_marker_tool = function() {
+        this.marker_tool.activate();
     }
     game.updateMouseAppearance = function(point_location) {
         this.mouse_track_layer.activate();
@@ -208,81 +228,152 @@ with (paper) {
             position: view.center
         });
     }
-    game.fetchGrid = function() {
-        var process = "fetchGrid";
-        var data = {
-            "game_id":  GAME_ID
-        };
-        $.ajax({
-            type:   "POST",
-            url:    "api.php",
-            data:   {
-                "ajax_token":   AJAX_TOKEN,
-                "process":      process,
-                "data":         JSON.stringify(data)
-            },
-            success: function(data) {
-                var response = JSON.parse(data);
-                if (response.status == "Success") {
-                    game.grid.state = response.grid;
-                    game.renderGrid();
-                } else {
-                    console.log(response.error_message);
-                }
-            },
-            error: function() {
-                console.log("Error!");
-            }
-        })
-    }
-    game.generateGrid = function() {
-        this.grid = {};
-        this.grid.state = {};
-        this.fog = {};
-        this.grid.cell_width = 1024 / BACKGROUND_GRID_WIDTH;
-        this.grid.cell_height = BACKGROUND_HEIGHT / BACKGROUND_GRID_HEIGHT;
+
+    game.grid = {}
+    game.grid.state = {};
+    game.grid.cell_width = 1024 / BACKGROUND_GRID_WIDTH;
+    game.grid.cell_height = BACKGROUND_HEIGHT / BACKGROUND_GRID_HEIGHT;
+    game.grid.generate = function() {
+        game.fog = {};
         for (var i = 0; i < BACKGROUND_GRID_WIDTH; i++) {
-            this.grid.state[i] = {};
-            this.fog[i] = {};
+            this.state[i] = {};
+            game.fog[i] = {};
             for (var j = 0; j < BACKGROUND_GRID_HEIGHT; j++) {
-                this.fog_layer.activate();
-                var fog = new Path.Rectangle((i * this.grid.cell_width - 2), (j * this.grid.cell_height) - 2, this.grid.cell_width + 4, this.grid.cell_height + 4);
+                game.fog_layer.activate();
+                var fog = new Path.Rectangle((i * this.cell_width - 2), (j * this.cell_height) - 2, this.cell_width + 4, this.cell_height + 4);
                 fog.fillColor = "black";
-                this.grid.state[i][j] = {"fog": true}
-                this.fog[i][j] = fog;
+                this.state[i][j] = {"fog": true, "contains_marker": false}
+                game.fog[i][j] = fog;
             }
         }
         view.draw();
-        this.owner.updateGrid();
+        game.owner.updateGrid();
     }
-    game.renderGrid = function() {
+    game.grid.render = function() {
         for (var i = 0; i < BACKGROUND_GRID_WIDTH; i++) {
             for (var j = 0; j < BACKGROUND_GRID_HEIGHT; j++) {
-                this.fog[i][j].visible = this.grid.state[i][j].fog;
+                game.fog[i][j].visible = this.state[i][j].fog;
             }
         }
     }
-    game.run = function() {
-        if (game.background.width !== 1024) {
-            game.background.width = 1024;
-            game.background.height = BACKGROUND_HEIGHT;
+    game.grid.determineCoordinates = function(point_location) {
+        var grid_x = Math.floor(point_location.x / this.cell_width);
+        var grid_y = Math.floor(point_location.y / this.cell_height);
+        return [grid_x, grid_y];
+    }
+
+    game.markers.size = game.grid.cell_width < game.grid.cell_height ? game.grid.cell_width/2 - 5 : game.grid.cell_height / 2 - 5;
+    game.markers.render = function() {
+        game.marker_layer.activate();
+        for (var i = 0; i < this.paths.length; i++) {
+            this.paths[i].remove();
         }
-        game.fetchPuddles();
-        game.fetchGrid();
+        this.paths = [];
+        for (var i = 0; i < this.list.length; i++) {
+            var location = new Point(this.list[i].x, this.list[i].y);
+            var grid_coords = game.grid.determineCoordinates(location);
+            game.grid.state[grid_coords[0]][grid_coords[1]].contains_marker = true;
+            var path = new Path.Circle({
+                center: location,
+                radius: this.size
+            });
+            path.fillColor = this.list[i].colour;
+            this.paths.push(path);
+        }
+    }
+    game.markers.determineCoordinates = function(point_location) {
+        var grid_coords = game.grid.determineCoordinates(point_location);
+        var x = grid_coords[0] * game.grid.cell_width;
+        var y = grid_coords[1] * game.grid.cell_height;
+        var marker_x = x + game.grid.cell_width/2 + 2;
+        var marker_y = y + game.grid.cell_height/2 + 2;
+        return [Math.floor(marker_x), Math.floor(marker_y)];
     }
 
     game.owner = {};
+    game.owner.checkMarker = function(point_location) {
+        if (this.verify()) {
+            var grid_coords = game.grid.determineCoordinates(point_location);
+            var x = grid_coords[0];
+            var y = grid_coords[1];
+            if (game.grid.state[x][y].contains_marker) {
+                this.removeMarker(point_location);
+            } else {
+                var colour = document.getElementById("marker_colour").value;
+                this.addMarker(point_location, colour);
+            }
+        }
+    }
+    game.owner.addMarker = function(point_location, colour) {
+        if (this.verify()) {
+            var marker_coords = game.markers.determineCoordinates(point_location);
+            var marker = {"x": marker_coords[0], "y": marker_coords[1], "colour": colour};
+            var process = "addMarker";
+            var data = {
+                "game_id":  GAME_ID,
+                "marker":   marker
+            };
+            $.ajax({
+                type:   "POST",
+                url:    "api.php",
+                data:   {
+                    "ajax_token":   AJAX_TOKEN,
+                    "process":      process,
+                    "data":         JSON.stringify(data)
+                },
+                success: function(data) {
+                    var response = JSON.parse(data);
+                    if (response.status != "Success") {
+                        console.log(response.error_message);
+                    }
+                },
+                error: function() {
+                    console.log("Error!");
+                }
+            });
+        }
+    }
+    game.owner.removeMarker = function(point_location) {
+        if (this.verify()) {
+            var marker_coords = game.markers.determineCoordinates(point_location);
+            var process = "removeMarker";
+            var data = {
+                "game_id": GAME_ID,
+                "marker_x": marker_coords[0],
+                "marker_y": marker_coords[1]
+            };
+            $.ajax({
+                type:   "POST",
+                url:    "api.php",
+                data:   {
+                    "ajax_token":   AJAX_TOKEN,
+                    "process":      process,
+                    "data":         JSON.stringify(data)
+                },
+                success: function(data) {
+                    var response = JSON.parse(data);
+                    if (response.status != "Success") {
+                        console.log(response.error_message);
+                    }
+                },
+                error: function() {
+                    console.log("Error!");
+                }
+            })
+        }
+    }
     game.owner.verify = function() {
         return PLAYER_ID == GAME_OWNER;
     }
     game.owner.toggleFog = function(point_location) {
-        var grid_x = Math.floor(point_location.x / game.grid.cell_width);
-        var grid_y = Math.floor(point_location.y / game.grid.cell_height);
-        game.grid.state[grid_x][grid_y].fog = !game.grid.state[grid_x][grid_y].fog;
+        var grid_coords = game.grid.determineCoordinates(point_location);
+        var x = grid_coords[0];
+        var y = grid_coords[1];
+        game.grid.state[x][y].fog = !game.grid.state[x][y].fog;
         this.updateGrid();
     }
     game.owner.updateGrid = function() {
-        if (this.verify) {
+        if (this.verify()) {
             var process = "updateGrid";
             var data = {
                 "game_id":      GAME_ID,
@@ -307,6 +398,44 @@ with (paper) {
                 }
             });
         }
+    }
+
+    game.render = function() {
+        this.grid.render();
+        this.markers.render();
+    }
+    game.run = function() {
+        if (game.background.width !== 1024) {
+            game.background.width = 1024;
+            game.background.height = BACKGROUND_HEIGHT;
+        }
+        game.fetchPuddles();
+        game.fetchBoard();
+    }
+    game.fetchBoard = function() {
+        var process = "fetchBoard";
+        var data = {
+            "game_id":  GAME_ID
+        };
+        $.ajax({
+            type:   "POST",
+            url:    "api.php",
+            data:   {
+                "ajax_token":   AJAX_TOKEN,
+                "process":      process,
+                "data":         JSON.stringify(data)
+            },
+            success: function(data) {
+                // Update the fog and markers state
+                var response = JSON.parse(data);
+                game.grid.state = response.board.grid;
+                game.markers.list = response.board.markers;
+                game.render();
+            },
+            error: function() {
+                console.log("Error!");
+            }
+        })
     }
 }
 

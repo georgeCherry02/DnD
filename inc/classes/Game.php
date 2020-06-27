@@ -116,10 +116,13 @@
             }
             return $rooms;
         }
-        public static function fetch_grid($game_id) {
-            // Fetch initial state
+        public static function fetch_board($game_id) {
             $state = self::fetch_state($game_id);
-            $res = $state["grid"];
+            $res["grid"] = $state["grid"];
+            $res["markers"] = array();
+            if (isset($state["markers"])) {
+                $res["markers"] = $state["markers"];
+            }
             return $res;
         }
         // Game owner operations
@@ -136,6 +139,46 @@
             $state = self::fetch_state($game_id);
             // Modify state
             $state["grid"] = $grid_state;
+            // Set final state
+            return self::set_state($game_id, $state);
+        }
+        public static function add_marker($game_id, $marker) {
+            // Final verification
+            if (!self::verify_owner($game_id)) {
+                return false;
+            }
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            // Check if markers key is set
+            if (!isset($state["markers"])) {
+                $state["markers"] = array();
+            }
+            // Add marker to markers
+            array_push($state["markers"], $marker);
+            // Set final state
+            return self::set_state($game_id, $state);
+        }
+        public static function remove_marker($game_id, $marker_x, $marker_y) {
+            // Final verification
+            if (!self::verify_owner($game_id)) {
+                return false;
+            }
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            // Check if markers key is set
+            if (!isset($state["markers"])) {
+                return false;
+            }
+            // Remove marker from markers
+            for ($i = 0; $i < sizeof($state["markers"]); $i++) {
+                $marker = $state["markers"][$i];
+                if ($marker["x"] == $marker_x && $marker["y"] == $marker_y) {
+                    $index = $i;
+                }
+            }
+            if (isset($index)) {
+                array_splice($state["markers"], $index, 1);
+            }
             // Set final state
             return self::set_state($game_id, $state);
         }

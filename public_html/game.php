@@ -27,6 +27,8 @@
 <div class="gm_control_panel">
     <div class="tool_button" id="comm_tool" onclick="game.use_point_tool();"></div>
     <div class="tool_button" id="fog_tool" onclick="game.use_fog_tool();"></div>
+    <div class="tool_button" id="marker_tool" onclick="game.use_marker_tool();"></div>
+    <input type="text" id="marker_colour"/>
 </div>
 <?php
                 }

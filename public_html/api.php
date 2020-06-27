@@ -66,6 +66,42 @@
                 $response["error_message"] = "Failed to send puddle to server";
             }
             break;
+        case "addMarker":
+            if (!isset($request_data["game_id"]) || !isset($request_data["marker"])) {
+                $response["error_message"] = "Failed to provide necessary data";
+                break;
+            }
+            // Double check session is owner
+            $game_info = Game::fetch_display_information($request_data["game_id"]);
+            if ($_SESSION["Logged_in_id"] !== $game_info["Owner_ID"]) {
+                $response["error_message"] = "As you're not the owner of this game you can't do this";
+                break;
+            }
+            $res = Game::add_marker($request_data["game_id"], $request_data["marker"]);
+            if ($res) {
+                $response["status"] = "Success";
+            } else {
+                $response["error_message"] = "Failed to add marker";
+            }
+            break;
+        case "removeMarker":
+            if (!isset($request_data["game_id"]) || !isset($request_data["marker_x"]) || !isset($request_data["marker_y"])) {
+                $response["error_message"] = "Failed to provide necessary data";
+                break;
+            }
+            $game_info = Game::fetch_display_information($request_data["game_id"]);
+            if ($_SESSION["Logged_in_id"] !== $game_info["Owner_ID"]) {
+                $response["error_message"] = "As you're not the owner of this game you can't do this";
+                break;
+            }
+            $res = Game::remove_marker($request_data["game_id"], $request_data["marker_x"], $request_data["marker_y"]);
+            if ($res) {
+                $response["status"] = "Success";
+                $response["res"] = $res;
+            } else {
+                $response["error_message"] = "Failed to remove marker";
+            }
+            break;
         case "fetchPuddles":
             if (!isset($request_data["game_id"]) || !isset($request_data["player_id"])) {
                 $response["error_message"] = "Failed to provide necessary data";
@@ -75,13 +111,13 @@
             $response["puddles"] = $res;
             $response["status"] = "Success";
             break;
-        case "fetchGrid":
+        case "fetchBoard":
             if (!isset($request_data["game_id"])) {
                 $response["error_message"] = "Failed to provide necessary data";
                 break;
             }
-            $res = Game::fetch_grid($request_data["game_id"]);
-            $response["grid"] = $res;
+            $res = Game::fetch_board($request_data["game_id"]);
+            $response["board"] = $res;
             $response["status"] = "Success";
             break;
         case "updateGrid":
