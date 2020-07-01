@@ -84,7 +84,12 @@ with (paper) {
     game.use_fog_tool = function() {
         this.fog_tool.activate();
     }
-    game.use_marker_tool = function() {
+    game.use_marker_tool = function(type) {
+        if (type == "npc") {
+            this.markers.colour = document.getElementById("marker_colour").value;
+        } else {
+            this.markers.colour = PLAYER_COLOURS[type];
+        }
         this.marker_tool.activate();
     }
     game.updateMouseAppearance = function(point_location) {
@@ -299,15 +304,14 @@ with (paper) {
             if (game.grid.state[x][y].contains_marker) {
                 this.removeMarker(point_location);
             } else {
-                var colour = document.getElementById("marker_colour").value;
-                this.addMarker(point_location, colour);
+                this.addMarker(point_location);
             }
         }
     }
-    game.owner.addMarker = function(point_location, colour) {
+    game.owner.addMarker = function(point_location) {
         if (this.verify()) {
             var marker_coords = game.markers.determineCoordinates(point_location);
-            var marker = {"x": marker_coords[0], "y": marker_coords[1], "colour": colour};
+            var marker = {"x": marker_coords[0], "y": marker_coords[1], "colour": game.markers.colour};
             var process = "addMarker";
             var data = {
                 "game_id":  GAME_ID,
@@ -359,7 +363,12 @@ with (paper) {
                 error: function() {
                     console.log("Error!");
                 }
-            })
+            });
+            var grid_coords = game.grid.determineCoordinates(point_location);
+            var x = grid_coords[0];
+            var y = grid_coords[1];
+            game.grid.state[x][y].contains_marker = false;
+            this.updateGrid();
         }
     }
     game.owner.verify = function() {

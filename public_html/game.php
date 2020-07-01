@@ -27,8 +27,13 @@
 <div class="gm_control_panel">
     <div class="tool_button" id="comm_tool" onclick="game.use_point_tool();"></div>
     <div class="tool_button" id="fog_tool" onclick="game.use_fog_tool();"></div>
-    <div class="tool_button" id="marker_tool" onclick="game.use_marker_tool();"></div>
+    <div class="tool_button" id="marker_tool" onclick="game.use_marker_tool('npc');"></div>
     <input type="text" id="marker_colour"/>
+    <?php 
+        for ($i = 0; $i < sizeof($allowed_players); $i++) {
+            echo "<div class='tool_button' style='background-color: ".$player_colours[$i].";' onclick=\"game.use_marker_tool('".$allowed_players[$i]."')\"></div>";
+        }
+    ?>
 </div>
 <?php
                 }

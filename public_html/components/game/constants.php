@@ -9,10 +9,9 @@
     const PLAYER_COLOURS = {
 <?php
     $colours = "";
-    $player_ids = json_decode($game_info["Player_IDs"]);
     $player_colours = json_decode($game_info["Player_Colours"]);
-    for ($i = 0; $i < sizeof($player_ids); $i++) {
-        $colours .= $player_ids[$i].": \"".$player_colours[$i]."\", ";
+    for ($i = 0; $i < sizeof($allowed_players); $i++) {
+        $colours .= $allowed_players[$i].": \"".$player_colours[$i]."\", ";
     }
     $colours = substr($colours, 0, strlen($colours) - 2);
     echo $colours;
