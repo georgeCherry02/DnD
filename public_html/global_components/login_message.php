@@ -1,5 +1,5 @@
 <div class='grey_border light_background message_container'>
-    <div id='login_container' style='display: none;'>
+    <div id='login_container' style='display: inline-block;'>
         <h4 class='grey_text'>Login to access these features!</h4>
         <form action='<?php echo $file_root; ?>actions/login.php' method='POST'>
             <input id='login_username' type='text' name='user' placeholder='Username' class='white_background grey_text grey_border'/>
@@ -8,7 +8,7 @@
         </form>
         <h5 class='grey_text'>Don't have an account? Sign up <a onclick='toggle_login_form()'>here</a></h5>
     </div>
-    <div id='signup_container' style='display: inline-block;'>
+    <div id='signup_container' style='display: none;'>
         <h4 class='grey_text'>Sign up now!</h4>
         <form action='<?php echo $file_root; ?>signup.php' method='POST' onsubmit="return validate_signup()">
             <input id='signup_email' type='text' name='email' placeholder='Email' class='white_background grey_text grey_border'/>

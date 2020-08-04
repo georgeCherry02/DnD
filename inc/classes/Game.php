@@ -1,7 +1,7 @@
 <?php
     class Game {
         public static function fetch_display_information($id) {
-            $game_info_sql = "SELECT `Name`, `Owner_ID`, `Player_IDs`, `Player_Colours` FROM `Games` WHERE `ID`=:gid";
+            $game_info_sql = "SELECT `Name`, `Owner_ID`, `Player_IDs`, `Player_Colours`, `Player_Character_IDs` FROM `Games` WHERE `ID`=:gid";
             $game_info_var = array(":gid" => $id);
             try {
                 $game_info = DB::query($game_info_sql, $game_info_var)[0];
@@ -41,6 +41,7 @@
         }
         public static function fetch_puddles($game_id, $player_id) {
             $state = self::fetch_state($game_id);
+            $total_number_of_players = json_decode(self::fetch_display_information($game_id)["Player_IDs"]);
             $unseen_puddles = array();
             $keys_to_remove = array();
             foreach ($state["puddles"] as $key => $current_puddle) {
@@ -51,7 +52,7 @@
                     // Check if everyone's seen puddles
                     $seen_by = $state["puddles"][$key]["seen_by"];
                     $connected = self::fetch_connections($game_id);
-                    if (sizeof($seen_by) == sizeof($connected)) {
+                    if (sizeof($seen_by) >= sizeof($connected) || sizeof($seen_by) == sizeof($total_number_of_players)) {
                         // Remove later
                         array_push($keys_to_remove, $key);
                     }
@@ -116,10 +117,13 @@
             }
             return $rooms;
         }
-        public static function fetch_grid($game_id) {
-            // Fetch initial state
+        public static function fetch_board($game_id) {
             $state = self::fetch_state($game_id);
-            $res = $state["grid"];
+            $res["grid"] = $state["grid"];
+            $res["markers"] = array();
+            if (isset($state["markers"])) {
+                $res["markers"] = $state["markers"];
+            }
             return $res;
         }
         // Game owner operations
@@ -138,6 +142,107 @@
             $state["grid"] = $grid_state;
             // Set final state
             return self::set_state($game_id, $state);
+        }
+        public static function add_marker($game_id, $marker) {
+            // Final verification
+            if (!self::verify_owner($game_id)) {
+                return false;
+            }
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            // Check if markers key is set
+            if (!isset($state["markers"])) {
+                $state["markers"] = array();
+            }
+            // Add marker to markers
+            array_push($state["markers"], $marker);
+            // Set final state
+            return self::set_state($game_id, $state);
+        }
+        public static function remove_marker($game_id, $marker_x, $marker_y) {
+            // Final verification
+            if (!self::verify_owner($game_id)) {
+                return false;
+            }
+            // Fetch initial state
+            $state = self::fetch_state($game_id);
+            // Check if markers key is set
+            if (!isset($state["markers"])) {
+                return false;
+            }
+            // Remove marker from markers
+            for ($i = 0; $i < sizeof($state["markers"]); $i++) {
+                $marker = $state["markers"][$i];
+                if ($marker["x"] == $marker_x && $marker["y"] == $marker_y) {
+                    $index = $i;
+                }
+            }
+            if (isset($index)) {
+                array_splice($state["markers"], $index, 1);
+            }
+            // Set final state
+            return self::set_state($game_id, $state);
+        }
+        public static function verify_player($game_id) {
+            // Check if player is in allowed players
+            $sql = "SELECT `Player_IDs` FROM `Games` WHERE `ID`=:id";
+            $variables = array(":id" => $game_id);
+            try {
+                $allowed_players = json_decode(DB::query($sql, $variables)[0]["Player_IDs"], $assoc=true);
+            } catch (PDOException $e) {
+                return false;
+            }
+            return in_array($_SESSION["Logged_in_id"], $allowed_players);
+        }
+        public static function add_player_character($game_id, $character_id) {
+            // Verify user owns character
+            if (User::verify_character_ownership($character_id) && self::verify_player($game_id)) {
+                $init_char_sql = "SELECT `Player_Character_IDs` FROM `Games` WHERE `ID`=:id";
+                $init_char_var = array(":id" => $game_id);
+                try {
+                    $init_char = json_decode(DB::query($init_char_sql, $init_char_var)[0]["Player_Character_IDs"], $assoc=true);
+                } catch (PDOException $e) {
+                    return false;
+                }
+                if (!array_key_exists($_SESSION["Logged_in_id"], $init_char)) {
+                    $fin_char_sql = "UPDATE `Games` SET `Player_Character_IDs`=:pcids WHERE `ID`=:id";
+                    $init_char[$_SESSION["Logged_in_id"]] = $character_id;
+                    $fin_char_var = array(":pcids" => json_encode($init_char), ":id" => $game_id);
+                    try {
+                        DB::query($fin_char_sql, $fin_char_var);
+                    } catch (PDOException $e) {
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        public static function fetch_characters($character_ids) {
+            $character_info = array();
+            foreach ($character_ids as $player_id => $character_id) {
+                $character_info[$player_id] = Character::fetch_character_info($character_id);
+            }
+            return $character_info;
+        }
+        public static function fetch_character_healths($game_id) {
+            $character_ids = json_decode(self::fetch_display_information($game_id)["Player_Character_IDs"], $assoc=true);
+            $characters_health_summary = array();
+            foreach ($character_ids as $player_id => $character_id) {
+                $character_info = Character::fetch_character_info($character_id);
+                $characters_health_summary[$player_id] = array("Max" => $character_info["Hit_Point_Maximum"], "Current" => $character_info["Current_Hit_Points"], "Temp" => $character_info["Temporary_Hit_Points"]);
+            }
+            return $characters_health_summary;
+        }
+        public static function fetch_character_spell_slots($game_id) {
+            $character_ids = json_decode(self::fetch_display_information($game_id)["Player_Character_IDs"], $assoc=true);
+            $characters_spell_slot_summary = array();
+            foreach ($character_ids as $player_id => $character_id) {
+                $character_info = Character::fetch_character_info($character_id);
+                $characters_spell_slot_summary[$player_id] = ItemManager::get_spell_slot_distribution($character_info["Current_Spell_Slot_Distribution_ID"]);
+            }
+            return $characters_spell_slot_summary;
         }
     }
 ?>

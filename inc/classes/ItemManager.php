@@ -200,13 +200,7 @@
             $sql = substr($beginning_of_sql, 0, -2) . substr($end_of_sql, 0, -2) . ")";
             // Commit abilities to database
             try {
-                DB::query($sql, $ability_summary);
-            } catch (PDOException $e) {
-                return FALSE;
-            }
-            // Fetch the ID of that distribution
-            try {
-                $distribution_id = DB::query("SELECT `ID` FROM `Ability_Distributions` ORDER BY `ID` DESC LIMIT 1")[0]["ID"];
+                $distribution_id = DB::query($sql, $ability_summary);
             } catch (PDOException $e) {
                 return FALSE;
             }
@@ -226,10 +220,11 @@
             $data["Weapon_ID_List"] = array();
             // Fetch the list of owned item IDs so that you can validate these items have been added by the user
             $owned_item_ids = self::get_owned_items();
+
+            // Define patterns to filter POSTed variables
+            $weapon_pattern = "/^" . ItemTypes::Weapon()->getName() . "_/";
+            $spell_pattern = "/^" . ItemTypes::Spell()->getName() . "_/";
             foreach($_POST as $key => $value) {
-                // Define patterns to filter POSTed variables
-                $weapon_pattern = "/^" . ItemTypes::Weapon()->getName() . "_/";
-                $spell_pattern = "/^" . ItemTypes::Spell()->getName() . "_/";
                 if (preg_match($weapon_pattern, $key)) {
                     $current_item_type = ItemTypes::Weapon();
                 } else if (preg_match($spell_pattern, $key)) {
@@ -407,7 +402,7 @@
             return $damage_summary;
         }
 
-        private static function gather_ability_summary() {
+        public static function gather_ability_summary() {
             $ability_summary = array();
             foreach (Abilities::ALL() as $ability) {
                 if (isset($_POST[$ability->getName()."_modifier"]) && filter_input(INPUT_POST, $ability->getName()."_modifier", FILTER_VALIDATE_INT)) {
@@ -419,7 +414,21 @@
             return $ability_summary;
         }
 
-        private static function gather_multi_number($data, $column_name, $unique_descriptor, $enum_class) {
+        public static function gather_spell_slot_summary() {
+            $spellslot_summary = array();
+            for ($i = 1; $i <= 9; $i++) {
+                // Determine the number of spell slots for each level, using 0 as a default
+                $value = 0;
+                if (isset($_POST["spell_slot_level_".$i]) && filter_input(INPUT_POST, "spell_slot_level_".$i, FILTER_VALIDATE_INT)) {
+                    $value = $_POST["spell_slot_level_".$i];
+                }
+                // Put these values into an array ready to create a request
+                $spellslot_summary[":level".$i] = $value;
+            }
+            return $spellslot_summary;
+        }
+
+        public static function gather_multi_number($data, $column_name, $unique_descriptor, $enum_class) {
             $data_arr = array();
             foreach ($enum_class as $enum) {
                 if (isset($_POST[$enum->getName()."_".$unique_descriptor]) && filter_input(INPUT_POST, $enum->getName()."_".$unique_descriptor, FILTER_VALIDATE_INT)) {
@@ -432,7 +441,7 @@
             return $data;
         }
 
-        private static function gather_multi_select($data, $column_name, $unique_descriptor, $enum_class) {
+        public static function gather_multi_select($data, $column_name, $unique_descriptor, $enum_class) {
             $data_arr = array();
             foreach ($enum_class as $enum) {
                 if (isset($_POST[$enum->getName()."_".$unique_descriptor]) && $_POST[$enum->getName()."_".$unique_descriptor] == "1") {
@@ -644,6 +653,20 @@
                 return FALSE;
             }
             return $data;
+        }
+        public static function update_spell_slot_distribution($level, $amount, $id) {
+            $level_filtered = filter_var($level, FILTER_VALIDATE_INT);
+            if ($level_filtered) {
+                $sql = "UPDATE `Spell_Slot_Distributions` SET `Level_".$level_filtered."`=:amount WHERE `ID`=:id";
+                $sql_var = array(":amount" => $amount, ":id" => $id);
+                try {
+                    DB::query($sql, $sql_var);
+                } catch (PDOException $e) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
     }
 ?>
