@@ -82,7 +82,7 @@
                             $npc_ids = json_decode(ItemManager::get_owned_npcs());
                             $npc_data = ItemManager::get_all_item_data($npc_ids, $item_type);
                             $item_data = $npc_data;
-                            include "./create_forms/components/ItemNumber.php";
+                            include "./create_forms/components/NPCNumber.php";
                         ?>
                     </div>
                     <input type="submit" value="Create" class="white_background highlight_text grey_border"/>

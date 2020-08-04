@@ -39,16 +39,16 @@
                     $player_id = UserAdmin::id_from_username($player_name);
                     if ($player_id) {
                         array_push($player_ids, $player_id);
-                        array_push($player_colours, $_POST["player_".$i."_colour"]);
+                        $player_colours[$player_id] = $_POST["player_".$i."_colour"];
                     } else {
                         header("Location: default.php");
                         exit;
                     }
                 }
                 array_push($player_ids, $owner_id);
-                array_push($player_colours, $_POST["colour"]);
-                $create_game_sql = "INSERT INTO `Games` (`Name`, `Owner_ID`, `Player_IDs`, `Player_Colours`, `State`, `Connections`) VALUES (:name, :oid, :pids, :pcs, :state, :conns)";
-                $create_game_var = array(":name" => $name, ":oid" => $owner_id, ":pids" => json_encode($player_ids), ":pcs" => json_encode($player_colours), ":state" => "{\"puddles\": []}", ":conns" => "[]");
+                $player_colours[$owner_id] = $_POST["colour"];
+                $create_game_sql = "INSERT INTO `Games` (`Name`, `Owner_ID`, `Player_IDs`, `Player_Colours`, `State`, `Connections`, `Player_Character_IDs`) VALUES (:name, :oid, :pids, :pcs, :state, :conns, :char_ids)";
+                $create_game_var = array(":name" => $name, ":oid" => $owner_id, ":pids" => json_encode($player_ids), ":pcs" => json_encode($player_colours), ":state" => "{\"puddles\": []}", ":conns" => "[]", ":char_ids" => "{}");
                 try {
                     DB::query($create_game_sql, $create_game_var);
                 } catch (PDOException $e) {

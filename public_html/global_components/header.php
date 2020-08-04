@@ -31,8 +31,9 @@
                     echo "<link rel='stylesheet' href='" . $file_root . "css/duplicate.css' type='text/css'/>";
                     break;
             }
-            if (isset($game_id)) {
+            if ($game_room) {
 ?>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
                 <script src="https://unpkg.com/paper@0.11.5/dist/paper-full.min.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
                 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">

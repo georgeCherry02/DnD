@@ -1,14 +1,143 @@
+p, h3, h5, h6 {
+    margin: 0;
+}
+p {
+    font-size: 12px;
+    font-weight: 700;
+}
 .canvas_container {
     text-align: center;
 }
 .gm_control_panel {
     position: absolute;
-    width: 100px;
+    width: 200px;
+    height: 100%;
+    overflow: scroll;
+}
+.player_panel {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+
+    width: 200px;
     height: 100%;
 }
+.player_card {
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.player_card h3 {
+    font-weight: 500;
+}
+.player_card_divider {
+    width: 100%;
+    height: 0.1px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: #222;
+}
+/* Health Bar Styling */
+.health_container {
+    position: relative;
+    height: 20px;
+    width: 100%;
+    margin: 1px;
+    margin-left: 0;
+    margin-top: 3px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px;
+}
+.health_bar_background {
+    height: 16px;
+    width: 100%;
+    background: red;
+    border-radius: 5px;
+    z-index: 1;
+}
+.health_bar {
+    height: 16px;
+    background: green;
+    border-radius: 5px;
+    z-index: 2;
+    position: absolute;
+    top: 1px;
+}
+.temp_health_bar {
+    height: 16px;
+    background: yellow;
+    border-radius: 5px;
+    z-index: 3;
+    position: absolute;
+    top: 1px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.player_card .collapsing_section {
+    overflow: hidden;
+    width: 100%;
+    transition: max-height 1s;
+}
+.ability_description p {
+    text-align: center;
+    font-size: 8px;
+    margin: 1px;
+    display: inline-block;
+    width: 30%;
+}
+.key_stats p { 
+    font-size: 10px;
+    padding: 0;
+}
 .tool_button {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    margin: 2px;
+    text-align: center;
+}
+.tool_button i {
+    margin-top: 6px;
+    color: white;
+    font-size: 20px;
+}
+.weapon_details p {
+    font-size: 8px;
+}
+.spell_slot_row {
+    position: relative;
+    align-items: top;
+}
+.spell_slot_row p {
+    position: absolute;
+    display: inline-block;
+}
+.spell_slot_placeholder {
+    display: inline-block;
+    width: 25%;
+}
+.spell_slot {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+}
+.spell_slot i {
+    font-size: 14px;
+    transform: translateY(-30%);
+}
+p.spell_name {
+    font-size: 8px;
+}
+h5 i.fas.fa-chevron-down {
+    margin-top: 5px;
+    margin-right: 5px;
+    float: right;
+    font-size: 12px;
+}
+i.fas.fa-chevron-down {
+    transition: transform 1s;
 }
 #comm_tool {
     background-color: blue;
@@ -18,4 +147,44 @@
 }
 #marker_tool {
     background-color: green;
+}
+#health_tool_plus {
+    display: inline-block;
+    cursor: pointer;
+    background-color: green;
+}
+#health_tool_minus {
+    display: inline-block;
+    cursor: pointer;
+    background-color: red;
+}
+#temp_health_tool {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #ffcc00;
+}
+#radius_tool {
+    display: inline-block;
+    cursor: pointer;
+    background-color: green;
+}
+#clear_radius_tool {
+    display: inline-block;
+    cursor: pointer;
+    background-color: red;
+}
+#measure_tool {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #ad07db;
+}
+#spell_slot_plus {
+    display: inline-block;
+    cursor: pointer;
+    background-color: green;
+}
+#spell_slot_minus {
+    display: inline-block;
+    cursor: pointer;
+    background-color: red;
 }

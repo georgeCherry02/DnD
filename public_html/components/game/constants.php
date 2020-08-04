@@ -6,15 +6,14 @@
     const BACKGROUND_HEIGHT = <?php echo $end_height; ?>;
     const BACKGROUND_GRID_WIDTH = <?php echo $room_grid_dim["width"]; ?>;
     const BACKGROUND_GRID_HEIGHT = <?php echo $room_grid_dim["height"]; ?>;
-    const PLAYER_COLOURS = {
+    const PLAYER_COLOURS = <?php echo $game_info["Player_Colours"] ?>;
+    const PLAYER_IDS =
 <?php
-    $colours = "";
-    $player_colours = json_decode($game_info["Player_Colours"]);
-    for ($i = 0; $i < sizeof($allowed_players); $i++) {
-        $colours .= $allowed_players[$i].": \"".$player_colours[$i]."\", ";
+    $players_excluding_gm = array_splice($allowed_players, array_search($game_info["Owner_ID"], $allowed_players), 1);
+    $html = "[";
+    for ($i = 0; $i < sizeof($players_excluding_gm); $i++) {
+        $html .= $players_excluding_gm[$i].", ";
     }
-    $colours = substr($colours, 0, strlen($colours) - 2);
-    echo $colours;
+    echo substr($html, 0, -2)."]";
 ?>
-    };
 </script>
